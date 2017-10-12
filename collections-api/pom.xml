@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <artifactId>collections-management</artifactId>
+        <groupId>se.nrm.dina</groupId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>collections-api</artifactId>
+    <packaging>war</packaging>
+
+    <name>${project.artifactId}</name>
+
+    <properties>
+        <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    
+    <dependencies>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>collections-jpa</artifactId>
+            <version>${project.version}</version> 
+        </dependency>
+        
+<!--        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>collections-logic</artifactId>
+            <version>${project.parent.version}</version>   
+        </dependency>-->
+         
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>jaxrs</artifactId> 
+        </dependency>
+        
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>cdi</artifactId> 
+        </dependency>
+        
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>ejb</artifactId> 
+        </dependency>
+         
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>keycloak</artifactId>
+        </dependency>
+          
+    </dependencies>
+
+    <build> 
+        <plugins> 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId> 
+                <version>3.0.0</version> 
+                <!--<version>3.1.0</version>-->
+            </plugin> 
+            <plugin>
+                <groupId>org.wildfly.swarm</groupId>
+                <artifactId>wildfly-swarm-plugin</artifactId> 
+                <version>${version.wildfly.swarm}</version> 
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                    </execution>  
+                </executions>
+                <configuration> 
+                    <jvmArguments>
+                        <jvmArgument>-Xmx2048m</jvmArgument>
+                    </jvmArguments> 
+                    <properties> 
+                        <java.net.preferIPv4Stack>true</java.net.preferIPv4Stack> 
+                    </properties> 
+                </configuration>  
+            </plugin>  
+        </plugins>
+        <finalName>collections-api</finalName> 
+    </build>
+
+</project>

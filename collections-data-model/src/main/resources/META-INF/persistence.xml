@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" 
+             xmlns="http://xmlns.jcp.org/xml/ns/persistence" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+    
+    
+    <persistence-unit name="jpaPU" transaction-type="JTA">
+        
+        <jta-data-source>java:/jdbc/DinaDS</jta-data-source>
+
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+
+        <properties> 
+            <property name="eclipselink.jdbc.batch-writing" value="JDBC"/>
+            <property name="eclipselink.jdbc.batch-writing.size" value="1000"/>
+            <property name="eclipselink.logging.level" value="off"/>
+            <!--<property name="eclipselink.weaving" value="true"/>-->
+        </properties>
+    </persistence-unit> 
+    
+    
+    
+    
+    
+<!--    <persistence-unit name="se.nrm.dina_collections-data-model_jar_0.1-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        
+        <class>se.nrm.dina.collections.data.model.CatalogedUnit</class>
+        <class>se.nrm.dina.collections.data.model.Identification</class>
+        <class>se.nrm.dina.collections.data.model.IndividualGroup</class>
+        <class>se.nrm.dina.collections.data.model.Occurrence</class>
+        <class>se.nrm.dina.collections.data.model.PhysicalUnit</class>
+        <class>se.nrm.dina.collections.data.model.FeatureObservationType</class>
+        <class>se.nrm.dina.collections.data.model.FeatureObservation</class>
+        
+        <properties>
+          <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/dina_collections?zeroDateTimeBehavior=convertToNull"/>
+          <property name="javax.persistence.jdbc.user" value="root"/>
+          <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+          <property name="javax.persistence.jdbc.password" value="friday18"/>
+        </properties>
+    </persistence-unit>-->
+</persistence>
