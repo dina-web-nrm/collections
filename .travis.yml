@@ -5,8 +5,9 @@ services:
 jdk:
   - oraclejdk8
 install: true
-
-script: "mvn clean verify && mvn cobertura:cobertura"
+script:
+- mvn clean verify
+# script: "mvn clean verify && mvn cobertura:cobertura"
 # - mvn clean verify   
 #before_install:
 #  - pip install --user codecov

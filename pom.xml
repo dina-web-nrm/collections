@@ -64,13 +64,13 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${version.org.slf4j}</version>
-        </dependency>
+        </dependency><!--
         
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>${version.org.slf4j}</version>
-        </dependency> 
+        </dependency> -->
         
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -122,7 +122,7 @@
                     </configuration>
                 </plugin> 
   
-                <plugin>
+<!--                <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>cobertura-maven-plugin</artifactId>
                     <version>2.7</version>
@@ -131,9 +131,20 @@
                             <format>html</format>
                             <format>xml</format>
                         </formats>
+                        <instrumentation>
+                            <ignoreTrivial>true</ignoreTrivial>
+                        </instrumentation>
                         <check/>
                     </configuration>
-                </plugin> 
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>cobertura</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin> -->
             </plugins>
         </pluginManagement>
     </build> 
