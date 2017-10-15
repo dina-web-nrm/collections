@@ -6,7 +6,7 @@ jdk:
   - oraclejdk8
 install: true
 script:
-- mvn clean verify
+- mvn clean test jacoco:report coveralls:report
 # script: "mvn clean verify && mvn cobertura:cobertura"
 # - mvn clean verify   
 before_install:
