@@ -7,7 +7,8 @@
     
     <persistence-unit name="jpaPU" transaction-type="JTA">
         
-        <jta-data-source>java:/jdbc/DinaDS</jta-data-source>
+        <!--<jta-data-source>java:/jdbc/DinaDS</jta-data-source>-->
+        <jta-data-source>java:jboss/datasources/DinaDS</jta-data-source>
 
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
 
@@ -19,10 +20,7 @@
         </properties>
     </persistence-unit> 
     
-    
-    
-    
-    
+     
 <!--    <persistence-unit name="se.nrm.dina_collections-data-model_jar_0.1-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         

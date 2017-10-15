@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import se.nrm.dina.collections.annotation.CollectionsOneToMany;
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -37,6 +38,7 @@ public class FeatureObservationType extends BaseEntity {
     private String featureObservationTypeName;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "isOfFeatureObservationTypeId", fetch = FetchType.LAZY)
+    @CollectionsOneToMany
     private List<FeatureObservation> featureObservationList;
 
     public FeatureObservationType() {

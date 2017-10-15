@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import se.nrm.dina.collections.annotation.CollectionsOneToMany;
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -30,15 +31,19 @@ import se.nrm.dina.collections.data.model.BaseEntity;
 public class IndividualGroup extends BaseEntity {
  
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "appliesToIndividualGroupId", fetch = FetchType.LAZY)
+    @CollectionsOneToMany
     private List<Identification> identificationList;
     
     @OneToMany(mappedBy = "appliesToIndividualGroupId", fetch = FetchType.LAZY)
+    @CollectionsOneToMany
     private List<FeatureObservation> featureObservationList;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "involvesIndividualGroupId", fetch = FetchType.LAZY)
+    @CollectionsOneToMany
     private List<Occurrence> occurrenceList;
     
     @OneToMany(mappedBy = "representsIndividualGroupId", fetch = FetchType.LAZY)
+    @CollectionsOneToMany
     private List<PhysicalUnit> physicalUnitList;
 
     public IndividualGroup() {

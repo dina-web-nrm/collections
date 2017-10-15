@@ -1,0 +1,45 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package se.nrm.dina.collections.api.services;
+
+import java.util.HashSet;
+import java.util.Set;
+import javax.enterprise.context.ApplicationScoped;
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
+import org.jboss.resteasy.plugins.interceptors.CorsFilter;
+
+/**
+ *
+ * @author idali
+ */
+@ApplicationScoped
+@ApplicationPath("/")
+public class RestApplication extends Application {
+    
+    private final Set<Object> singletons = new HashSet<>();
+    private final HashSet<Class<?>> classes = new HashSet<>();
+
+    public RestApplication() {
+        CorsFilter corsFilter = new CorsFilter();
+        corsFilter.getAllowedOrigins().add("*");
+        corsFilter.setAllowedMethods("OPTIONS, GET, POST, DELETE, PUT, PATCH");
+        singletons.add(corsFilter);
+
+        classes.add(CollectionsServices.class); 
+    }
+
+    @Override
+    public Set<Object> getSingletons() {
+        return singletons;
+    }
+
+    @Override
+    public HashSet<Class<?>> getClasses() {
+        return classes;
+    } 
+    
+}

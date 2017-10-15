@@ -5,6 +5,7 @@
  */
 package se.nrm.dina.collections.data.model.impl;
  
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType; 
@@ -15,6 +16,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import se.nrm.dina.collections.annotation.CollectionsManyToOne;
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -38,15 +40,18 @@ public class PhysicalUnit extends BaseEntity {
     private String normalStorageLocation;
     
     @JoinColumn(name = "belongs_to_cataloged_unit_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @CollectionsManyToOne(name = "belongs_to_cataloged_unit", type="CatalogedUnit")
     private CatalogedUnit belongsToCatalogedUnitId;
     
     @JoinColumn(name = "represents_individual_group_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @CollectionsManyToOne(name = "individual_group", type="IndividualGroup")
     private IndividualGroup representsIndividualGroupId;
     
     @JoinColumn(name = "is_collected_at_occurrence_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @CollectionsManyToOne(name = "is_collected_at_occurrence", type="Occurrence")
     private Occurrence isCollectedAtOccurrenceId;
 
     public PhysicalUnit() {

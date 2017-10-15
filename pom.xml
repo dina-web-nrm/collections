@@ -24,8 +24,7 @@
     </developers>
   
     <properties> 
-        <version.wildfly.swarm>2017.10.0</version.wildfly.swarm>   
-        <!--<version.wildfly.swarm>2017.8.1</version.wildfly.swarm>-->   
+        <version.wildfly.swarm>2017.9.5</version.wildfly.swarm>    
         <version.org.slf4j>1.7.25</version.org.slf4j>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -34,6 +33,8 @@
     </properties>
  
     <modules>    
+        <module>collections-annotation</module>
+        <module>collections-json-converter</module>
         <module>collections-data-model</module>
         <module>collections-jpa</module>
         <module>collections-logic</module> 
@@ -92,10 +93,23 @@
             <scope>test</scope>
         </dependency> 
         
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <version>2.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     
     <build>
-        <!--<finalName>inventory-web</finalName>-->
+        <!--<finalName>collections</finalName>-->
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -107,27 +121,7 @@
                         <target>1.8</target>
                     </configuration>
                 </plugin> 
-                
-<!--                <plugin>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.7.9</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>prepare-agent</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>report</id>
-                            <phase>test</phase>
-                            <goals>
-                                <goal>report</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>-->
-                
+  
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>cobertura-maven-plugin</artifactId>

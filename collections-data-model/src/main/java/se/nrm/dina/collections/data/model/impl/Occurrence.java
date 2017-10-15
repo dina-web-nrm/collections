@@ -6,6 +6,7 @@
 package se.nrm.dina.collections.data.model.impl;
  
 import java.util.List; 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType; 
@@ -18,6 +19,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import se.nrm.dina.collections.annotation.CollectionsManyToOne;
+import se.nrm.dina.collections.annotation.CollectionsOneToMany;
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -45,10 +48,12 @@ public class Occurrence extends BaseEntity {
     private String occurrenceDateText;
     
     @JoinColumn(name = "involves_individual_group_id", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @CollectionsManyToOne(name = "individual_group", type = "IndividualGroup")
     private IndividualGroup involvesIndividualGroupId;
     
     @OneToMany(mappedBy = "isCollectedAtOccurrenceId", fetch = FetchType.LAZY)
+    @CollectionsOneToMany
     private List<PhysicalUnit> physicalUnitList;
 
     public Occurrence() {

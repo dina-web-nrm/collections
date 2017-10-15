@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import se.nrm.dina.collections.annotation.CollectionsOneToMany;
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -36,6 +37,7 @@ public class CatalogedUnit extends BaseEntity {
     private String catalogNumber;
     
     @OneToMany(mappedBy = "belongsToCatalogedUnitId", fetch = FetchType.LAZY)
+    @CollectionsOneToMany
     private List<PhysicalUnit> physicalUnitList;
 
     public CatalogedUnit() {

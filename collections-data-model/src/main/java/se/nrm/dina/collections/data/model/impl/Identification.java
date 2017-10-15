@@ -5,6 +5,7 @@
  */
 package se.nrm.dina.collections.data.model.impl;
  
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType; 
@@ -15,6 +16,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import se.nrm.dina.collections.annotation.CollectionsManyToOne;
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -34,7 +36,8 @@ public class Identification extends BaseEntity {
     private String identificationText;
     
     @JoinColumn(name = "applies_to_individual_group_id", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @CollectionsManyToOne(name = "individual_group", type="IndividualGroup")
     private IndividualGroup appliesToIndividualGroupId;
 
     public Identification() {

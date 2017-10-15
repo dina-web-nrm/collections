@@ -1,0 +1,34 @@
+language: java 
+sudo: required
+services:
+  - docker
+jdk:
+  - oraclejdk8
+install: true
+
+script: "mvn clean verify && mvn cobertura:cobertura"
+# - mvn clean verify   
+#before_install:
+#  - pip install --user codecov
+after_success:
+#  - codecov
+  - bash <(curl -s https://codecov.io/bash)
+before_deploy:
+  - docker build --tag dina/collections-api:$TRAVIS_TAG .
+  - docker build --tag dina/collections-api .
+deploy:
+  provider: releases
+  api_key:
+    secure: Y2Sxg+r4Rkrcle9h6rvqDJg8sTmdC1kPkiOaL2//p7/Yfji92IZsororuOpEf09oHmtJi8G47DwwKAjjZaZ4JEcRkWcz3SrTMq2vvs4fXWIfdAQXAmuq0QKIKllKcXh5S7DBktl6ZizNVogg2qFUm/1b88Bf4aGkhLjDS8SCbsfJ13vT8AD1w8GwMrpMhgFM4H7x5cmjFFpsLLK2o9j1VcGlAGSaTME9EQucBwLlV1ZVRxnH/y+0tTGxYNq/JJPTh8qOh7s3IRpt4gE3eMMkcE1dGkfSiTsNufAQFF0ONd6N7KHGH2H6i+KjQnzPidQ54jo9Be+EewwjWYEmGFhvIUImALmfeVC07Xd3MaSs2820KEumk/+D1pKbvqyGoNVL+VoXXwTNYQlbEXsySTd4EapxlEGJoAoeTOoG7KdlQnNJQm6F8d06chCyy6zhbBrJMsLeG7HcCH8fVnElfukkAcwnf7oJsK0KtHfkPP9GQgAL26VO8J9o/Yg/DlHVSMGY6amGUfopVV0bA/yb2lHNWPiPSlD6xYc1dBFSXQdciiJkUQVLVsXahL6tmlW+0NBqe0GX0Proc9qE8fokF0YvhHENlvrwYcNzweGEEuGb/cfw5b3ngC8Zs19HNufpLMKxybTE39VFsU/D2S9rDYz9u3zBU2/inCcPixhoJWQD8Ws=
+  file:  
+    - collections-api/target/collections-api-swarm.jar  
+  skip_cleanup: true
+
+  on:
+    repo: DINA-Web/collections
+    tags: true
+    all_branches: true
+
+after_deploy:
+  - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker push dina/collections-api

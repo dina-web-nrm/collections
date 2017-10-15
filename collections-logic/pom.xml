@@ -14,5 +14,25 @@
     <artifactId>collections-logic</artifactId>
     <name>${project.artifactId}</name>
     
-    
+    <dependencies>
+                
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>collections-json-converter</artifactId>
+            <version>${project.parent.version}</version>   
+        </dependency>
+        
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>collections-jpa</artifactId>
+            <version>${project.version}</version> 
+        </dependency>
+        
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId> 
+            <scope>provided</scope>
+        </dependency>
+    </dependencies> 
+
 </project>
