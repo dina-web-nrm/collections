@@ -12,8 +12,8 @@ script:
 before_install:
   - pip install --user codecov
 after_success:
-#  - codecov
-  - bash <(curl -s https://codecov.io/bash) 
+  - codecov
+#  - bash <(curl -s https://codecov.io/bash) 
 before_deploy:
   - docker build --tag dina/collections-api:$TRAVIS_TAG .
   - docker build --tag dina/collections-api .
