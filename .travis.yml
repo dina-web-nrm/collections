@@ -9,8 +9,8 @@ script:
 - mvn clean verify
 # script: "mvn clean verify && mvn cobertura:cobertura"
 # - mvn clean verify   
-#before_install:
-#  - pip install --user codecov
+before_install:
+  - pip install --user codecov
 after_success:
 #  - codecov
   - bash <(curl -s https://codecov.io/bash) 
