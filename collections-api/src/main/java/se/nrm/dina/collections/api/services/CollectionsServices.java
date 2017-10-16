@@ -56,7 +56,7 @@ public class CollectionsServices implements Serializable {
     public Response getAll(@PathParam("entity") String entity) {
         log.info("getAll"); 
         
-        return Response.ok(logic.getAll("entity")).build();
+        return Response.ok(logic.getAll(entity)).build();
     }
     
     @GET

@@ -6,9 +6,9 @@ jdk:
   - oraclejdk8
 install: true
 script:
-- mvn clean test jacoco:report coveralls:report
+#- mvn clean test jacoco:report coveralls:report
 # script: "mvn clean verify && mvn cobertura:cobertura"
-# - mvn clean verify   
+ - mvn clean verify   
 before_install:
   - pip install --user codecov
 after_success:
