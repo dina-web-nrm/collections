@@ -7,7 +7,7 @@ package se.nrm.dina.collections.logic;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.io.Serializable;  
+import java.io.Serializable;   
 import javax.ejb.EJB; 
 import javax.inject.Inject;
 import javax.json.JsonObject;
@@ -46,6 +46,19 @@ public class CollectionsLogic implements Serializable  {
     public JsonObject getById(String entityName, long id) {
         Class clazz = Util.getInstance().convertClassNameToClass(entityName);
         return json.convert(dao.findById(id, clazz));
+    }
+    
+    public JsonObject saveEntity(String entityName, String theJson ) {
+        log.info("saveEntity : {} -- {}", entityName, theJson);
+        
+        try { 
+            Class clazz = Util.getInstance().convertClassNameToClass(entityName);
+            EntityBean bean = (EntityBean) mapper.readValue(theJson, clazz);
+            return json.convert(dao.create(bean));
+        } catch (IOException ex) {
+            log.error(ex.getMessage());
+            return null;
+        } 
     }
 
     public JsonObject savePhysicalUnit(String theJson) {

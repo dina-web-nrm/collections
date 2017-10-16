@@ -73,7 +73,7 @@ public class CollectionsServices implements Serializable {
                                     @PathParam("entity") String entity, String json) {
         log.info("createNewEntity - entity: {}", json);
       
-        return Response.ok(logic.savePhysicalUnit(json)).build();
+        return Response.ok(logic.saveEntity(entity, json)).build();
     }
     
     @DELETE
