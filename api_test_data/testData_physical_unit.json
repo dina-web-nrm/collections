@@ -1,0 +1,15 @@
+{
+    "physical_unit_text": "This is a test",
+    "normal_storage_location": "Stockholm",
+    "belongs_to_cataloged_unit_id": {
+        "catalog_number": "test_006"
+    },
+    "represents_individual_group_id": {},
+    "is_collected_at_occurrence_id": {
+        "collectors_text": "Ida Li",
+        "locality_text": "Sollentuna, Sweden",
+        "occurrence_date_text": "2017-10-12",
+        "involves_individual_group_id": { 
+        }
+    }
+}
