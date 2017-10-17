@@ -34,7 +34,7 @@ public class IndividualGroup extends BaseEntity {
     @CollectionsOneToMany
     private List<Identification> identificationList;
     
-    @OneToMany(mappedBy = "appliesToIndividualGroupId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "appliesToIndividualGroupId", fetch = FetchType.LAZY)
     @CollectionsOneToMany
     private List<FeatureObservation> featureObservationList;
     
@@ -42,7 +42,9 @@ public class IndividualGroup extends BaseEntity {
     @CollectionsOneToMany
     private List<Occurrence> occurrenceList;
     
-    @OneToMany(mappedBy = "representsIndividualGroupId", fetch = FetchType.LAZY)
+    @OneToMany( cascade = CascadeType.ALL, 
+                mappedBy = "representsIndividualGroupId",  
+                fetch = FetchType.LAZY)
     @CollectionsOneToMany
     private List<PhysicalUnit> physicalUnitList;
 
@@ -99,6 +101,16 @@ public class IndividualGroup extends BaseEntity {
         this.physicalUnitList = physicalUnitList;
     }
 
+//    public void addPhysicalUnit(PhysicalUnit physicalUnit) {
+//        physicalUnitList.add(physicalUnit);
+//        physicalUnit.setRepresentsIndividualGroupId(this);
+//    }
+//    
+//    public void removePhysicalUnit(PhysicalUnit physicalUnit) {
+//        physicalUnitList.remove(physicalUnit);
+//        physicalUnit.setBelongsToCatalogedUnitId(null);
+//    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
