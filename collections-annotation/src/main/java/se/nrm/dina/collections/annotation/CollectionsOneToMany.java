@@ -17,4 +17,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD) //on field level
 public @interface CollectionsOneToMany { 
+    String name();
+    String type();
 }

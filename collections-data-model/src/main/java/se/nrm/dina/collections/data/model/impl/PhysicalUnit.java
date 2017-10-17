@@ -33,26 +33,26 @@ public class PhysicalUnit extends BaseEntity {
  
     @Lob
     @Column(name = "physical_unit_text")
-    private String physicalUnitText;
+    private String physical_unit_text;
     
     @Lob
     @Column(name = "normal_storage_location")
-    private String normalStorageLocation;
+    private String normal_storage_location;
     
     @JoinColumn(name = "belongs_to_cataloged_unit_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "belongs_to_cataloged_unit", type="CatalogedUnit")
-    private CatalogedUnit belongsToCatalogedUnitId;
+    @CollectionsManyToOne(name = "belongs_to_cataloged_unit_id", type="CatalogedUnit")
+    private CatalogedUnit belongs_to_cataloged_unit_id;
     
     @JoinColumn(name = "represents_individual_group_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "individual_group", type="IndividualGroup")
-    private IndividualGroup representsIndividualGroupId;
+    @CollectionsManyToOne(name = "represents_individual_group_id", type="IndividualGroup")
+    private IndividualGroup represents_individual_group_id;
     
     @JoinColumn(name = "is_collected_at_occurrence_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "is_collected_at_occurrence", type="Occurrence")
-    private Occurrence isCollectedAtOccurrenceId;
+    @CollectionsManyToOne(name = "is_collected_at_occurrence_id", type="Occurrence")
+    private Occurrence is_collected_at_occurrence_id;
 
     public PhysicalUnit() {
     }
@@ -70,46 +70,88 @@ public class PhysicalUnit extends BaseEntity {
     public long getEntityId() {
         return id; 
     }
+
+    public String getPhysical_unit_text() {
+        return physical_unit_text;
+    }
+
+    public void setPhysical_unit_text(String physical_unit_text) {
+        this.physical_unit_text = physical_unit_text;
+    }
+
+    public String getNormal_storage_location() {
+        return normal_storage_location;
+    }
+
+    public void setNormal_storage_location(String normal_storage_location) {
+        this.normal_storage_location = normal_storage_location;
+    }
+
+    public CatalogedUnit getBelongs_to_cataloged_unit_id() {
+        return belongs_to_cataloged_unit_id;
+    }
+
+    public void setBelongs_to_cataloged_unit_id(CatalogedUnit belongs_to_cataloged_unit_id) {
+        this.belongs_to_cataloged_unit_id = belongs_to_cataloged_unit_id;
+    }
+
+    public IndividualGroup getRepresents_individual_group_id() {
+        return represents_individual_group_id;
+    }
+
+    public void setRepresents_individual_group_id(IndividualGroup represents_individual_group_id) {
+        this.represents_individual_group_id = represents_individual_group_id;
+    }
+
+    public Occurrence getIs_collected_at_occurrence_id() {
+        return is_collected_at_occurrence_id;
+    }
+
+    public void setIs_collected_at_occurrence_id(Occurrence is_collected_at_occurrence_id) {
+        this.is_collected_at_occurrence_id = is_collected_at_occurrence_id;
+    }
     
-    public String getPhysicalUnitText() {
-        return physicalUnitText;
-    }
-
-    public void setPhysicalUnitText(String physicalUnitText) {
-        this.physicalUnitText = physicalUnitText;
-    }
-
-    public String getNormalStorageLocation() {
-        return normalStorageLocation;
-    }
-
-    public void setNormalStorageLocation(String normalStorageLocation) {
-        this.normalStorageLocation = normalStorageLocation;
-    }
-
-    public CatalogedUnit getBelongsToCatalogedUnitId() {
-        return belongsToCatalogedUnitId;
-    }
-
-    public void setBelongsToCatalogedUnitId(CatalogedUnit belongsToCatalogedUnitId) {
-        this.belongsToCatalogedUnitId = belongsToCatalogedUnitId;
-    }
-
-    public IndividualGroup getRepresentsIndividualGroupId() {
-        return representsIndividualGroupId;
-    }
-
-    public void setRepresentsIndividualGroupId(IndividualGroup representsIndividualGroupId) {
-        this.representsIndividualGroupId = representsIndividualGroupId;
-    }
-
-    public Occurrence getIsCollectedAtOccurrenceId() {
-        return isCollectedAtOccurrenceId;
-    }
-
-    public void setIsCollectedAtOccurrenceId(Occurrence isCollectedAtOccurrenceId) {
-        this.isCollectedAtOccurrenceId = isCollectedAtOccurrenceId;
-    }
+    
+    
+//    public String getPhysicalUnitText() {
+//        return physical_unit_text;
+//    }
+//
+//    public void setPhysicalUnitText(String physical_unit_text) {
+//        this.physical_unit_text = physical_unit_text;
+//    }
+//
+//    public String getNormalStorageLocation() {
+//        return normal_storage_location;
+//    }
+//
+//    public void setNormalStorageLocation(String normal_storage_location) {
+//        this.normal_storage_location = normal_storage_location;
+//    }
+//
+//    public CatalogedUnit getBelongsToCatalogedUnitId() {
+//        return belongs_to_cataloged_unit_id;
+//    }
+//
+//    public void setBelongsToCatalogedUnitId(CatalogedUnit belongs_to_cataloged_unit_id) {
+//        this.belongs_to_cataloged_unit_id = belongs_to_cataloged_unit_id;
+//    }
+//
+//    public IndividualGroup getRepresentsIndividualGroupId() {
+//        return represents_individual_group_id;
+//    }
+//
+//    public void setRepresentsIndividualGroupId(IndividualGroup represents_individual_group_id) {
+//        this.represents_individual_group_id = represents_individual_group_id;
+//    }
+//
+//    public Occurrence getIsCollectedAtOccurrenceId() {
+//        return is_collected_at_occurrence_id;
+//    }
+//
+//    public void setIsCollectedAtOccurrenceId(Occurrence is_collected_at_occurrence_id) {
+//        this.is_collected_at_occurrence_id = is_collected_at_occurrence_id;
+//    }
 
     @Override
     public int hashCode() {

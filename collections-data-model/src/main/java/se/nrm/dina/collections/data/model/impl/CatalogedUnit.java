@@ -28,17 +28,18 @@ import se.nrm.dina.collections.data.model.BaseEntity;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "CatalogedUnit.findAll", query = "SELECT c FROM CatalogedUnit c"),
-    @NamedQuery(name = "CatalogedUnit.findById", query = "SELECT c FROM CatalogedUnit c WHERE c.id = :id"),  
-    @NamedQuery(name = "CatalogedUnit.findByCatalogNumber", query = "SELECT c FROM CatalogedUnit c WHERE c.catalogNumber = :catalogNumber")})
+    @NamedQuery(name = "CatalogedUnit.findById", query = "SELECT c FROM CatalogedUnit c WHERE c.id = :id")
+//    @NamedQuery(name = "CatalogedUnit.findByCatalogNumber", query = "SELECT c FROM CatalogedUnit c WHERE c.catalogNumber = :catalogNumber")
+})
 public class CatalogedUnit extends BaseEntity {
 
     @Basic(optional = false)
     @Column(name = "catalog_number")
-    private String catalogNumber;
+    private String catalog_number;
     
-    @OneToMany(mappedBy = "belongsToCatalogedUnitId", fetch = FetchType.LAZY)
-    @CollectionsOneToMany
-    private List<PhysicalUnit> physicalUnitList;
+    @OneToMany(mappedBy = "belongs_to_cataloged_unit_id", fetch = FetchType.LAZY)
+    @CollectionsOneToMany(name = "physical_units", type = "PhysicalUnit")
+    private List<PhysicalUnit> physical_units;
 
     public CatalogedUnit() {
     }
@@ -47,33 +48,51 @@ public class CatalogedUnit extends BaseEntity {
         this.id = id;
     }
 
-    public CatalogedUnit(Long id, int version, String catalogNumber) {
+    public CatalogedUnit(Long id, int version, String catalog_number) {
         this.id = id;
         this.version = version;
-        this.catalogNumber = catalogNumber;
+        this.catalog_number = catalog_number;
     }
  
     @Override
     public long getEntityId() {
         return id;
     }
+
+    public String getCatalog_number() {
+        return catalog_number;
+    }
+
+    public void setCatalog_number(String catalog_number) {
+        this.catalog_number = catalog_number;
+    }
+
+    public List<PhysicalUnit> getPhysical_units() {
+        return physical_units;
+    }
+
+    public void setPhysical_units(List<PhysicalUnit> physical_units) {
+        this.physical_units = physical_units;
+    }
     
-    public String getCatalogNumber() {
-        return catalogNumber;
-    }
-
-    public void setCatalogNumber(String catalogNumber) {
-        this.catalogNumber = catalogNumber;
-    }
-
-    @XmlTransient
-    public List<PhysicalUnit> getPhysicalUnitList() {
-        return physicalUnitList;
-    }
-
-    public void setPhysicalUnitList(List<PhysicalUnit> physicalUnitList) {
-        this.physicalUnitList = physicalUnitList;
-    }
+    
+    
+//    public String getCatalogNumber() {
+//        return catalog_number;
+//    }
+//
+//    public void setCatalogNumber(String catalog_number) {
+//        this.catalog_number = catalog_number;
+//    }
+//
+//    @XmlTransient
+//    public List<PhysicalUnit> getPhysicalUnits() {
+//        return physical_units;
+//    }
+//
+//    public void setPhysicalUnitList(List<PhysicalUnit> physical_units) {
+//        this.physical_units = physical_units;
+//    }
 
     @Override
     public int hashCode() {

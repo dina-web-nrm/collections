@@ -30,23 +30,23 @@ import se.nrm.dina.collections.data.model.BaseEntity;
     @NamedQuery(name = "IndividualGroup.findById", query = "SELECT i FROM IndividualGroup i WHERE i.id = :id")})
 public class IndividualGroup extends BaseEntity {
  
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "appliesToIndividualGroupId", fetch = FetchType.LAZY)
-    @CollectionsOneToMany
-    private List<Identification> identificationList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "applies_to_individual_group_id", fetch = FetchType.LAZY)
+    @CollectionsOneToMany(name = "identifications", type = "Identification")
+    private List<Identification> identifications;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "appliesToIndividualGroupId", fetch = FetchType.LAZY)
-    @CollectionsOneToMany
-    private List<FeatureObservation> featureObservationList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "applies_to_individual_group_id", fetch = FetchType.LAZY)
+    @CollectionsOneToMany(name = "feature_observations", type = "FeatureObservation")
+    private List<FeatureObservation> feature_observations;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "involvesIndividualGroupId", fetch = FetchType.LAZY)
-    @CollectionsOneToMany
-    private List<Occurrence> occurrenceList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "involves_individual_group_id", fetch = FetchType.LAZY)
+    @CollectionsOneToMany(name = "occurrences", type = "Occurrence")
+    private List<Occurrence> occurrences;
     
     @OneToMany( cascade = CascadeType.ALL, 
-                mappedBy = "representsIndividualGroupId",  
+                mappedBy = "represents_individual_group_id",  
                 fetch = FetchType.LAZY)
-    @CollectionsOneToMany
-    private List<PhysicalUnit> physicalUnitList;
+    @CollectionsOneToMany(name = "physical_units", type = "PhysicalUnit")
+    private List<PhysicalUnit> physical_units;
 
     public IndividualGroup() {
     }
@@ -64,52 +64,77 @@ public class IndividualGroup extends BaseEntity {
     public long getEntityId() {
         return id;
     }
+
+    public List<Identification> getIdentifications() {
+        return identifications;
+    }
+
+    public void setIdentifications(List<Identification> identifications) {
+        this.identifications = identifications;
+    }
+
+    public List<FeatureObservation> getFeature_observations() {
+        return feature_observations;
+    }
+
+    public void setFeature_observations(List<FeatureObservation> feature_observations) {
+        this.feature_observations = feature_observations;
+    }
+
+    public List<Occurrence> getOccurrences() {
+        return occurrences;
+    }
+
+    public void setOccurrences(List<Occurrence> occurrences) {
+        this.occurrences = occurrences;
+    }
+
+    public List<PhysicalUnit> getPhysical_units() {
+        return physical_units;
+    }
+
+    public void setPhysical_units(List<PhysicalUnit> physical_units) {
+        this.physical_units = physical_units;
+    }
+    
+    
  
-    @XmlTransient
-    public List<Identification> getIdentificationList() {
-        return identificationList;
-    }
-
-    public void setIdentificationList(List<Identification> identificationList) {
-        this.identificationList = identificationList;
-    }
-
-    @XmlTransient
-    public List<FeatureObservation> getFeatureObservationList() {
-        return featureObservationList;
-    }
-
-    public void setFeatureObservationList(List<FeatureObservation> featureObservationList) {
-        this.featureObservationList = featureObservationList;
-    }
-
-    @XmlTransient
-    public List<Occurrence> getOccurrenceList() {
-        return occurrenceList;
-    }
-
-    public void setOccurrenceList(List<Occurrence> occurrenceList) {
-        this.occurrenceList = occurrenceList;
-    }
-
-    @XmlTransient
-    public List<PhysicalUnit> getPhysicalUnitList() {
-        return physicalUnitList;
-    }
-
-    public void setPhysicalUnitList(List<PhysicalUnit> physicalUnitList) {
-        this.physicalUnitList = physicalUnitList;
-    }
-
-//    public void addPhysicalUnit(PhysicalUnit physicalUnit) {
-//        physicalUnitList.add(physicalUnit);
-//        physicalUnit.setRepresentsIndividualGroupId(this);
+//    @XmlTransient
+//    public List<Identification> getIdentificationList() {
+//        return identifications;
 //    }
-//    
-//    public void removePhysicalUnit(PhysicalUnit physicalUnit) {
-//        physicalUnitList.remove(physicalUnit);
-//        physicalUnit.setBelongsToCatalogedUnitId(null);
+//
+//    public void setIdentificationList(List<Identification> identifications) {
+//        this.identifications = identifications;
 //    }
+//
+//    @XmlTransient
+//    public List<FeatureObservation> getFeatureObservationList() {
+//        return feature_observations;
+//    }
+//
+//    public void setFeatureObservationList(List<FeatureObservation> feature_observations) {
+//        this.feature_observations = feature_observations;
+//    }
+//
+//    @XmlTransient
+//    public List<Occurrence> getOccurrenceList() {
+//        return occurrences;
+//    }
+//
+//    public void setOccurrenceList(List<Occurrence> occurrences) {
+//        this.occurrences = occurrences;
+//    }
+//
+//    @XmlTransient
+//    public List<PhysicalUnit> getPhysicalUnitList() {
+//        return physical_units;
+//    }
+//
+//    public void setPhysicalUnitList(List<PhysicalUnit> physical_units) {
+//        this.physical_units = physical_units;
+//    }
+// 
     
     @Override
     public int hashCode() {

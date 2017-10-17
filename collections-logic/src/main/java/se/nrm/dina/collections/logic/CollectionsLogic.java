@@ -61,36 +61,36 @@ public class CollectionsLogic implements Serializable  {
             EntityBean bean = (EntityBean) mapper.readValue(theJson, clazz);
             if(bean instanceof PhysicalUnit) {
                 PhysicalUnit pu = (PhysicalUnit) bean;
-                ig = pu.getRepresentsIndividualGroupId();
-                Occurrence occurrence = pu.getIsCollectedAtOccurrenceId();
+                ig = pu.getRepresents_individual_group_id();
+                Occurrence occurrence = pu.getIs_collected_at_occurrence_id();
                 if(occurrence != null) {
-                    occurrence.setInvolvesIndividualGroupId(ig); 
+                    occurrence.setInvolves_individual_group_id(ig); 
                 }
             } else if(bean instanceof IndividualGroup) {
                 ig = (IndividualGroup) bean; 
                 
-                List<Occurrence> occurrences = ig.getOccurrenceList();
+                List<Occurrence> occurrences = ig.getOccurrences();
                 if(occurrences != null) {
                     occurrences.stream().forEach(o -> {
-                        o.setInvolvesIndividualGroupId(ig); 
+                        o.setInvolves_individual_group_id(ig); 
                     });
                 }
                 
-                List<PhysicalUnit> physicalUnits = ig.getPhysicalUnitList(); 
+                List<PhysicalUnit> physicalUnits = ig.getPhysical_units(); 
                 if(physicalUnits != null) {
                     physicalUnits.stream().forEach(p -> {
-                        p.setRepresentsIndividualGroupId(ig);
+                        p.setRepresents_individual_group_id(ig);
                         if(occurrences != null && !occurrences.isEmpty()) {
                             Occurrence o = occurrences.get(0);
-                            p.setIsCollectedAtOccurrenceId(o);
+                            p.setIs_collected_at_occurrence_id(o);
                         }
                     });
                 } 
  
-                List<FeatureObservation> foList = ig.getFeatureObservationList();
+                List<FeatureObservation> foList = ig.getFeature_observations();
                 if(foList != null) {
                     foList.stream().forEach(f -> {
-                        f.setAppliesToIndividualGroupId(ig);
+                        f.setApplies_to_individual_group_id(ig);
                     });
                 }
             }

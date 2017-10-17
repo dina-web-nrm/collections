@@ -29,17 +29,18 @@ import se.nrm.dina.collections.data.model.BaseEntity;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "FeatureObservationType.findAll", query = "SELECT f FROM FeatureObservationType f"), 
-    @NamedQuery(name = "FeatureObservationType.findById", query = "SELECT f FROM FeatureObservationType f WHERE f.id = :id"), 
-    @NamedQuery(name = "FeatureObservationType.findByFeatureObservationTypeName", query = "SELECT f FROM FeatureObservationType f WHERE f.featureObservationTypeName = :featureObservationTypeName")})
+    @NamedQuery(name = "FeatureObservationType.findById", query = "SELECT f FROM FeatureObservationType f WHERE f.id = :id")
+//    @NamedQuery(name = "FeatureObservationType.findByFeatureObservationTypeName", query = "SELECT f FROM FeatureObservationType f WHERE f.featureObservationTypeName = :featureObservationTypeName")
+})
 public class FeatureObservationType extends BaseEntity {
  
     @Basic(optional = false)
     @Column(name = "feature_observation_type_name")
-    private String featureObservationTypeName;
+    private String feature_observation_type_name;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "isOfFeatureObservationTypeId", fetch = FetchType.LAZY)
-    @CollectionsOneToMany
-    private List<FeatureObservation> featureObservationList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "is_of_feature_observation_type_id", fetch = FetchType.LAZY)
+    @CollectionsOneToMany(name = "feature_observations", type = "FeatureObservation")
+    private List<FeatureObservation> feature_observations;
 
     public FeatureObservationType() {
     }
@@ -48,33 +49,51 @@ public class FeatureObservationType extends BaseEntity {
         this.id = id;
     }
 
-    public FeatureObservationType(Long id, int version, String featureObservationTypeName) {
+    public FeatureObservationType(Long id, int version, String feature_observation_type_name) {
         this.id = id;
         this.version = version;
-        this.featureObservationTypeName = featureObservationTypeName;
+        this.feature_observation_type_name = feature_observation_type_name;
     }
      
     @Override
     public long getEntityId() {
         return id;
     }
+
+    public String getFeature_observation_type_name() {
+        return feature_observation_type_name;
+    }
+
+    public void setFeature_observation_type_name(String feature_observation_type_name) {
+        this.feature_observation_type_name = feature_observation_type_name;
+    }
+
+    public List<FeatureObservation> getFeature_observations() {
+        return feature_observations;
+    }
+
+    public void setFeature_observations(List<FeatureObservation> feature_observations) {
+        this.feature_observations = feature_observations;
+    }
     
-    public String getFeatureObservationTypeName() {
-        return featureObservationTypeName;
-    }
-
-    public void setFeatureObservationTypeName(String featureObservationTypeName) {
-        this.featureObservationTypeName = featureObservationTypeName;
-    }
-
-    @XmlTransient
-    public List<FeatureObservation> getFeatureObservationList() {
-        return featureObservationList;
-    }
-
-    public void setFeatureObservationList(List<FeatureObservation> featureObservationList) {
-        this.featureObservationList = featureObservationList;
-    }
+    
+    
+//    public String getFeatureObservationTypeName() {
+//        return feature_observation_type_name;
+//    }
+//
+//    public void setFeatureObservationTypeName(String feature_observation_type_name) {
+//        this.feature_observation_type_name = feature_observation_type_name;
+//    }
+//
+//    @XmlTransient
+//    public List<FeatureObservation> getFeatureObservationList() {
+//        return feature_observations;
+//    }
+//
+//    public void setFeatureObservationList(List<FeatureObservation> feature_observations) {
+//        this.feature_observations = feature_observations;
+//    }
 
     @Override
     public int hashCode() {

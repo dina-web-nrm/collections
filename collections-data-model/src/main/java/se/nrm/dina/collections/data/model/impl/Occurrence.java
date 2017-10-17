@@ -37,24 +37,24 @@ public class Occurrence extends BaseEntity {
  
     @Lob
     @Column(name = "collectors_text")
-    private String collectorsText;
+    private String collectors_text;
     
     @Lob
     @Column(name = "locality_text")
-    private String localityText;
+    private String locality_text;
     
     @Lob
     @Column(name = "occurrence_date_text")
-    private String occurrenceDateText;
+    private String occurrence_date_text;
     
     @JoinColumn(name = "involves_individual_group_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "individual_group", type = "IndividualGroup")
-    private IndividualGroup involvesIndividualGroupId;
+    @CollectionsManyToOne(name = "involves_individual_group_id", type = "IndividualGroup")
+    private IndividualGroup involves_individual_group_id;
     
-    @OneToMany(mappedBy = "isCollectedAtOccurrenceId", fetch = FetchType.LAZY)
-    @CollectionsOneToMany
-    private List<PhysicalUnit> physicalUnitList;
+    @OneToMany(mappedBy = "is_collected_at_occurrence_id", fetch = FetchType.LAZY)
+    @CollectionsOneToMany(name = "physical_units", type = "PhysicalUnit")
+    private List<PhysicalUnit> physical_units;
 
     public Occurrence() {
     }
@@ -72,46 +72,88 @@ public class Occurrence extends BaseEntity {
     public long getEntityId() {
         return id;
     }
+
+    public String getCollectors_text() {
+        return collectors_text;
+    }
+
+    public void setCollectors_text(String collectors_text) {
+        this.collectors_text = collectors_text;
+    }
+
+    public String getLocality_text() {
+        return locality_text;
+    }
+
+    public void setLocality_text(String locality_text) {
+        this.locality_text = locality_text;
+    }
+
+    public String getOccurrence_date_text() {
+        return occurrence_date_text;
+    }
+
+    public void setOccurrence_date_text(String occurrence_date_text) {
+        this.occurrence_date_text = occurrence_date_text;
+    }
+
+    public IndividualGroup getInvolves_individual_group_id() {
+        return involves_individual_group_id;
+    }
+
+    public void setInvolves_individual_group_id(IndividualGroup involves_individual_group_id) {
+        this.involves_individual_group_id = involves_individual_group_id;
+    }
+
+    public List<PhysicalUnit> getPhysical_units() {
+        return physical_units;
+    }
+
+    public void setPhysical_units(List<PhysicalUnit> physical_units) {
+        this.physical_units = physical_units;
+    }
+    
+    
      
-    public String getCollectorsText() {
-        return collectorsText;
-    }
-
-    public void setCollectorsText(String collectorsText) {
-        this.collectorsText = collectorsText;
-    }
-
-    public String getLocalityText() {
-        return localityText;
-    }
-
-    public void setLocalityText(String localityText) {
-        this.localityText = localityText;
-    }
-
-    public String getOccurrenceDateText() {
-        return occurrenceDateText;
-    }
-
-    public void setOccurrenceDateText(String occurrenceDateText) {
-        this.occurrenceDateText = occurrenceDateText;
-    }
-
-    public IndividualGroup getInvolvesIndividualGroupId() {
-        return involvesIndividualGroupId;
-    }
-
-    public void setInvolvesIndividualGroupId(IndividualGroup involvesIndividualGroupId) {
-        this.involvesIndividualGroupId = involvesIndividualGroupId;
-    }
+//    public String getCollectorsText() {
+//        return collectors_text;
+//    }
+//
+//    public void setCollectorsText(String collectors_text) {
+//        this.collectors_text = collectors_text;
+//    }
+//
+//    public String getLocalityText() {
+//        return locality_text;
+//    }
+//
+//    public void setLocalityText(String locality_text) {
+//        this.locality_text = locality_text;
+//    }
+//
+//    public String getOccurrenceDateText() {
+//        return occurrence_date_text;
+//    }
+//
+//    public void setOccurrenceDateText(String occurrence_date_text) {
+//        this.occurrence_date_text = occurrence_date_text;
+//    }
+//
+//    public IndividualGroup getInvolvesIndividualGroupId() {
+//        return involves_individual_group_id;
+//    }
+//
+//    public void setInvolvesIndividualGroupId(IndividualGroup involves_individual_group_id) {
+//        this.involves_individual_group_id = involves_individual_group_id;
+//    }
 
     @XmlTransient
     public List<PhysicalUnit> getPhysicalUnitList() {
-        return physicalUnitList;
+        return physical_units;
     }
 
-    public void setPhysicalUnitList(List<PhysicalUnit> physicalUnitList) {
-        this.physicalUnitList = physicalUnitList;
+    public void setPhysicalUnitList(List<PhysicalUnit> physical_units) {
+        this.physical_units = physical_units;
     }
 
     @Override

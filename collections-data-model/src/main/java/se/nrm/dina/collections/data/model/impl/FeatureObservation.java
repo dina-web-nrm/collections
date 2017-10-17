@@ -33,17 +33,17 @@ public class FeatureObservation extends BaseEntity {
  
     @Lob
     @Column(name = "feature_observation_text")
-    private String featureObservationText;
+    private String feature_observation_text;
     
     @JoinColumn(name = "is_of_feature_observation_type_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @CollectionsManyToOne(name = "feature_observation_type", type="FeatureObservationType")
-    private FeatureObservationType isOfFeatureObservationTypeId;
+    @CollectionsManyToOne(name = "is_of_feature_observation_type_id", type="FeatureObservationType")
+    private FeatureObservationType is_of_feature_observation_type_id;
     
     @JoinColumn(name = "applies_to_individual_group_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "individual_group", type="IndividualGroup")
-    private IndividualGroup appliesToIndividualGroupId;
+    @CollectionsManyToOne(name = "applies_to_individual_group_id", type="IndividualGroup")
+    private IndividualGroup applies_to_individual_group_id;
 
     public FeatureObservation() {
     }
@@ -61,30 +61,56 @@ public class FeatureObservation extends BaseEntity {
     public long getEntityId() {
         return id;
     }
+
+    public String getFeature_observation_text() {
+        return feature_observation_text;
+    }
+
+    public void setFeature_observation_text(String feature_observation_text) {
+        this.feature_observation_text = feature_observation_text;
+    }
+
+    public FeatureObservationType getIs_of_feature_observation_type_id() {
+        return is_of_feature_observation_type_id;
+    }
+
+    public void setIs_of_feature_observation_type_id(FeatureObservationType is_of_feature_observation_type_id) {
+        this.is_of_feature_observation_type_id = is_of_feature_observation_type_id;
+    }
+
+    public IndividualGroup getApplies_to_individual_group_id() {
+        return applies_to_individual_group_id;
+    }
+
+    public void setApplies_to_individual_group_id(IndividualGroup applies_to_individual_group_id) {
+        this.applies_to_individual_group_id = applies_to_individual_group_id;
+    }
      
-    public String getFeatureObservationText() {
-        return featureObservationText;
-    }
-
-    public void setFeatureObservationText(String featureObservationText) {
-        this.featureObservationText = featureObservationText;
-    }
-
-    public FeatureObservationType getIsOfFeatureObservationTypeId() {
-        return isOfFeatureObservationTypeId;
-    }
-
-    public void setIsOfFeatureObservationTypeId(FeatureObservationType isOfFeatureObservationTypeId) {
-        this.isOfFeatureObservationTypeId = isOfFeatureObservationTypeId;
-    }
-
-    public IndividualGroup getAppliesToIndividualGroupId() {
-        return appliesToIndividualGroupId;
-    }
-
-    public void setAppliesToIndividualGroupId(IndividualGroup appliesToIndividualGroupId) {
-        this.appliesToIndividualGroupId = appliesToIndividualGroupId;
-    }
+    
+    
+//    public String getFeatureObservationText() {
+//        return feature_observation_text;
+//    }
+//
+//    public void setFeatureObservationText(String feature_observation_text) {
+//        this.feature_observation_text = feature_observation_text;
+//    }
+//
+//    public FeatureObservationType getIsOfFeatureObservationTypeId() {
+//        return is_of_feature_observation_type_id;
+//    }
+//
+//    public void setIsOfFeatureObservationTypeId(FeatureObservationType is_of_feature_observation_type_id) {
+//        this.is_of_feature_observation_type_id = is_of_feature_observation_type_id;
+//    }
+//
+//    public IndividualGroup getAppliesToIndividualGroupId() {
+//        return applies_to_individual_group_id;
+//    }
+//
+//    public void setAppliesToIndividualGroupId(IndividualGroup applies_to_individual_group_id) {
+//        this.applies_to_individual_group_id = applies_to_individual_group_id;
+//    }
 
     @Override
     public int hashCode() {

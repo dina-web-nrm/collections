@@ -101,7 +101,7 @@ public class JsonConverterImpl<T extends Object>implements JsonConverter<T>, Ser
                         if (f.isAnnotationPresent(CollectionsManyToOne.class)) {
                             buildManyToOneRelationship(f, fieldValue, relBuilder);
                         } else if (f.isAnnotationPresent(CollectionsOneToMany.class)) {
-                            buildOneToManyRelationship(fieldValue, relBuilder); 
+                            buildOneToManyRelationship(f, fieldValue, relBuilder); 
                         } else {
                             addAttributes(attBuilder, fieldValue, f.getName());
                         }
@@ -112,7 +112,7 @@ public class JsonConverterImpl<T extends Object>implements JsonConverter<T>, Ser
         dataBuilder.add(CommonString.getInstance().getRelationships(), relBuilder); 
     }
     
-    private void buildOneToManyRelationship(Object bean, JsonObjectBuilder relBuilder) {
+    private void buildOneToManyRelationship(Field field, Object bean, JsonObjectBuilder relBuilder) {
         log.info("buildOneToManyRelationship");
         JsonObjectBuilder subBuilder = Json.createObjectBuilder();
         JsonObjectBuilder subDataBuilder = Json.createObjectBuilder();
@@ -121,7 +121,7 @@ public class JsonConverterImpl<T extends Object>implements JsonConverter<T>, Ser
         List<Object> subBeans = (List<Object>) bean;
         if (subBeans != null && !subBeans.isEmpty()) {
             
-            String fieldName = subBeans.get(0).getClass().getSimpleName(); 
+            String fieldName = field.getAnnotation(CollectionsOneToMany.class).name();
             
             subBeans.stream()
                     .forEach(b -> {  
