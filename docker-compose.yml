@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  # MySQL database for Keycloak
+  db:
+    image: mysql:latest
+    env_file: ./env/.envmysql 
+    volumes:
+      - db_collections:/var/lib/mysql
+      - ./mysql-autoload:/docker-entrypoint-initdb.d:ro
+
+ 
+# Java JSON-API
+  api:
+    image: dina/collections-api:v0.1
+    env_file:  
+      - ./env/.envaccounts
+    environment:
+      - VIRTUAL_HOST=beta-api.dina-web.net
+#   volumes:
+#     - ./env/.envapi:/usr/src/myapp/project-initdata.yml
+    ports:
+      - "8181:8181"
+    links:
+      - db:mysql
+
+ 
+volumes:
+  db_collections: 

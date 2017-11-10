@@ -1,0 +1,10 @@
+{
+  "realm": "dina",
+  "realm-public-key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsAZ1vtpIZSCMw9M9bVcX7zLP1libLcQfMZUTE52kdpvwMH/6Vifs3hXcgb0E0DsWpD1jw+uO8eXq5emkHRflUbACNDfaufVSwksTEa5LDr2XSoWqj/eYkEttKzbJDCtb9l8d1Zi9fXGHCA4faIj1tvmMiyLrKnOaI19DZ47xEa/Cf3dTnsMR1vIh7KviHyot6Pm00/G/7dBugu8FgLlrcC/pz4FX9I6eW/li9r/CSIrHRfa/rGS0cgXGOi5k6pu1YnwinfAbkykXWyTAL9pwybzbNjDaq4kOWkzo/1eQ0hCujjU05oQGivuOFmaaeHIV2NAhusYAIJzE7m07U2b1twIDAQAB",
+  "bearer-only": true,
+  "auth-server-url": "https://beta-sso.dina-web.net/auth",
+  "ssl-required": "none",
+  "resource": "collections",
+  "use-resource-role-mappings": true
+}
+
