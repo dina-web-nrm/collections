@@ -20,6 +20,7 @@ build-api:
    
 up:
 	#docker-compose up -d#
+	docker-compose up -d proxy
 	docker-compose up -d db 
 	docker-compose up -d api 
 

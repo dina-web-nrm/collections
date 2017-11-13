@@ -18,12 +18,23 @@ services:
       - ./env/.envaccounts
     environment:
       - VIRTUAL_HOST=beta-api.dina-web.net
+      - VIRTUAL_PORT=8080
 #   volumes:
 #     - ./env/.envapi:/usr/src/myapp/project-initdata.yml
-    ports:
-      - "8181:8181"
+#    ports:
+#      - "8181:8181"
     links:
       - db:mysql
+
+# Generic proxy
+  proxy:
+    image: jwilder/nginx-proxy:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./certs:/etc/nginx/certs
 
  
 volumes:

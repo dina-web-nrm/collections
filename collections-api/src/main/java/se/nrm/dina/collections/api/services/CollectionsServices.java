@@ -26,7 +26,7 @@ import se.nrm.dina.collections.logic.CollectionsLogic;
  *
  * @author idali
  */
-@Path("/collections/api/v01")
+@Path("collections/api/v01")
 @Consumes({MediaType.APPLICATION_JSON+";charset=UTF-8"})
 @Produces({MediaType.APPLICATION_JSON + ";charset=UTF-8"})
 @Stateless
