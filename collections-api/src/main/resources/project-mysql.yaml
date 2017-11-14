@@ -12,4 +12,4 @@ swarm:
         driver-name: com.mysql
         connection-url: jdbc:mysql://db:3306/dina_collections?autoReconnect=true&useSSL=false
         user-name: admin
-        password: ${password}  
+        password: password12
