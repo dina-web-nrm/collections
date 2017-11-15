@@ -14,8 +14,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlRootElement; 
 import se.nrm.dina.collections.annotation.CollectionsOneToMany;
 import se.nrm.dina.collections.data.model.BaseEntity;
 
@@ -35,11 +34,11 @@ public class CatalogedUnit extends BaseEntity {
 
     @Basic(optional = false)
     @Column(name = "catalog_number")
-    private String catalog_number;
+    private String catalogNumber;
     
     @OneToMany(mappedBy = "belongs_to_cataloged_unit_id", fetch = FetchType.LAZY)
-    @CollectionsOneToMany(name = "physical_units", type = "PhysicalUnit")
-    private List<PhysicalUnit> physical_units;
+    @CollectionsOneToMany(name = "physicalUnits", type = "PhysicalUnit")
+    private List<PhysicalUnit> physicalUnits;
 
     public CatalogedUnit() {
     }
@@ -48,10 +47,10 @@ public class CatalogedUnit extends BaseEntity {
         this.id = id;
     }
 
-    public CatalogedUnit(Long id, int version, String catalog_number) {
+    public CatalogedUnit(Long id, int version, String catalogNumber) {
         this.id = id;
         this.version = version;
-        this.catalog_number = catalog_number;
+        this.catalogNumber = catalogNumber;
     }
  
     @Override
@@ -59,41 +58,22 @@ public class CatalogedUnit extends BaseEntity {
         return id;
     }
 
-    public String getCatalog_number() {
-        return catalog_number;
+    public String getCatalogNumber() {
+        return catalogNumber;
     }
 
-    public void setCatalog_number(String catalog_number) {
-        this.catalog_number = catalog_number;
+    public void setCatalogNumber(String catalog_number) {
+        this.catalogNumber = catalog_number;
     }
 
-    public List<PhysicalUnit> getPhysical_units() {
-        return physical_units;
+    public List<PhysicalUnit> getPhysicalUnits() {
+        return physicalUnits;
     }
 
-    public void setPhysical_units(List<PhysicalUnit> physical_units) {
-        this.physical_units = physical_units;
+    public void setPhysicalUnits(List<PhysicalUnit> physicalUnits) {
+        this.physicalUnits = physicalUnits;
     }
-    
-    
-    
-//    public String getCatalogNumber() {
-//        return catalog_number;
-//    }
-//
-//    public void setCatalogNumber(String catalog_number) {
-//        this.catalog_number = catalog_number;
-//    }
-//
-//    @XmlTransient
-//    public List<PhysicalUnit> getPhysicalUnits() {
-//        return physical_units;
-//    }
-//
-//    public void setPhysicalUnitList(List<PhysicalUnit> physical_units) {
-//        this.physical_units = physical_units;
-//    }
-
+ 
     @Override
     public int hashCode() {
         int hash = 0;

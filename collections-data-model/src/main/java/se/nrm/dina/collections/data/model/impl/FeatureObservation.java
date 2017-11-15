@@ -33,17 +33,17 @@ public class FeatureObservation extends BaseEntity {
  
     @Lob
     @Column(name = "feature_observation_text")
-    private String feature_observation_text;
+    private String featureObservationText;
     
     @JoinColumn(name = "is_of_feature_observation_type_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @CollectionsManyToOne(name = "is_of_feature_observation_type_id", type="FeatureObservationType")
-    private FeatureObservationType is_of_feature_observation_type_id;
+    @CollectionsManyToOne(name = "isOfFeatureObservationType", type="FeatureObservationType")
+    private FeatureObservationType isOfFeatureObservationType;
     
     @JoinColumn(name = "applies_to_individual_group_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "applies_to_individual_group_id", type="IndividualGroup")
-    private IndividualGroup applies_to_individual_group_id;
+    @CollectionsManyToOne(name = "appliesToIndividualGroup", type="IndividualGroup")
+    private IndividualGroup appliesToIndividualGroup;
 
     public FeatureObservation() {
     }
@@ -62,56 +62,32 @@ public class FeatureObservation extends BaseEntity {
         return id;
     }
 
-    public String getFeature_observation_text() {
-        return feature_observation_text;
+    public String getFeatureObservationText() {
+        return featureObservationText;
     }
 
-    public void setFeature_observation_text(String feature_observation_text) {
-        this.feature_observation_text = feature_observation_text;
+    public void setFeatureObservationText(String featureObservationText) {
+        this.featureObservationText = featureObservationText;
     }
 
-    public FeatureObservationType getIs_of_feature_observation_type_id() {
-        return is_of_feature_observation_type_id;
+    public FeatureObservationType getIsOfFeatureObservationType() {
+        return isOfFeatureObservationType;
     }
 
-    public void setIs_of_feature_observation_type_id(FeatureObservationType is_of_feature_observation_type_id) {
-        this.is_of_feature_observation_type_id = is_of_feature_observation_type_id;
+    public void setIsOfFeatureObservationType(FeatureObservationType isOfFeatureObservationType) {
+        this.isOfFeatureObservationType = isOfFeatureObservationType;
     }
 
-    public IndividualGroup getApplies_to_individual_group_id() {
-        return applies_to_individual_group_id;
+    public IndividualGroup getAppliesToIndividualGroup() {
+        return appliesToIndividualGroup;
     }
 
-    public void setApplies_to_individual_group_id(IndividualGroup applies_to_individual_group_id) {
-        this.applies_to_individual_group_id = applies_to_individual_group_id;
+    public void setAppliesToIndividualGroup(IndividualGroup appliesToIndividualGroup) {
+        this.appliesToIndividualGroup = appliesToIndividualGroup;
     }
-     
+ 
     
     
-//    public String getFeatureObservationText() {
-//        return feature_observation_text;
-//    }
-//
-//    public void setFeatureObservationText(String feature_observation_text) {
-//        this.feature_observation_text = feature_observation_text;
-//    }
-//
-//    public FeatureObservationType getIsOfFeatureObservationTypeId() {
-//        return is_of_feature_observation_type_id;
-//    }
-//
-//    public void setIsOfFeatureObservationTypeId(FeatureObservationType is_of_feature_observation_type_id) {
-//        this.is_of_feature_observation_type_id = is_of_feature_observation_type_id;
-//    }
-//
-//    public IndividualGroup getAppliesToIndividualGroupId() {
-//        return applies_to_individual_group_id;
-//    }
-//
-//    public void setAppliesToIndividualGroupId(IndividualGroup applies_to_individual_group_id) {
-//        this.applies_to_individual_group_id = applies_to_individual_group_id;
-//    }
-
     @Override
     public int hashCode() {
         int hash = 0;

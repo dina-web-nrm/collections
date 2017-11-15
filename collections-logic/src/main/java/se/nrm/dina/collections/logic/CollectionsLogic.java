@@ -61,10 +61,10 @@ public class CollectionsLogic implements Serializable  {
             EntityBean bean = (EntityBean) mapper.readValue(theJson, clazz);
             if(bean instanceof PhysicalUnit) {
                 PhysicalUnit pu = (PhysicalUnit) bean;
-                ig = pu.getRepresents_individual_group_id();
-                Occurrence occurrence = pu.getIs_collected_at_occurrence_id();
+                ig = pu.getRepresentsIndividualGroup();
+                Occurrence occurrence = pu.getIsCollectedAtOccurrence();
                 if(occurrence != null) {
-                    occurrence.setInvolves_individual_group_id(ig); 
+                    occurrence.setInvolvesIndividualGroup(ig); 
                 }
             } else if(bean instanceof IndividualGroup) {
                 ig = (IndividualGroup) bean; 
@@ -72,25 +72,25 @@ public class CollectionsLogic implements Serializable  {
                 List<Occurrence> occurrences = ig.getOccurrences();
                 if(occurrences != null) {
                     occurrences.stream().forEach(o -> {
-                        o.setInvolves_individual_group_id(ig); 
+                        o.setInvolvesIndividualGroup(ig); 
                     });
                 }
                 
-                List<PhysicalUnit> physicalUnits = ig.getPhysical_units(); 
+                List<PhysicalUnit> physicalUnits = ig.getPhysicalUnits(); 
                 if(physicalUnits != null) {
                     physicalUnits.stream().forEach(p -> {
-                        p.setRepresents_individual_group_id(ig);
+                        p.setRepresentsIndividualGroup(ig);
                         if(occurrences != null && !occurrences.isEmpty()) {
                             Occurrence o = occurrences.get(0);
-                            p.setIs_collected_at_occurrence_id(o);
+                            p.setIsCollectedAtOccurrence(o);
                         }
                     });
                 } 
  
-                List<FeatureObservation> foList = ig.getFeature_observations();
+                List<FeatureObservation> foList = ig.getFeatureObservations();
                 if(foList != null) {
                     foList.stream().forEach(f -> {
-                        f.setApplies_to_individual_group_id(ig);
+                        f.setAppliesToIndividualGroup(ig);
                     });
                 }
             }
@@ -129,103 +129,5 @@ public class CollectionsLogic implements Serializable  {
             dao.delete(bean);
         }
     }
-    
-//    
-//    private void setValueToBean(EntityBean parent, Field f) {
-//        try {
-//            if (Util.getInstance().isEntity(parent.getClass(), f.getName())) {
-//                setChildToBean(parent, f);
-//            } else if (JpaReflectionHelper.getInstance().isCollection(parent.getClass(), f.getName())) {
-//                setChildrenToBean(parent, f);
-//            }
-//        } catch (DinaException e) {
-//            throw e;
-//        }
-//    }
-//    
-//    
-//    private void setChildToBean(EntityBean parent, Field f) { 
-//        try {
-//            f.setAccessible(true);
-//            EntityBean child = (EntityBean) f.get(parent); 
-//            if (child != null) {
-//                Field field = JpaReflectionHelper.getInstance().getIDField(child);
-//
-//                field.setAccessible(true);
-//                if (field.get(child) != null && (Integer) field.get(child) > 0) { 
-//                    Class clazz = child.getClass(); 
-//                    EntityBean entity = dao.findById((Integer) field.get(child), clazz, JpaReflectionHelper.getInstance().isVersioned(clazz)); 
-//                    if (entity == null) {
-//                        setTimeStampCreated(child);
-//                        setCreatedByUser(child, createdByUserBean);
-//                        f.set(parent, child);
-//                        Field[] fields = child.getClass().getDeclaredFields();
-//                        Arrays.stream(fields)
-//                                .forEach(fd -> {
-//                                    setValueToBean(child, fd);
-//                                });
-//                        setParentToChild(fields, child, parent);
-//                    } else {
-//                        f.set(parent, entity);
-//                    }
-//                } else {
-//                    setTimeStampCreated(child);
-//                    setCreatedByUser(child, createdByUserBean);
-//                    f.set(parent, child);
-//                    Field[] fields = child.getClass().getDeclaredFields();
-//                    Arrays.stream(fields)
-//                            .forEach(fd -> {
-//                                setValueToBean(child, fd);
-//                            });
-//                    setParentToChild(fields, child, parent);
-//                }
-//            }
-//        } catch (IllegalArgumentException | IllegalAccessException ex) {
-//            throw new DinaException(400, ex.getCause().getClass().getSimpleName(), ex.getMessage());
-//        }
-//    }
-//
-//    private void setChildrenToBean(EntityBean parent, Field field) {
-//        try {
-//            field.setAccessible(true);
-//            List<EntityBean> children = (List) field.get(parent);
-//            Field[] fields;
-//            if (children != null && !children.isEmpty()) {
-//                for (EntityBean child : children) {
-//                    setTimeStampCreated(child);
-//                    setCreatedByUser(child, createdByUserBean);
-//                    fields = child.getClass().getDeclaredFields();
-//                    setParentToChild(fields, child, parent);
-//                }
-//                field.set(parent, children);
-//
-//            }
-//        } catch (IllegalArgumentException | IllegalAccessException ex) {
-//            throw new DinaException(400, ex.getCause().getClass().getSimpleName(), ex.getMessage());
-//        }
-//    }
-//
-//    private void setParentToChild(Field[] fields, EntityBean child, EntityBean parent) {
-//        Arrays.asList(fields).stream()
-//                .forEach(f -> {
-//                    if (JpaReflectionHelper.getInstance().isEntity(child.getClass(), f.getName())) {
-//                        try {
-//                            setChildToBean(child, f);
-//                            f.setAccessible(true);
-//                            if (f.getName().toLowerCase().contains(parent.getClass().getSimpleName().toLowerCase())) {
-//                                f.set(child, parent);
-//                            }
-//                        } catch (IllegalArgumentException | IllegalAccessException ex) {
-//                            throw new DinaException(400, ex.getCause().getClass().getSimpleName(), ex.getMessage());
-//                        }
-//                    }
-//                });
-//    }
-
-//    public List<EntityBean> getAllPhysicalUnit() {
-//        
-//        log.info("getAllPhysicalUnit"); 
-//        
-//        return dao.findAll(PhysicalUnit.class); 
-//    }
+ 
 }

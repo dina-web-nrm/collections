@@ -33,12 +33,12 @@ public class Identification extends BaseEntity {
  
     @Lob
     @Column(name = "identification_text")
-    private String identification_text;
+    private String identificationText;
     
     @JoinColumn(name = "applies_to_individual_group_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "applies_to_individual_group_id", type="IndividualGroup")
-    private IndividualGroup applies_to_individual_group_id;
+    @CollectionsManyToOne(name = "appliesToIndividualGroup", type="IndividualGroup")
+    private IndividualGroup appliesToIndividualGroup;
 
     public Identification() {
     }
@@ -57,40 +57,24 @@ public class Identification extends BaseEntity {
         return id;
     }
 
-    public String getIdentification_text() {
-        return identification_text;
+    public String getIdentificationText() {
+        return identificationText;
     }
 
-    public void setIdentification_text(String identification_text) {
-        this.identification_text = identification_text;
+    public void setIdentificationText(String identificationText) {
+        this.identificationText = identificationText;
     }
 
-    public IndividualGroup getApplies_to_individual_group_id() {
-        return applies_to_individual_group_id;
+    public IndividualGroup getAppliesToIndividualGroup() {
+        return appliesToIndividualGroup;
     }
 
-    public void setApplies_to_individual_group_id(IndividualGroup applies_to_individual_group_id) {
-        this.applies_to_individual_group_id = applies_to_individual_group_id;
+    public void setAppliesToIndividualGroup(IndividualGroup appliesToIndividualGroup) {
+        this.appliesToIndividualGroup = appliesToIndividualGroup;
     }
     
     
-    
-//    public String getIdentificationText() {
-//        return identification_text;
-//    }
-//
-//    public void setIdentificationText(String identification_text) {
-//        this.identification_text = identification_text;
-//    }
-//
-//    public IndividualGroup getAppliesToIndividualGroupId() {
-//        return applies_to_individual_group_id;
-//    }
-//
-//    public void setAppliesToIndividualGroupId(IndividualGroup applies_to_individual_group_id) {
-//        this.applies_to_individual_group_id = applies_to_individual_group_id;
-//    }
-
+  
     @Override
     public int hashCode() {
         int hash = 0;
