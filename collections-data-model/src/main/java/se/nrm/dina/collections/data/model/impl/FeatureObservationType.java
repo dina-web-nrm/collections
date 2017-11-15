@@ -37,7 +37,7 @@ public class FeatureObservationType extends BaseEntity {
     @Column(name = "feature_observation_type_name")
     private String featureObservationTypeName;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "is_of_feature_observation_type_id", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "isOfFeatureObservationType", fetch = FetchType.LAZY)
     @CollectionsOneToMany(name = "featureObservations", type = "FeatureObservation")
     private List<FeatureObservation> featureObservations;
 

@@ -29,20 +29,20 @@ import se.nrm.dina.collections.data.model.BaseEntity;
     @NamedQuery(name = "IndividualGroup.findById", query = "SELECT i FROM IndividualGroup i WHERE i.id = :id")})
 public class IndividualGroup extends BaseEntity {
  
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "applies_to_individual_group_id", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "appliesToIndividualGroup", fetch = FetchType.LAZY)
     @CollectionsOneToMany(name = "identifications", type = "Identification")
     private List<Identification> identifications;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "applies_to_individual_group_id", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "appliesToIndividualGroup", fetch = FetchType.LAZY)
     @CollectionsOneToMany(name = "featureObservations", type = "FeatureObservation")
     private List<FeatureObservation> featureObservations;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "involves_individual_group_id", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "involvesIndividualGroup", fetch = FetchType.LAZY)
     @CollectionsOneToMany(name = "occurrences", type = "Occurrence")
     private List<Occurrence> occurrences;
     
     @OneToMany( cascade = CascadeType.ALL, 
-                mappedBy = "represents_individual_group_id",  
+                mappedBy = "representsIndividualGroup",  
                 fetch = FetchType.LAZY)
     @CollectionsOneToMany(name = "physicalUnits", type = "PhysicalUnit")
     private List<PhysicalUnit> physicalUnits;

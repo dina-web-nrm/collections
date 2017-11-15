@@ -52,7 +52,7 @@ public class Occurrence extends BaseEntity {
     @CollectionsManyToOne(name = "involvesIndividualGroup", type = "IndividualGroup")
     private IndividualGroup involvesIndividualGroup;
     
-    @OneToMany(mappedBy = "is_collected_at_occurrence_id", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "isCollectedAtOccurrence", fetch = FetchType.LAZY)
     @CollectionsOneToMany(name = "physicalUnits", type = "PhysicalUnit")
     private List<PhysicalUnit> physicalUnits;
 
