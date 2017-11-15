@@ -44,9 +44,9 @@ public class CollectionsServices implements Serializable {
     }
     
     @GET
-    @Path("/physicalUnit") 
-    public Response getPhysicalUnit() {
-        log.info("getPhysicalUnit"); 
+    @Path("/physicalUnits") 
+    public Response getPhysicalUnits() {
+        log.info("getPhysicalUnits"); 
         
         return Response.ok(logic.getAll("physicalUnit")).build();
     }
