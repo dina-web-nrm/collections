@@ -5,6 +5,7 @@
  */
 package se.nrm.dina.collections.data.model.impl;
  
+//import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -16,6 +17,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement; 
+import javax.xml.bind.annotation.XmlTransient;
 import se.nrm.dina.collections.annotation.CollectionsOneToMany;
 import se.nrm.dina.collections.data.model.BaseEntity;
 
@@ -39,6 +41,7 @@ public class FeatureObservationType extends BaseEntity {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "isOfFeatureObservationType", fetch = FetchType.LAZY)
     @CollectionsOneToMany(name = "featureObservations", type = "FeatureObservation")
+//    @JsonManagedReference
     private List<FeatureObservation> featureObservations;
 
     public FeatureObservationType() {
@@ -67,6 +70,7 @@ public class FeatureObservationType extends BaseEntity {
         this.featureObservationTypeName = featureObservationTypeName;
     }
 
+    @XmlTransient
     public List<FeatureObservation> getFeatureObservations() {
         return featureObservations;
     }

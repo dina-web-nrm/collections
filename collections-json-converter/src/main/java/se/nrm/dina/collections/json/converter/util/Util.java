@@ -42,4 +42,12 @@ public class Util {
             return null;
         }
     } 
+    
+    public String reformClassName(String name) { 
+        
+        if (name.length() == 0) {
+            return name;
+        }
+        return name.substring(0, 1).toLowerCase() + name.substring(1) + "s";
+    } 
 }

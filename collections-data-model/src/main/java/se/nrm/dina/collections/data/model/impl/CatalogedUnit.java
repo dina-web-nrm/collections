@@ -5,6 +5,7 @@
  */
 package se.nrm.dina.collections.data.model.impl;
  
+//import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -15,6 +16,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement; 
+import javax.xml.bind.annotation.XmlTransient;
 import se.nrm.dina.collections.annotation.CollectionsOneToMany;
 import se.nrm.dina.collections.data.model.BaseEntity;
 
@@ -38,6 +40,7 @@ public class CatalogedUnit extends BaseEntity {
     
     @OneToMany(mappedBy = "belongsToCatalogedUnit", fetch = FetchType.LAZY)
     @CollectionsOneToMany(name = "physicalUnits", type = "PhysicalUnit")
+//    @JsonManagedReference
     private List<PhysicalUnit> physicalUnits;
 
     public CatalogedUnit() {
@@ -66,10 +69,11 @@ public class CatalogedUnit extends BaseEntity {
         this.catalogNumber = catalog_number;
     }
 
+    @XmlTransient
     public List<PhysicalUnit> getPhysicalUnits() {
         return physicalUnits;
     }
-
+ 
     public void setPhysicalUnits(List<PhysicalUnit> physicalUnits) {
         this.physicalUnits = physicalUnits;
     }

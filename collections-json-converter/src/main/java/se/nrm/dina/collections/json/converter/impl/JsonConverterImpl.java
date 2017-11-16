@@ -19,12 +19,12 @@ import javax.json.JsonBuilderFactory;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder; 
 import lombok.extern.slf4j.Slf4j;  
-import se.nrm.dina.collections.annotation.CollectionsId;
+//import se.nrm.dina.collections.annotation.CollectionsId;
 import se.nrm.dina.collections.annotation.CollectionsManyToOne;
 import se.nrm.dina.collections.annotation.CollectionsOneToMany;
 import se.nrm.dina.collections.json.converter.JsonConverter;
 import se.nrm.dina.collections.json.converter.util.CommonString;
-import se.nrm.dina.collections.json.converter.util.Util;
+import se.nrm.dina.collections.json.converter.util.Util; 
 
 /**
  *
@@ -32,12 +32,15 @@ import se.nrm.dina.collections.json.converter.util.Util;
  * @param <T>
  */
 @Slf4j
-public class JsonConverterImpl<T extends Object>implements JsonConverter<T>, Serializable  {
+public class JsonConverterImpl<T extends Object> implements JsonConverter<T>, Serializable {
     
     public JsonConverterImpl() {
         
     }
-
+ 
+    
+    
+    
     @Override
     public JsonObject convert(T object) {
         if(object instanceof List) { 
@@ -81,6 +84,7 @@ public class JsonConverterImpl<T extends Object>implements JsonConverter<T>, Ser
         jsonBuilder.add(CommonString.getInstance().getData(), dataBuilder); 
         return jsonBuilder.build();
     }
+ 
     
     
     private void buildDataJson(Object bean, JsonObjectBuilder dataBuilder) {
@@ -161,32 +165,32 @@ public class JsonConverterImpl<T extends Object>implements JsonConverter<T>, Ser
         } 
     }
 
-    private Field getIdField(Field[] fields) {
+//    private Field getIdField(Field[] fields) {
+//
+//        return Arrays.asList(fields)
+//                .stream()
+//                .filter(f -> f.isAnnotationPresent(CollectionsId.class))
+//                .findAny()
+//                .get();
+//    }
 
-        return Arrays.asList(fields)
-                .stream()
-                .filter(f -> f.isAnnotationPresent(CollectionsId.class))
-                .findAny()
-                .get();
-    }
-
-    public Long getField(Class clazz, String fieldName) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        try {
-            Field field = clazz.getDeclaredField(fieldName);
-            field.setAccessible(true);
-
-            return (Long) field.get(clazz);
-        } catch (IllegalArgumentException | IllegalAccessException ex) {
-            throw ex;
-        } catch (NoSuchFieldException e) {
-            Class superClass = clazz.getSuperclass();
-            if (superClass == null) {
-                throw e;
-            } else {
-                return getField(superClass, fieldName);
-            }
-        }
-    }
+//    public Long getField(Class clazz, String fieldName) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+//        try {
+//            Field field = clazz.getDeclaredField(fieldName);
+//            field.setAccessible(true);
+//
+//            return (Long) field.get(clazz);
+//        } catch (IllegalArgumentException | IllegalAccessException ex) {
+//            throw ex;
+//        } catch (NoSuchFieldException e) {
+//            Class superClass = clazz.getSuperclass();
+//            if (superClass == null) {
+//                throw e;
+//            } else {
+//                return getField(superClass, fieldName);
+//            }
+//        }
+//    }
 
     private Long getIdValue(Object bean) {
         log.info("getIdValue : {}", bean);
@@ -199,6 +203,11 @@ public class JsonConverterImpl<T extends Object>implements JsonConverter<T>, Ser
             log.error(ex.getMessage());
             return 0l;
         } 
+    }
+    
+    @Override
+    public JsonObject convertErrors() {
+        return null;
     }
 
         

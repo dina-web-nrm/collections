@@ -5,6 +5,7 @@
  */
 package se.nrm.dina.collections.data.model.impl;
  
+//import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List; 
 import javax.persistence.CascadeType; 
 import javax.persistence.Entity;
@@ -14,6 +15,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement; 
+import javax.xml.bind.annotation.XmlTransient;
 import se.nrm.dina.collections.annotation.CollectionsOneToMany;
 import se.nrm.dina.collections.data.model.BaseEntity;
 
@@ -31,20 +33,24 @@ public class IndividualGroup extends BaseEntity {
  
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "appliesToIndividualGroup", fetch = FetchType.LAZY)
     @CollectionsOneToMany(name = "identifications", type = "Identification")
+//    @JsonManagedReference
     private List<Identification> identifications;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "appliesToIndividualGroup", fetch = FetchType.LAZY)
     @CollectionsOneToMany(name = "featureObservations", type = "FeatureObservation")
+//    @JsonManagedReference
     private List<FeatureObservation> featureObservations;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "involvesIndividualGroup", fetch = FetchType.LAZY)
     @CollectionsOneToMany(name = "occurrences", type = "Occurrence")
+//    @JsonManagedReference
     private List<Occurrence> occurrences;
     
     @OneToMany( cascade = CascadeType.ALL, 
                 mappedBy = "representsIndividualGroup",  
                 fetch = FetchType.LAZY)
     @CollectionsOneToMany(name = "physicalUnits", type = "PhysicalUnit")
+//    @JsonManagedReference
     private List<PhysicalUnit> physicalUnits;
 
     public IndividualGroup() {
@@ -64,6 +70,7 @@ public class IndividualGroup extends BaseEntity {
         return id;
     }
 
+    @XmlTransient
     public List<Identification> getIdentifications() {
         return identifications;
     }
@@ -72,6 +79,7 @@ public class IndividualGroup extends BaseEntity {
         this.identifications = identifications;
     }
   
+    @XmlTransient
     public List<Occurrence> getOccurrences() {
         return occurrences;
     }
@@ -80,6 +88,7 @@ public class IndividualGroup extends BaseEntity {
         this.occurrences = occurrences;
     }
 
+    @XmlTransient
     public List<FeatureObservation> getFeatureObservations() {
         return featureObservations;
     }
@@ -88,6 +97,7 @@ public class IndividualGroup extends BaseEntity {
         this.featureObservations = featureObservations;
     }
 
+    @XmlTransient
     public List<PhysicalUnit> getPhysicalUnits() {
         return physicalUnits;
     }

@@ -16,18 +16,25 @@
     
         
     <dependencies>
-        <dependency>
+        <!--        <dependency>
             <groupId>${project.parent.groupId}</groupId>
             <artifactId>collections-annotation</artifactId>
             <version>${project.parent.version}</version>   
-        </dependency>
+        </dependency>-->
+        
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>collections-data-model</artifactId>
+            <version>${project.parent.version}</version> 
+            <type>jar</type>
+        </dependency> 
         
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
             <artifactId>jaxrs-jsonp</artifactId>
         </dependency>
          
-<!--        <dependency>
+        <!--        <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>1.9.3</version>

@@ -5,20 +5,20 @@
  */
 package se.nrm.dina.collections.json.converter;
 
+import java.util.List;
 import javax.json.JsonObject;
+import se.nrm.dina.collections.data.model.impl.PhysicalUnit;
 
 /**
  *
  * @author idali
  * @param <T>
  */
-public interface JsonConverter<T extends Object> {
- 
-    JsonObject convert(T bean);
+public interface JsonConverterV2<T extends Object> {
     
+    JsonObject convertPhysicalUnits(List<PhysicalUnit> physicalUnits);
+
+    JsonObject convert(T bean);
+
     JsonObject convertErrors();
-     
-//    JsonObject convert(int count, Map<String, ?>  meta, String source);
-//    
-//    JsonObject convert(Map<String, ?> meta, List<String> errors, int statusCode, String errorType, String source);  
 }

@@ -48,7 +48,8 @@ public class CollectionsServices implements Serializable {
     public Response getPhysicalUnits() {
         log.info("getPhysicalUnits"); 
         
-        return Response.ok(logic.getAll("physicalUnit")).build();
+        return Response.ok(logic.getPhysicalUnits()).build();
+//        return Response.ok(logic.getAll("physicalUnit")).build();
     }
     
     @GET

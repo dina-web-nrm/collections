@@ -5,6 +5,7 @@
  */
 package se.nrm.dina.collections.data.model.impl;
  
+//import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,17 +42,20 @@ public class PhysicalUnit extends BaseEntity {
     
     @JoinColumn(name = "belongs_to_cataloged_unit_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "belongsToCatalogedUnit", type="CatalogedUnit")
+    @CollectionsManyToOne(name = "catalogedUnit", type="CatalogedUnit")
+//    @JsonBackReference
     private CatalogedUnit belongsToCatalogedUnit;
     
     @JoinColumn(name = "represents_individual_group_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "representsIndividualGroup", type="IndividualGroup")
+    @CollectionsManyToOne(name = "individualGroup", type="IndividualGroup")
+//    @JsonBackReference
     private IndividualGroup representsIndividualGroup;
     
     @JoinColumn(name = "is_collected_at_occurrence_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "isCollectedAtOccurrence", type="Occurrence")
+    @CollectionsManyToOne(name = "occurrence", type="Occurrence")
+//    @JsonBackReference
     private Occurrence isCollectedAtOccurrence;
 
     public PhysicalUnit() {

@@ -5,6 +5,7 @@
  */
 package se.nrm.dina.collections.data.model.impl;
   
+//import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,11 +39,13 @@ public class FeatureObservation extends BaseEntity {
     @JoinColumn(name = "is_of_feature_observation_type_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @CollectionsManyToOne(name = "isOfFeatureObservationType", type="FeatureObservationType")
+//    @JsonBackReference
     private FeatureObservationType isOfFeatureObservationType;
     
     @JoinColumn(name = "applies_to_individual_group_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @CollectionsManyToOne(name = "appliesToIndividualGroup", type="IndividualGroup")
+//    @JsonBackReference
     private IndividualGroup appliesToIndividualGroup;
 
     public FeatureObservation() {

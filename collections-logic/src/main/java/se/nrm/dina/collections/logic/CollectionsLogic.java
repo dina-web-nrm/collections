@@ -5,10 +5,15 @@
  */
 package se.nrm.dina.collections.logic;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import se.nrm.dina.collections.logic.utils.Util;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import java.util.List; 
 import java.io.IOException;
 import java.io.Serializable;    
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB; 
 import javax.inject.Inject;
 import javax.json.JsonObject;
@@ -19,7 +24,8 @@ import se.nrm.dina.collections.data.model.impl.IndividualGroup;
 import se.nrm.dina.collections.data.model.impl.Occurrence;
 import se.nrm.dina.collections.data.model.impl.PhysicalUnit;
 import se.nrm.dina.collections.jpa.CollectionsDao; 
-import se.nrm.dina.collections.json.converter.JsonConverter;
+import se.nrm.dina.collections.json.converter.JsonConverter; 
+import se.nrm.dina.collections.json.converter.JsonConverterV2; 
 
 /**
  *
@@ -33,17 +39,41 @@ public class CollectionsLogic implements Serializable  {
     @Inject
     private JsonConverter json;
     
+    @Inject 
+    private JsonConverterV2 json2;
+    
+//    @Inject
+//    private se.nrm.dina.collections.logic.json.JsonConverter jsonConverter;
+    
     @EJB
     private CollectionsDao dao;
-    
-    public CollectionsLogic() { 
+
+    public CollectionsLogic() {
         mapper = new ObjectMapper();
+    }
+
+    public JsonObject getPhysicalUnits() {
+        log.info("getPhysiclUnits");
+
+        Class clazz = PhysicalUnit.class; 
+
+        return json2.convertPhysicalUnits(dao.findAll(clazz));
+
+
+
+
+//            String results = mapper.writeValueAsString(dao.findAll(clazz)); 
+                //            return mapper.writeValueAsString(dao.findAll(clazz));
+                //        } catch (JsonProcessingException ex) {
+                //            log.error("ex : {}", ex.getMessage());
+//            return null;
+//        } 
     }
     
     public JsonObject getAll(String entityName) {
         log.info("getAll : {}", entityName);
         
-        Class clazz = Util.getInstance().convertClassNameToClass(entityName);
+        Class clazz = Util.getInstance().convertClassNameToClass(entityName); 
         return json.convert(dao.findAll(clazz));
     }
     

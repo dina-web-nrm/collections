@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.nrm.dina.collections.logic;
+package se.nrm.dina.collections.logic.utils;
  
 import java.lang.reflect.Field;
 import java.util.Arrays;

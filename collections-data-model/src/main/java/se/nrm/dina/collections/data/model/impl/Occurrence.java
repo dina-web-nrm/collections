@@ -5,6 +5,8 @@
  */
 package se.nrm.dina.collections.data.model.impl;
  
+//import com.fasterxml.jackson.annotation.JsonBackReference;
+//import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List; 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -50,10 +52,12 @@ public class Occurrence extends BaseEntity {
     @JoinColumn(name = "involves_individual_group_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @CollectionsManyToOne(name = "involvesIndividualGroup", type = "IndividualGroup")
+//    @JsonBackReference
     private IndividualGroup involvesIndividualGroup;
     
     @OneToMany(mappedBy = "isCollectedAtOccurrence", fetch = FetchType.LAZY)
     @CollectionsOneToMany(name = "physicalUnits", type = "PhysicalUnit")
+//    @JsonManagedReference
     private List<PhysicalUnit> physicalUnits;
 
     public Occurrence() {
@@ -105,6 +109,7 @@ public class Occurrence extends BaseEntity {
         this.involvesIndividualGroup = involvesIndividualGroup;
     }
 
+    @XmlTransient
     public List<PhysicalUnit> getPhysicalUnits() {
         return physicalUnits;
     }
