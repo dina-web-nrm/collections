@@ -47,13 +47,13 @@ public class CollectionsLogic implements Serializable  {
         mapper = new ObjectMapper();
     }
     
-    public JsonObject getIndividualGroupById(long id) {
+    public JsonObject getIndividualGroupById(long id, String include) {
         log.info("getIndividualGroupById");
         
-        return json2.convertIndividualGroups((IndividualGroup) dao.findByNamedQuery("IndividualGroup.findById", "id", id));
+        return json2.convertIndividualGroups((IndividualGroup) dao.findByNamedQuery("IndividualGroup.findById", "id", id), include);
     }
     
-    public JsonObject getIndividualGroup(String catalogNumber) {
+    public JsonObject getIndividualGroup(String catalogNumber, String include) {
         log.info("getIndividualGroup : {}", catalogNumber);
         
         StringBuilder sb = new StringBuilder();
@@ -69,7 +69,7 @@ public class CollectionsLogic implements Serializable  {
             sb.append("'");
         }
           
-        return json2.convertIndividualGroups(dao.findByJPQL(sb.toString()));
+        return json2.convertIndividualGroups(dao.findByJPQL(sb.toString()), include);
     }
     
     public JsonObject getCatalogedUnits(String include) {

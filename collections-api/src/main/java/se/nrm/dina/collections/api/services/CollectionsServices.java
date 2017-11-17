@@ -45,6 +45,31 @@ public class CollectionsServices implements Serializable {
         return Response.ok("Hello from collections api").build();
     }
     
+    @GET
+    @Path("/individualGroup")
+    public Response getIndividualGroup(@Context HttpServletRequest req, @Context UriInfo info) {
+         log.info("getIndividualGroup"); 
+        
+        MultivaluedMap<String, String> map = info.getQueryParameters();  
+        String include = map.getFirst("include");
+        
+        log.info("include : {}", include);
+        return Response.ok(logic.getIndividualGroup(map.getFirst("catalogNumber"), include)).build();
+    }
+    
+    @GET
+    @Path("/individualGroup/{id}")
+    public Response getIndividualGroupById(@Context HttpServletRequest req, @Context UriInfo info, @PathParam("id") long id) {
+        log.info("getIndividualGroupById : {}", id); 
+         
+        MultivaluedMap<String, String> map = info.getQueryParameters();  
+        String include = map.getFirst("include");
+        
+        log.info("include : {}", include);
+         
+        return Response.ok(logic.getIndividualGroupById(id, include)).build();
+    }
+    
 //    @GET
 //    @Path("/physicalUnits") 
 //    public Response getPhysicalUnits(@Context HttpServletRequest req, @Context UriInfo info) {
@@ -63,22 +88,7 @@ public class CollectionsServices implements Serializable {
 //        return Response.ok(logic.getPhysicalUnits(map.getFirst("include"))).build();
 //    }
     
-    @GET
-    @Path("/individualGroup")
-    public Response getIndividualGroup(@Context HttpServletRequest req, @Context UriInfo info) {
-         log.info("getIndividualGroup"); 
-        
-        MultivaluedMap<String, String> map = info.getQueryParameters();    
-        return Response.ok(logic.getIndividualGroup(map.getFirst("catalogNumber"))).build();
-    }
-    
-    @GET
-    @Path("/individualGroup/{id}")
-    public Response getIndividualGroupById(@Context HttpServletRequest req, @PathParam("id") long id) {
-         log.info("getIndividualGroupById : {}", id); 
-         
-        return Response.ok(logic.getIndividualGroupById(id)).build();
-    }
+
     
 //    @GET
 //    @Path("/{entity}") 
