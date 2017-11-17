@@ -101,7 +101,7 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
         if(!identification.isEmpty()) {
             identification.stream()
                     .forEach(i -> {
-                        subBuilder.add("id", i.getId());
+                        subBuilder.add(CommonString.getInstance().getId(), i.getId());
                         subBuilder.add("identificationText", i.getIdentificationText() == null ? "" : i.getIdentificationText()); 
                         dataArrBuilder.add(subBuilder);
                     }); 
@@ -117,7 +117,7 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
         if(!featureObservation.isEmpty()) {
             featureObservation.stream()
                     .forEach(fo -> {
-                        subBuilder.add("id", fo.getId());
+                        subBuilder.add(CommonString.getInstance().getId(), fo.getId());
                         subBuilder.add("featureObservationText", fo.getFeatureObservationText() == null ? "" : fo.getFeatureObservationText());
                         addFeatureObservationType(fo.getIsOfFeatureObservationType(), subBuilder); 
                         dataArrBuilder.add(subBuilder);
