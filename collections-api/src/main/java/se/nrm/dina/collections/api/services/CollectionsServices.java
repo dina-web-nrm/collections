@@ -72,7 +72,13 @@ public class CollectionsServices implements Serializable {
         return Response.ok(logic.getIndividualGroup(map.getFirst("catalogNumber"))).build();
     }
     
-
+    @GET
+    @Path("/individualGroup/{id}")
+    public Response getIndividualGroupById(@Context HttpServletRequest req, @PathParam("id") long id) {
+         log.info("getIndividualGroupById : {}", id); 
+         
+        return Response.ok(logic.getIndividualGroupById(id)).build();
+    }
     
 //    @GET
 //    @Path("/{entity}") 

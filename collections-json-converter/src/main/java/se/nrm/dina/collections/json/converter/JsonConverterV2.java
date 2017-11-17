@@ -18,6 +18,8 @@ import se.nrm.dina.collections.data.model.impl.PhysicalUnit;
  */
 public interface JsonConverterV2<T extends Object> {
     
+    JsonObject convertIndividualGroups(IndividualGroup individualGroup);
+    
     JsonObject convertIndividualGroups(List<IndividualGroup> individualGroups);
     
     JsonObject convertCatalogedUnits(List<CatalogedUnit> catalogedUnits, String include);

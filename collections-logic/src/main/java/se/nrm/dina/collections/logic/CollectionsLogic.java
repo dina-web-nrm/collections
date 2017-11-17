@@ -47,6 +47,12 @@ public class CollectionsLogic implements Serializable  {
         mapper = new ObjectMapper();
     }
     
+    public JsonObject getIndividualGroupById(long id) {
+        log.info("getIndividualGroupById");
+        
+        return json2.convertIndividualGroups((IndividualGroup) dao.findByNamedQuery("IndividualGroup.findById", "id", id));
+    }
+    
     public JsonObject getIndividualGroup(String catalogNumber) {
         log.info("getIndividualGroup : {}", catalogNumber);
         

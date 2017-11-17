@@ -41,6 +41,22 @@ import se.nrm.dina.collections.json.converter.util.Util;
 public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>, Serializable {
     
     @Override
+    public JsonObject convertIndividualGroups(IndividualGroup individualGroup) {
+        log.info("convertIndividualGroups");
+        
+        JsonBuilderFactory factory = Json.createBuilderFactory(null);
+        JsonObjectBuilder jsonBuilder = factory.createObjectBuilder();
+        JsonObjectBuilder dataBuilder = Json.createObjectBuilder();
+        
+        if(individualGroup != null) {
+            buildIndividualGroup(individualGroup, dataBuilder);
+        }
+        
+        jsonBuilder.add(CommonString.getInstance().getData(), dataBuilder);
+        return jsonBuilder.build();
+    }
+    
+    @Override
     public JsonObject convertIndividualGroups(List<IndividualGroup> individualGroups) {
         log.info("convertIndividualGroups");
         
@@ -243,7 +259,6 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
 
         dataBuilder.add(CommonString.getInstance().getAttributes(), attBuilder); 
     }
-
  
     private void addOccurrence(Occurrence occurrence, JsonObjectBuilder attBuilder) { 
         JsonObjectBuilder subBuilder = Json.createObjectBuilder();

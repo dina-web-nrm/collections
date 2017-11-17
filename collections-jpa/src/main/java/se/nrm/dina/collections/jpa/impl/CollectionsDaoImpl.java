@@ -120,6 +120,13 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
     } 
     
     @Override
+    public T findByNamedQuery(String namedQuery, String parameter, long id) {
+        query = entityManager.createNamedQuery(namedQuery); 
+        query.setParameter(parameter, id);
+        return (T) query.getSingleResult();
+    }
+    
+    @Override
     public List<T> findByNamedQuery(String namedQuery, String parameter, String value) {
         query = entityManager.createNamedQuery(namedQuery); 
         query.setParameter(parameter, value);
