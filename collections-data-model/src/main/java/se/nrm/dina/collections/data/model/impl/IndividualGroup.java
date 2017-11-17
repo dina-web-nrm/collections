@@ -30,7 +30,7 @@ import se.nrm.dina.collections.data.model.BaseEntity;
     @NamedQuery(name = "IndividualGroup.findAll", query = "SELECT i FROM IndividualGroup i"), 
     @NamedQuery(name = "IndividualGroup.findById", query = "SELECT i FROM IndividualGroup i WHERE i.id = :id")})
 public class IndividualGroup extends BaseEntity {
- 
+  
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "appliesToIndividualGroup", fetch = FetchType.LAZY)
     @CollectionsOneToMany(name = "identifications", type = "Identification")
 //    @JsonManagedReference

@@ -6,7 +6,7 @@
 package se.nrm.dina.collections.jpa.impl;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.List; 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -112,11 +112,25 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
     }
 
     @Override
-    public List<T> findAll(Class<T> clazz) {
-        
+    public List<T> findAll(Class<T> clazz) { 
         log.info("findAll");
         
         query = entityManager.createNamedQuery(clazz.getSimpleName() + ".findAll"); 
         return query.getResultList();   
     } 
+    
+    @Override
+    public List<T> findByNamedQuery(String namedQuery, String parameter, String value) {
+        query = entityManager.createNamedQuery(namedQuery); 
+        query.setParameter(parameter, value);
+        return query.getResultList(); 
+    }
+
+    @Override
+    public List<T> findByJPQL(String jpql) {
+        log.info("findByJPQL");
+        
+        query = entityManager.createQuery(jpql);
+        return query.getResultList(); 
+    }
 }

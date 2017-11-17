@@ -4,21 +4,18 @@
  * and open the template in the editor.
  */
 package se.nrm.dina.collections.logic;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
+ 
 import se.nrm.dina.collections.logic.utils.Util;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper; 
 import java.util.List; 
 import java.io.IOException;
-import java.io.Serializable;    
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.Serializable;     
 import javax.ejb.EJB; 
 import javax.inject.Inject;
 import javax.json.JsonObject;
 import lombok.extern.slf4j.Slf4j;  
 import se.nrm.dina.collections.data.model.EntityBean;
+import se.nrm.dina.collections.data.model.impl.CatalogedUnit;
 import se.nrm.dina.collections.data.model.impl.FeatureObservation;
 import se.nrm.dina.collections.data.model.impl.IndividualGroup;
 import se.nrm.dina.collections.data.model.impl.Occurrence;
@@ -41,9 +38,7 @@ public class CollectionsLogic implements Serializable  {
     
     @Inject 
     private JsonConverterV2 json2;
-    
-//    @Inject
-//    private se.nrm.dina.collections.logic.json.JsonConverter jsonConverter;
+     
     
     @EJB
     private CollectionsDao dao;
@@ -51,24 +46,39 @@ public class CollectionsLogic implements Serializable  {
     public CollectionsLogic() {
         mapper = new ObjectMapper();
     }
-
-    public JsonObject getPhysicalUnits() {
-        log.info("getPhysiclUnits");
-
-        Class clazz = PhysicalUnit.class; 
-
-        return json2.convertPhysicalUnits(dao.findAll(clazz));
-
-
-
-
-//            String results = mapper.writeValueAsString(dao.findAll(clazz)); 
-                //            return mapper.writeValueAsString(dao.findAll(clazz));
-                //        } catch (JsonProcessingException ex) {
-                //            log.error("ex : {}", ex.getMessage());
-//            return null;
-//        } 
+    
+    public JsonObject getIndividualGroup(String catalogNumber) {
+        log.info("getIndividualGroup : {}", catalogNumber);
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT ig ");
+        sb.append("FROM IndividualGroup AS ig ");
+        sb.append("JOIN ig.physicalUnits pu ");
+        sb.append("JOIN pu.belongsToCatalogedUnit cu ");
+        sb.append("WHERE pu.representsIndividualGroup = ig ");
+        sb.append("AND pu.belongsToCatalogedUnit = cu ");
+        if(catalogNumber != null && !catalogNumber.isEmpty()) {
+            sb.append("AND cu.catalogNumber = '");
+            sb.append(catalogNumber);
+            sb.append("'");
+        }
+          
+        return json2.convertIndividualGroups(dao.findByJPQL(sb.toString()));
     }
+    
+    public JsonObject getCatalogedUnits(String include) {
+        log.info("getCatalogedUnits");
+        
+        return json2.convertPhysicalUnits(dao.findAll(CatalogedUnit.class), include); 
+    }
+
+    public JsonObject getPhysicalUnits(String include) {
+        log.info("getPhysiclUnits");
+   
+        return json2.convertPhysicalUnits(dao.findAll(PhysicalUnit.class), include); 
+    }
+    
+    
     
     public JsonObject getAll(String entityName) {
         log.info("getAll : {}", entityName);

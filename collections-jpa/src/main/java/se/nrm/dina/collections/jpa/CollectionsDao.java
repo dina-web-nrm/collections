@@ -70,4 +70,7 @@ public interface CollectionsDao<T extends EntityBean> {
     public List<T> findAll(Class<T> clazz);
 
 
+    public List<T> findByNamedQuery(String namedQuery, String parameter, String value);
+    
+    public List<T> findByJPQL(String jpql);
 }
