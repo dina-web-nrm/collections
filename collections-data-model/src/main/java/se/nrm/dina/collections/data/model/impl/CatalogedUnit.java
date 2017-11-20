@@ -39,8 +39,7 @@ public class CatalogedUnit extends BaseEntity {
     private String catalogNumber;
     
     @OneToMany(mappedBy = "belongsToCatalogedUnit", fetch = FetchType.LAZY)
-    @CollectionsOneToMany(name = "physicalUnits", type = "PhysicalUnit")
-//    @JsonManagedReference
+    @CollectionsOneToMany(name = "physicalUnits", type = "PhysicalUnit") 
     private List<PhysicalUnit> physicalUnits;
 
     public CatalogedUnit() {

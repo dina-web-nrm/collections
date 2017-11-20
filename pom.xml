@@ -35,10 +35,11 @@
     </properties>
  
     <modules>    
+        <module>collections-exceptions</module>
         <module>collections-annotation</module>
-        <module>collections-json-converter</module>
         <module>collections-data-model</module>
         <module>collections-jpa</module>
+        <module>collections-json-converter</module> 
         <module>collections-logic</module> 
         <module>collections-api</module> 
     </modules>

@@ -6,7 +6,9 @@
 package se.nrm.dina.collections.jpa.impl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List; 
+import java.util.Set;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -14,10 +16,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import se.nrm.dina.collections.data.model.EntityBean;
+import se.nrm.dina.collections.exceptions.CollectionsConstraintViolationException; 
+import se.nrm.dina.collections.exceptions.Util.ErrorCode;
+import se.nrm.dina.collections.exceptions.Util.Util;
 import se.nrm.dina.collections.jpa.CollectionsDao;
 
 /**
@@ -39,6 +46,15 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
         
     }
     
+    public CollectionsDaoImpl(EntityManager entyEntityManager) {
+        this.entityManager = entyEntityManager;
+    }
+    
+    public CollectionsDaoImpl(EntityManager entyEntityManager, Query query) {
+        this.entityManager = entyEntityManager;
+        this.query = query;
+    }
+    
     @Override
     public T create(T entity) {
         
@@ -48,14 +64,21 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
         try {
             entityManager.persist(entity);
             entityManager.flush();  
+        } catch (PersistenceException ex) {  
+            throw Util.getInstance().getCollectionsException(ex);
         } catch(ConstraintViolationException e) {
-            throw e;
+            throw new CollectionsConstraintViolationException(entity.getClass().getSimpleName(), 
+                                                              handleConstraintViolations(e).toString(), 
+                                                              e.getMessage(), 
+                                                              ErrorCode.CONSTRAINT_VIOLATION_EXCEPTION_CODE);
         } catch (Exception e) {  
             throw e;
         }
         return tmp;
     }
     
+     
+     
     @Override
     public T merge(T entity) {
         
@@ -139,5 +162,28 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
         
         query = entityManager.createQuery(jpql);
         return query.getResultList(); 
+    }
+    
+    
+    private List<String> handleConstraintViolations(ConstraintViolationException e) {  
+
+        StringBuilder sb = new StringBuilder();
+        List<String> msgs = new ArrayList<>();
+        Set<ConstraintViolation<?>> cvs = e.getConstraintViolations();
+
+        if (cvs != null) {
+            cvs.stream().forEach(cv -> {
+                sb.append(cv.getMessage());
+                sb.append(": ");
+                sb.append(cv.getRootBeanClass().getSimpleName());
+                sb.append(" [Constrian Key:");
+                sb.append(cv.getPropertyPath().toString());
+                sb.append(" Value: ");
+                sb.append(cv.getInvalidValue() == null ? null : cv.getInvalidValue().toString());
+                sb.append("]");
+                msgs.add(sb.toString()); 
+            });
+        } 
+        return msgs;
     }
 }

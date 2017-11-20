@@ -44,8 +44,7 @@ public class FeatureObservation extends BaseEntity {
     
     @JoinColumn(name = "applies_to_individual_group_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "appliesToIndividualGroup", type="IndividualGroup")
-//    @JsonBackReference
+    @CollectionsManyToOne(name = "appliesToIndividualGroup", type="IndividualGroup") 
     private IndividualGroup appliesToIndividualGroup;
 
     public FeatureObservation() {

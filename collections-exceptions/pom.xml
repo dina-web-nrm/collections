@@ -10,29 +10,27 @@
         <artifactId>collections-management</artifactId>
         <version>0.1-SNAPSHOT</version>
     </parent>
+    <artifactId>collections-exceptions</artifactId>
+    <packaging>jar</packaging>
     
-    <artifactId>collections-jpa</artifactId>
-    <name>${project.artifactId}</name>
-    
-    <dependencies>  
+    <dependencies> 
+        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
         <dependency>
-            <groupId>${project.parent.groupId}</groupId>
-            <artifactId>collections-data-model</artifactId>
-            <version>${project.parent.version}</version> 
-            <type>jar</type>
-        </dependency> 
-         
-        <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>persistence-api</artifactId>
-            <version>1.0.2</version>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.2.12.Final</version>
         </dependency>
-         
+        
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+ 
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId> 
             <scope>provided</scope>
         </dependency>
-    </dependencies> 
-    
+    </dependencies>
 </project>
