@@ -46,19 +46,20 @@ public class CollectionsServices implements Serializable {
     }
     
     @GET
-    @Path("/individualGroup")
+    @Path("/individualGroups")
     public Response getIndividualGroup(@Context HttpServletRequest req, @Context UriInfo info) {
          log.info("getIndividualGroup"); 
         
         MultivaluedMap<String, String> map = info.getQueryParameters();  
         String include = map.getFirst("include");
-        
-        log.info("include : {}", include);
-        return Response.ok(logic.getIndividualGroup(map.getFirst("catalogNumber"), include)).build();
+        String catalogNumber = map.getFirst("filter[catalogNumber]");
+        log.info("catalogNumber : {}", catalogNumber);
+         
+        return Response.ok(logic.getIndividualGroup(catalogNumber, include)).build();
     }
     
     @GET
-    @Path("/individualGroup/{id}")
+    @Path("/individualGroups/{id}")
     public Response getIndividualGroupById(@Context HttpServletRequest req, @Context UriInfo info, @PathParam("id") long id) {
         log.info("getIndividualGroupById : {}", id); 
          

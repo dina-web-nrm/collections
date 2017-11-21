@@ -14,14 +14,14 @@ import javax.ejb.ApplicationException;
 @ApplicationException
 public class CollectionsDatabaseException extends CollectionsException {
     
-    private final String code; 
+    private final int code; 
     
-    public CollectionsDatabaseException(String source, String detail, String errorMsg, String code) {
+    public CollectionsDatabaseException(String source, String detail, String errorMsg, int code) {
         super(source, detail, errorMsg);
         this.code = code;
     }
 
-    public String getCode() {
+    public int getCode() {
         return code;
     } 
 }

@@ -13,7 +13,7 @@ package se.nrm.dina.collections.exceptions.Util;
  */
 public class ErrorCode {
       
-    public static final int DATABASE_EXCEPTION = 10000;
+    public static final int DATABASE_EXCEPTION_CODE = 10000;
     public static final int CONSTRAINT_VIOLATION_EXCEPTION_CODE = 11000;
      
     

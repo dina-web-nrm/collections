@@ -23,6 +23,7 @@ import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import se.nrm.dina.collections.data.model.EntityBean;
 import se.nrm.dina.collections.exceptions.CollectionsConstraintViolationException; 
+import se.nrm.dina.collections.exceptions.CollectionsDatabaseException;
 import se.nrm.dina.collections.exceptions.Util.ErrorCode;
 import se.nrm.dina.collections.exceptions.Util.Util;
 import se.nrm.dina.collections.jpa.CollectionsDao;
@@ -65,14 +66,22 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
             entityManager.persist(entity);
             entityManager.flush();  
         } catch (PersistenceException ex) {  
-            throw Util.getInstance().getCollectionsException(ex);
-        } catch(ConstraintViolationException e) {
+            System.out.println("test");
+            throw new CollectionsDatabaseException( entity.getClass().getSimpleName(),
+                                                    Util.getInstance().getRootCauseName(ex), 
+                                                    ex.getMessage(),
+                                                    ErrorCode.DATABASE_EXCEPTION_CODE);
+    
+        } catch(ConstraintViolationException e) { 
             throw new CollectionsConstraintViolationException(entity.getClass().getSimpleName(), 
                                                               handleConstraintViolations(e).toString(), 
                                                               e.getMessage(), 
                                                               ErrorCode.CONSTRAINT_VIOLATION_EXCEPTION_CODE);
         } catch (Exception e) {  
-            throw e;
+            throw new CollectionsDatabaseException( entity.getClass().getSimpleName(),
+                                                    Util.getInstance().getRootCauseName(e), 
+                                                    e.getMessage(),
+                                                    ErrorCode.DATABASE_EXCEPTION_CODE);
         }
         return tmp;
     }
