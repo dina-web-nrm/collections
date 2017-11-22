@@ -7,10 +7,11 @@
 /collections-json-converter/nbproject/
 /collections-exceptions/target/
 
-/env
 /certs
 /m2
 
 .env
+env/.envaccounts
+env/.envmysql
 
 *~
