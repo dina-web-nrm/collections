@@ -1,0 +1,5 @@
+#admin psw needs do be the same as in the file /collections-api/src/main/resources/project-mysql.yaml-file
+MYSQL_ROOT_PASSWORD=
+MYSQL_DATABASE=dina_collections
+MYSQL_USER=
+MYSQL_PASSWORD=
