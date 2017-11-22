@@ -22,6 +22,7 @@ import se.nrm.dina.collections.data.model.impl.PhysicalUnit;
 import se.nrm.dina.collections.jpa.CollectionsDao; 
 import se.nrm.dina.collections.json.converter.JsonConverter; 
 import se.nrm.dina.collections.json.converter.JsonConverterV2;  
+import se.nrm.dina.collections.logic.query.QueryBuilder;
 
 /**
  *
@@ -54,21 +55,8 @@ public class CollectionsLogic implements Serializable  {
     
     public JsonObject getIndividualGroup(String catalogNumber, String include) {
         log.info("getIndividualGroup : {}", catalogNumber);
-        
-        StringBuilder sb = new StringBuilder();
-        sb.append("SELECT ig ");
-        sb.append("FROM IndividualGroup AS ig ");
-        sb.append("JOIN ig.physicalUnits pu ");
-        sb.append("JOIN pu.belongsToCatalogedUnit cu ");
-        sb.append("WHERE pu.representsIndividualGroup = ig ");
-        sb.append("AND pu.belongsToCatalogedUnit = cu ");
-        if(catalogNumber != null && !catalogNumber.isEmpty()) {
-            sb.append("AND cu.catalogNumber = '");
-            sb.append(catalogNumber);
-            sb.append("'");
-        }
-          
-        return json2.convertIndividualGroups(dao.findByJPQL(sb.toString()), include);
+         
+        return json2.convertIndividualGroups(dao.findByJPQL(QueryBuilder.getInstance().getQueryFindIndividualGroupsByCatalogNumber(catalogNumber)), include);
     }
     
 //    public JsonObject getCatalogedUnits(String include) {

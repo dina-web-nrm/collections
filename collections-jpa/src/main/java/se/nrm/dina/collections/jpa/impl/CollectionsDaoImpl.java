@@ -24,8 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 import se.nrm.dina.collections.data.model.EntityBean;
 import se.nrm.dina.collections.exceptions.CollectionsConstraintViolationException; 
 import se.nrm.dina.collections.exceptions.CollectionsDatabaseException;
-import se.nrm.dina.collections.exceptions.Util.ErrorCode;
-import se.nrm.dina.collections.exceptions.Util.Util;
+import se.nrm.dina.collections.exceptions.utils.ErrorCode;
+import se.nrm.dina.collections.exceptions.utils.Util;
 import se.nrm.dina.collections.jpa.CollectionsDao;
 
 /**
@@ -38,7 +38,7 @@ import se.nrm.dina.collections.jpa.CollectionsDao;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<T>, Serializable  {
     
-    private Query query;
+    private Query query; 
   
     @PersistenceContext(unitName = "jpaPU")                  //  persistence unit connect to production database  
     private EntityManager entityManager;
@@ -55,23 +55,38 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
         this.entityManager = entyEntityManager;
         this.query = query;
     }
+ 
     
     @Override
     public T create(T entity) {
-        
+
         log.info("create : {}", entity);
-        
+
         T tmp = entity;
         try {
             entityManager.persist(entity);
-            entityManager.flush();  
-        } catch (PersistenceException ex) {  
-            System.out.println("test");
-            throw new CollectionsDatabaseException( entity.getClass().getSimpleName(),
-                                                    Util.getInstance().getRootCauseName(ex), 
-                                                    ex.getMessage(),
-                                                    ErrorCode.DATABASE_EXCEPTION_CODE);
-    
+            entityManager.flush();
+        } catch (PersistenceException e) {
+            throw new CollectionsConstraintViolationException(entity.getClass().getSimpleName(),
+                                                                e.getMessage(),
+                                                                e.getMessage(),
+                                                                ErrorCode.CONSTRAINT_VIOLATION_EXCEPTION_CODE);
+
+//            System.out.println("test true"); 
+//            if(Util.getInstance().isHibernateConstraintViolationException(e)) {
+//                System.out.println("test true e");
+//                throw new CollectionsConstraintViolationException(Util.getInstance().getErrorSource(e), 
+//                                                                  e.getMessage(), 
+//                                                                  e.getMessage(), 
+//                                                                  ErrorCode.CONSTRAINT_VIOLATION_EXCEPTION_CODE);
+//            } else {
+//                System.out.println("test false 2");
+//                throw new CollectionsDatabaseException(Util.getInstance().getErrorSource(e), 
+//                                                       e.getMessage(), e.getMessage(), 
+//                                                       ErrorCode.DATABASE_EXCEPTION_CODE);
+//                
+//                
+//            } 
         } catch(ConstraintViolationException e) { 
             throw new CollectionsConstraintViolationException(entity.getClass().getSimpleName(), 
                                                               handleConstraintViolations(e).toString(), 
