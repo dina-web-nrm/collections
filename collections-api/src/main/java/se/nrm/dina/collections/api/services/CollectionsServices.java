@@ -53,8 +53,7 @@ public class CollectionsServices implements Serializable {
         MultivaluedMap<String, String> map = info.getQueryParameters();  
         String include = map.getFirst("include");
         String catalogNumber = map.getFirst("filter[catalogNumber]");
-        log.info("catalogNumber : {}", catalogNumber);
-         
+  
         return Response.ok(logic.getIndividualGroup(catalogNumber, include)).build();
     }
     

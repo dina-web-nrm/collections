@@ -12,17 +12,16 @@ import java.io.IOException;
 import java.io.Serializable;     
 import javax.ejb.EJB; 
 import javax.inject.Inject;
-import javax.json.JsonObject;
+import javax.json.JsonObject; 
 import lombok.extern.slf4j.Slf4j;  
-import se.nrm.dina.collections.data.model.EntityBean;
-import se.nrm.dina.collections.data.model.impl.CatalogedUnit;
+import se.nrm.dina.collections.data.model.EntityBean; 
 import se.nrm.dina.collections.data.model.impl.FeatureObservation;
 import se.nrm.dina.collections.data.model.impl.IndividualGroup;
 import se.nrm.dina.collections.data.model.impl.Occurrence;
 import se.nrm.dina.collections.data.model.impl.PhysicalUnit;
 import se.nrm.dina.collections.jpa.CollectionsDao; 
 import se.nrm.dina.collections.json.converter.JsonConverter; 
-import se.nrm.dina.collections.json.converter.JsonConverterV2; 
+import se.nrm.dina.collections.json.converter.JsonConverterV2;  
 
 /**
  *
@@ -50,7 +49,7 @@ public class CollectionsLogic implements Serializable  {
     public JsonObject getIndividualGroupById(long id, String include) {
         log.info("getIndividualGroupById");
         
-        return json2.convertIndividualGroups((IndividualGroup) dao.findByNamedQuery("IndividualGroup.findById", "id", id), include);
+        return json2.convertIndividualGroup((IndividualGroup) dao.findById(id, IndividualGroup.class), include);
     }
     
     public JsonObject getIndividualGroup(String catalogNumber, String include) {
@@ -72,18 +71,18 @@ public class CollectionsLogic implements Serializable  {
         return json2.convertIndividualGroups(dao.findByJPQL(sb.toString()), include);
     }
     
-    public JsonObject getCatalogedUnits(String include) {
-        log.info("getCatalogedUnits");
-        
-        return json2.convertPhysicalUnits(dao.findAll(CatalogedUnit.class), include); 
-    }
-
-    public JsonObject getPhysicalUnits(String include) {
-        log.info("getPhysiclUnits");
-   
-        return json2.convertPhysicalUnits(dao.findAll(PhysicalUnit.class), include); 
-    }
-    
+//    public JsonObject getCatalogedUnits(String include) {
+//        log.info("getCatalogedUnits");
+//        
+//        return json2.convertPhysicalUnits(dao.findAll(CatalogedUnit.class), include); 
+//    }
+//
+//    public JsonObject getPhysicalUnits(String include) {
+//        log.info("getPhysiclUnits");
+//   
+//        return json2.convertPhysicalUnits(dao.findAll(PhysicalUnit.class), include); 
+//    }
+//    
     
     
     public JsonObject getAll(String entityName) {

@@ -68,7 +68,7 @@ public interface CollectionsDao<T extends EntityBean> {
      * @return a <code>List</code> of all the entities in the database.
      */
     public List<T> findAll(Class<T> clazz);
-
+     
     public T findByNamedQuery(String namedQuery, String parameter, long id);
 
     public List<T> findByNamedQuery(String namedQuery, String parameter, String value);

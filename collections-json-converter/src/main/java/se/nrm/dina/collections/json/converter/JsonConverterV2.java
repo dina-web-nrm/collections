@@ -6,10 +6,8 @@
 package se.nrm.dina.collections.json.converter;
 
 import java.util.List;
-import javax.json.JsonObject;
-import se.nrm.dina.collections.data.model.impl.CatalogedUnit;
-import se.nrm.dina.collections.data.model.impl.IndividualGroup;
-import se.nrm.dina.collections.data.model.impl.PhysicalUnit;
+import javax.json.JsonObject; 
+import se.nrm.dina.collections.data.model.impl.IndividualGroup; 
 
 /**
  *
@@ -18,15 +16,15 @@ import se.nrm.dina.collections.data.model.impl.PhysicalUnit;
  */
 public interface JsonConverterV2<T extends Object> {
     
-    JsonObject convertIndividualGroups(IndividualGroup individualGroup, String include);
+    JsonObject convertIndividualGroup(IndividualGroup individualGroup, String include);
     
     JsonObject convertIndividualGroups(List<IndividualGroup> individualGroups, String include);
     
-    JsonObject convertCatalogedUnits(List<CatalogedUnit> catalogedUnits, String include);
-    
-    JsonObject convertPhysicalUnits(List<PhysicalUnit> physicalUnits, String include);
+//    JsonObject convertCatalogedUnits(List<CatalogedUnit> catalogedUnits, String include);
+//    
+//    JsonObject convertPhysicalUnits(List<PhysicalUnit> physicalUnits, String include);
 
-    JsonObject convert(T bean);
+//    JsonObject convert(T bean);
 
     JsonObject convertErrors();
 }
