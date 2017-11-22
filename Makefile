@@ -7,6 +7,7 @@ all: build up
 .PHONY: all
 
 init:
+	@echo "working directory is ${PWD}"
 
 build: build-api
 
@@ -39,6 +40,10 @@ down-prod:
 
 down-dev:
 	docker-compose -f docker-compose.dev.yml down
+
+
+test-alpha:
+	cd scripts && ./alpha_testing_response.sh
 
 # docker login
 release:
