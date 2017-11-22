@@ -1,9 +1,9 @@
 #!make
-
 PWD=$(shell pwd)
 
-all: init build up-dev
-#all: dotfiles up
+#all:  build up-dev
+all: build up
+
 .PHONY: all
 
 init:
@@ -18,22 +18,27 @@ build-api:
 		maven:3 bash -c "mvn package"
 	make -C collections-api
 
-up-dev:
-	#docker-compose up -d#
-	docker-compose -f docker-compose.dev.yml up -d proxy
-	docker-compose -f docker-compose.dev.yml up -d db
-	docker-compose -f docker-compose.dev.yml up -d api
-
-up-prod:
-	#docker-compose up -d#
+up:
 	docker-compose -f docker-compose.yml up -d db
 	docker-compose -f docker-compose.yml up -d api
 
-down-dev:
-	docker-compose -f docker-compose.dev.yml down
+up-prod:
+	docker-compose -f docker-compose.yml up -d db
+	docker-compose -f docker-compose.yml up -d api
+
+up-dev:
+	docker-compose -f docker-compose.dev.yml up -d proxy-local
+	docker-compose -f docker-compose.dev.yml up -d db
+	docker-compose -f docker-compose.dev.yml up -d api
+
+down:
+	docker-compose -f docker-compose.yml down
 
 down-prod:
 	docker-compose -f docker-compose.yml down
+
+down-dev:
+	docker-compose -f docker-compose.dev.yml down
 
 # docker login
 release:
