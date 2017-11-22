@@ -5,6 +5,12 @@
 /collections-json-converter/target/
 /collections-annotation/target/
 /collections-json-converter/nbproject/
+/collections-exceptions/target/
+
 /env
 /certs
 /m2
+
+.env
+
+*~
