@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.nrm.dina.collections.exceptions.Util;
+package se.nrm.dina.collections.exceptions.utils;
   
 
 

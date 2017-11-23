@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.nrm.dina.collections.exceptions.Util;
+package se.nrm.dina.collections.exceptions.utils;
  
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.exception.ExceptionUtils;
-//import org.hibernate.exception.ConstraintViolationException;
+//import org.hibernate.exception.ConstraintViolationException; 
 import se.nrm.dina.collections.exceptions.CollectionsConstraintViolationException;
 import se.nrm.dina.collections.exceptions.CollectionsDatabaseException;
 import se.nrm.dina.collections.exceptions.CollectionsException;
@@ -35,7 +35,7 @@ public class Util {
     }
      
     
-    private Throwable getRootCause(final Throwable throwable) {
+    public Throwable getRootCause(final Throwable throwable) {
         final List<Throwable> list = getThrowableList(throwable);
         return list.size() < 2 ? null : (Throwable) list.get(list.size() - 1);
     }
@@ -66,9 +66,7 @@ public class Util {
         sb.append("]");
         return sb.toString();
     }
-     
-     
-    
+      
 //    public boolean isHibernateConstraintViolationException(Exception e) {
 //        return e.getCause() instanceof ConstraintViolationException;
 //    }
