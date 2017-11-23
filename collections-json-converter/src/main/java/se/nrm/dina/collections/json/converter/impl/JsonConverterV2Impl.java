@@ -5,9 +5,7 @@
  */
 package se.nrm.dina.collections.json.converter.impl;
 
-import java.io.Serializable; 
-import java.math.BigDecimal; 
-import java.util.Date;
+import java.io.Serializable;  
 import java.util.List;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -81,27 +79,9 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
         
         addPhysicalUnits(individualGroup.getPhysicalUnits(), attBuilder, include);
         addFeatureObservations(individualGroup.getFeatureObservations(), attBuilder, include);
-        addIdentifications(individualGroup.getIdentifications(), attBuilder, include.contains("identification"));
-        addOccurrences(individualGroup.getOccurrences(), attBuilder, include.contains("occurrence"));
- 
-//        if (include != null && !include.isEmpty()) {
-//            if (include.contains("physicalUnit")) {
-//                addPhysicalUnits(individualGroup.getPhysicalUnits(), attBuilder, include);
-//            } 
-//
-//            if (include.contains("fetureObservation")) {
-//                addFeatureObservations(individualGroup.getFeatureObservations(), attBuilder, include);
-//            }
-//
-//            if (include.contains("identification")) {
-//                addIdentifications(individualGroup.getIdentifications(), attBuilder);
-//            }
-//
-//            if (include.contains("occurrence")) {
-//                addOccurrences(individualGroup.getOccurrences(), attBuilder);
-//            }
-//        } 
-
+        addIdentifications(individualGroup.getIdentifications(), attBuilder, include != null && include.contains("identification"));
+        addOccurrences(individualGroup.getOccurrences(), attBuilder, include != null && include.contains("occurrence"));
+  
         dataBuilder.add(CommonString.getInstance().getAttributes(), attBuilder);
     }
     
@@ -109,7 +89,7 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
         
         JsonObjectBuilder subBuilder = Json.createObjectBuilder();
         JsonArrayBuilder dataArrBuilder = Json.createArrayBuilder(); 
-        if(!physicalUnits.isEmpty()) {
+        if(physicalUnits != null && !physicalUnits.isEmpty()) {
             physicalUnits.stream()
                     .forEach(pu -> {
                         subBuilder.add(CommonString.getInstance().getId(), pu.getId());
@@ -146,7 +126,7 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
         
         JsonObjectBuilder subBuilder = Json.createObjectBuilder();
         JsonArrayBuilder dataArrBuilder = Json.createArrayBuilder(); 
-        if(!featureObservation.isEmpty()) {
+        if(featureObservation != null && !featureObservation.isEmpty()) {
             featureObservation.stream()
                     .forEach(fo -> {
                         subBuilder.add(CommonString.getInstance().getId(), fo.getId()); 
@@ -163,15 +143,15 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
         
     }
             
-    private void addFeatureObservationType(FeatureObservationType foType, JsonObjectBuilder attBuilder, boolean isType) {
+    private void addFeatureObservationType(FeatureObservationType featureObservationType, JsonObjectBuilder attBuilder, boolean isType) {
         JsonObjectBuilder subBuilder = Json.createObjectBuilder();
-        if(foType != null) { 
+        if(featureObservationType != null) { 
             if(isType) {
-                subBuilder.add(CommonString.getInstance().getId(), foType.getId());   
-                subBuilder.add("featureObservationTypeName", foType.getFeatureObservationTypeName());   
+                subBuilder.add(CommonString.getInstance().getId(), featureObservationType.getId());   
+                subBuilder.add("featureObservationTypeName", featureObservationType.getFeatureObservationTypeName());   
                 attBuilder.add("featureObservationType", subBuilder);
             } else {
-                attBuilder.add("featureObservationTypeId", foType.getId());
+                attBuilder.add("featureObservationTypeId", featureObservationType.getId());
             } 
         } else {
             attBuilder.add("featureObservationType", "null");
@@ -182,7 +162,7 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
         
         JsonObjectBuilder subBuilder = Json.createObjectBuilder();
         JsonArrayBuilder dataArrBuilder = Json.createArrayBuilder(); 
-        if(!identification.isEmpty()) {
+        if(identification != null && !identification.isEmpty()) {
             identification.stream()
                     .forEach(i -> {
                         subBuilder.add(CommonString.getInstance().getId(), i.getId());
@@ -201,7 +181,7 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
 
         JsonObjectBuilder subBuilder = Json.createObjectBuilder();
         JsonArrayBuilder dataArrBuilder = Json.createArrayBuilder(); 
-        if(!occurrences.isEmpty()) {
+        if(occurrences != null && !occurrences.isEmpty()) {
             occurrences.stream()
                     .forEach(o -> {
                         subBuilder.add(CommonString.getInstance().getId(), o.getId());
@@ -540,10 +520,5 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
     @Override
     public JsonObject convertErrors() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-
-    
-    
-    
+    } 
 }
