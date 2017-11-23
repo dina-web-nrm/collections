@@ -15,8 +15,6 @@ services:
     environment:
       - VIRTUAL_HOST=alpha-api.dina-web.net
       - VIRTUAL_PORT=8080
-    links:
-      - db:mysql
 
 # running with external proxy (check the network 'docker network ls')
 networks:
