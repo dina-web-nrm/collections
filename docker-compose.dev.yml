@@ -1,10 +1,8 @@
-version: '3'
+version: '3.1'
 
 services:
-
-  # MySQL database for Keycloak
   db:
-    image: mysql:latest
+    image: mysql:5.7
     env_file: ./env/.envmysql
     volumes:
       - db_collections:/var/lib/mysql
@@ -26,8 +24,8 @@ services:
     links:
       - db:mysql
 
-# Generic proxy
-  proxy:
+# Generic proxy, make sure that you have the certs for your application when running
+  proxy-local:
     image: jwilder/nginx-proxy:alpine
     ports:
       - "80:80"
@@ -36,6 +34,6 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./certs:/etc/nginx/certs
 
-
+# docker volume ls
 volumes:
   db_collections:

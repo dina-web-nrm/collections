@@ -1,10 +1,8 @@
-version: '3'
+version: '3.1'
 
 services:
-
-  # MySQL database for Keycloak
   db:
-    image: mysql:latest
+    image: mysql:5.7
     env_file: ./env/.envmysql
     volumes:
       - db_collections:/var/lib/mysql
@@ -20,10 +18,12 @@ services:
     links:
       - db:mysql
 
+# running with external proxy (check the network 'docker network ls')
 networks:
   default:
     external:
       name: dwproxy_default
 
+# docker volume ls
 volumes:
   db_collections:
