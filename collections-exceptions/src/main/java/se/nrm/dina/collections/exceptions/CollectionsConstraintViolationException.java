@@ -13,15 +13,8 @@ import javax.ejb.ApplicationException;
  */ 
 @ApplicationException
 public class CollectionsConstraintViolationException extends CollectionsException {
-    
-    private final int code;
-    
-    public CollectionsConstraintViolationException(String source, String detail, String errorMsg, int code) {
-        super(source, detail, errorMsg);
-        this.code = code;
-    }
-
-    public int getCode() {
-        return code;
+     
+    public CollectionsConstraintViolationException(String source, String detail, String code, String errorMsg) {
+        super(source, detail, code, errorMsg); 
     } 
 }

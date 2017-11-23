@@ -11,8 +11,7 @@ import java.util.List;
 import javax.enterprise.context.Dependent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.hibernate.exception.ConstraintViolationException;
-import se.nrm.dina.collections.exceptions.utils.ErrorCode;
+import org.hibernate.exception.ConstraintViolationException; 
 
 /**
  *
@@ -65,13 +64,5 @@ public class ExceptionsHandler implements Serializable {
       
     public boolean isHibernateConstraintViolationException(Exception e) {
         return e.getCause() instanceof ConstraintViolationException;
-    }
-    
-    public CollectionsException getCollectionsException(Exception e) {
-        if(e.getCause() instanceof ConstraintViolationException) {
-            return new CollectionsConstraintViolationException(getErrorSource(e), e.getMessage(), e.getMessage(), ErrorCode.CONSTRAINT_VIOLATION_EXCEPTION_CODE);
-        } else {
-            return new CollectionsDatabaseException(getErrorSource(e), e.getMessage(), e.getMessage(), ErrorCode.DATABASE_EXCEPTION_CODE);
-        }     
     } 
 }

@@ -14,11 +14,13 @@ public abstract class CollectionsException extends RuntimeException {
      
     private final String source;
     private final String detail;
+    private final String errorCode;
      
-    public CollectionsException(String source, String detail, String errorMsg) {
+    public CollectionsException(String source, String detail, String errorCode, String errorMsg) {
         super(errorMsg); 
         this.source = source;
         this.detail = detail;
+        this.errorCode = errorCode;
     }
  
     public String getSource() {
@@ -28,6 +30,10 @@ public abstract class CollectionsException extends RuntimeException {
     public String getDetail() {
         return detail;
     } 
+
+    public String getErrorCode() {
+        return errorCode;
+    }
      
     public String getErrorMessage() {
         return getMessage();

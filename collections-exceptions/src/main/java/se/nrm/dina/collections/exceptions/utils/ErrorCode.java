@@ -4,18 +4,18 @@
  * and open the template in the editor.
  */
 package se.nrm.dina.collections.exceptions.utils;
-  
-
 
 /**
  *
  * @author idali
  */
-public class ErrorCode {
-      
-    public static final int DATABASE_EXCEPTION_CODE = 10000;
-    public static final int CONSTRAINT_VIOLATION_EXCEPTION_CODE = 11000;
-     
-    
-    
+public enum ErrorCode {
+
+    DB_EXCEPTION,
+    DB_CONSTRAINT_VIOLATION,
+    DB_OPTIMISTIC_LOCK; 
+
+    public String getText(ErrorCode errorCode) {
+        return errorCode.name();
+    } 
 }

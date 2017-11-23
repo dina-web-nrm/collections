@@ -6,8 +6,7 @@
 package se.nrm.dina.collections.jpa.impl;
 
 import java.util.ArrayList;
-import java.util.List;
-import javax.ejb.EntityBean;
+import java.util.List; 
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.PersistenceException;
@@ -17,10 +16,10 @@ import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
+import org.junit.BeforeClass; 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static org.mockito.Matchers.any;
 import org.mockito.Mock;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -30,6 +29,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import se.nrm.dina.collections.data.model.impl.CatalogedUnit;
 import se.nrm.dina.collections.exceptions.CollectionsConstraintViolationException;
 import se.nrm.dina.collections.exceptions.CollectionsDatabaseException;
+import se.nrm.dina.collections.exceptions.ExceptionsHandler;
 import se.nrm.dina.collections.jpa.CollectionsDao;
 
 /**
@@ -46,7 +46,7 @@ public class CollectionsDaoImplTest {
     private Query query;
 
     @Mock
-    private Exception exception;
+    private ExceptionsHandler exceptionsHandler;
 
     @Mock
     private CollectionsConstraintViolationException collectionsConstraintViolationException;
@@ -92,12 +92,23 @@ public class CollectionsDaoImplTest {
 
     @Test
     public void testCollectionsDaoImplConstractorWithEntityManagerAndQuery() throws Exception {
-        System.out.println("testCollectionsDaoImplConstractorWithEntityManager");
+        System.out.println("testCollectionsDaoImplConstractorWithEntityManagerAndQuery");
 
         dao = new CollectionsDaoImpl(entityManager, query);
         assertNotNull(dao);
         assertNotNull(entityManager);
         assertNotNull(query);
+    }
+    
+    @Test
+    public void testCollectionsDaoImplConstractorWithEntityManagerAndQueryAndExceptionHandler() throws Exception {
+        System.out.println("testCollectionsDaoImplConstractorWithEntityManagerAndQueryAndExceptionHandler");
+
+        dao = new CollectionsDaoImpl(entityManager, query, exceptionsHandler);
+        assertNotNull(dao);
+        assertNotNull(entityManager);
+        assertNotNull(query);
+        assertNotNull(exceptionsHandler);
     }
 
     /**
@@ -121,11 +132,26 @@ public class CollectionsDaoImplTest {
 
     @Test(expected = CollectionsConstraintViolationException.class)
     public void testCreateFailure() throws Exception {
-        System.out.println("create");
+        System.out.println("testCreateFailure");
 
+        when(exceptionsHandler.isHibernateConstraintViolationException(any(PersistenceException.class))).thenReturn(true);
         doThrow(PersistenceException.class).when(entityManager).persist(testCatalogedUnit);
 
-        dao = new CollectionsDaoImpl(entityManager, query);
+        dao = new CollectionsDaoImpl(entityManager, query, exceptionsHandler);
+        dao.create(testCatalogedUnit);
+        verify(entityManager).persist(testCatalogedUnit);
+        verify(entityManager, times(1)).persist(testCatalogedUnit);
+        verify(entityManager, times(0)).flush();
+    }
+    
+    @Test(expected = CollectionsDatabaseException.class)
+    public void testCreateFailureThrowDatabaseException() throws Exception {
+        System.out.println("testCreateFailureThrowDatabaseException");
+
+        when(exceptionsHandler.isHibernateConstraintViolationException(any(PersistenceException.class))).thenReturn(false);
+        doThrow(PersistenceException.class).when(entityManager).persist(testCatalogedUnit);
+
+        dao = new CollectionsDaoImpl(entityManager, query, exceptionsHandler);
         dao.create(testCatalogedUnit);
         verify(entityManager).persist(testCatalogedUnit);
         verify(entityManager, times(1)).persist(testCatalogedUnit);
@@ -144,15 +170,14 @@ public class CollectionsDaoImplTest {
         verify(entityManager, times(1)).persist(testCatalogedUnit);
         verify(entityManager, times(0)).flush();
     }
-
-    @Ignore
+ 
     @Test(expected = CollectionsDatabaseException.class)
-    public void testCreateFailure2() throws Exception {
-        System.out.println("create");
+    public void testCreateThrowException() throws Exception {
+        System.out.println("testCreateThrowException");
 
-        doThrow(exception).when(entityManager).persist(testCatalogedUnit);
+        doThrow(Exception.class).when(entityManager).persist(testCatalogedUnit);
 
-        dao = new CollectionsDaoImpl(entityManager);
+        dao = new CollectionsDaoImpl(entityManager, query, exceptionsHandler);
         dao.create(testCatalogedUnit);
         verify(entityManager).persist(testCatalogedUnit);
         verify(entityManager, times(1)).persist(testCatalogedUnit);
@@ -258,57 +283,29 @@ public class CollectionsDaoImplTest {
         assertEquals(expResult, result.size());  
         assertSame(result, catalogedUnits);
     }
-
-    /**
-     * Test of findByNamedQuery method, of class CollectionsDaoImpl.
-     */
-    @Ignore
-    @Test
-    public void testFindByNamedQuery_3args_1() throws Exception {
-        System.out.println("findByNamedQuery");
-        String namedQuery = "";
-        String parameter = "";
-        long id = 0L;
-        CollectionsDaoImpl instance = new CollectionsDaoImpl();
-        Object expResult = null;
-        Object result = instance.findByNamedQuery(namedQuery, parameter, id);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of findByNamedQuery method, of class CollectionsDaoImpl.
-     */
-    @Ignore
-    @Test
-    public void testFindByNamedQuery_3args_2() throws Exception {
-        System.out.println("findByNamedQuery");
-        String namedQuery = "";
-        String parameter = "";
-        String value = "";
-        CollectionsDaoImpl instance = new CollectionsDaoImpl();
-        List expResult = null;
-        List result = instance.findByNamedQuery(namedQuery, parameter, value);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-    }
+ 
 
     /**
      * Test of findByJPQL method, of class CollectionsDaoImpl.
-     */
-    @Ignore
+     * @throws java.lang.Exception
+     */ 
     @Test
     public void testFindByJPQL() throws Exception {
         System.out.println("findByJPQL");
-        String jpql = "";
-        CollectionsDaoImpl instance = new CollectionsDaoImpl();
-        List expResult = null;
-        List result = instance.findByJPQL(jpql);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-    }
-
+        
+        String jpql = "SELECT cu FROM catalogedUnit cu where cu.id = 1";
+        
+        List<CatalogedUnit> catalogedUnits = new ArrayList<>(); 
+        catalogedUnits.add(testCatalogedUnit);
+         
+        when(entityManager.createQuery(jpql)).thenReturn(query);  
+        when(query.getResultList()).thenReturn(catalogedUnits);
+        
+        dao = new CollectionsDaoImpl(entityManager, query); 
+        List result = dao.findByJPQL(jpql);
+        assertEquals(result.size(), 1);
+        
+        verify(entityManager).createQuery(jpql);
+        verify(query).getResultList();  
+    } 
 }
