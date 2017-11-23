@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Set;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
+import javax.ejb.TransactionManagementType;  
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.OptimisticLockException;
@@ -24,8 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 import se.nrm.dina.collections.data.model.EntityBean;
 import se.nrm.dina.collections.exceptions.CollectionsConstraintViolationException; 
 import se.nrm.dina.collections.exceptions.CollectionsDatabaseException;
-import se.nrm.dina.collections.exceptions.utils.ErrorCode;
-import se.nrm.dina.collections.exceptions.utils.Util;
+import se.nrm.dina.collections.exceptions.ExceptionsHandler;
+import se.nrm.dina.collections.exceptions.utils.ErrorCode; 
 import se.nrm.dina.collections.jpa.CollectionsDao;
 
 /**
@@ -38,7 +39,10 @@ import se.nrm.dina.collections.jpa.CollectionsDao;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<T>, Serializable  {
     
-    private Query query; 
+    private Query query;  
+    
+    @Inject
+    private ExceptionsHandler exceptionHandler;
   
     @PersistenceContext(unitName = "jpaPU")                  //  persistence unit connect to production database  
     private EntityManager entityManager;
@@ -94,7 +98,8 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
                                                               ErrorCode.CONSTRAINT_VIOLATION_EXCEPTION_CODE);
         } catch (Exception e) {  
             throw new CollectionsDatabaseException( entity.getClass().getSimpleName(),
-                                                    Util.getInstance().getRootCauseName(e), 
+//                                                    Util.getInstance().getRootCauseName(e), 
+                                                    "",
                                                     e.getMessage(),
                                                     ErrorCode.DATABASE_EXCEPTION_CODE);
         }
