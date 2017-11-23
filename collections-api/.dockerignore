@@ -1,0 +1,4 @@
+src
+target
+!target/collections-api-swarm.jar
+
