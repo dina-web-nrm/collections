@@ -20,6 +20,7 @@ import se.nrm.dina.collections.data.model.impl.Identification;
 import se.nrm.dina.collections.data.model.impl.IndividualGroup;
 import se.nrm.dina.collections.data.model.impl.Occurrence;
 import se.nrm.dina.collections.data.model.impl.PhysicalUnit;
+import se.nrm.dina.collections.exceptions.CollectionsException;
 import se.nrm.dina.collections.json.converter.JsonConverterV2;
 import se.nrm.dina.collections.json.converter.util.CommonString;
 import se.nrm.dina.collections.json.converter.util.Util;
@@ -205,6 +206,40 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    @Override
+    public JsonObject convertErrors(List<CollectionsException> errors) { 
+        log.info("convertErrors");
+
+        JsonBuilderFactory factory = Json.createBuilderFactory(null);
+        JsonObjectBuilder jsonBuilder = factory.createObjectBuilder();
+        JsonObjectBuilder errorsBuilder = Json.createObjectBuilder();
+        JsonObjectBuilder sourceBuilder = Json.createObjectBuilder();
+        JsonArrayBuilder errorArrBuilder = Json.createArrayBuilder();
+
+        if (errors != null) {
+            errors.stream()
+                    .forEach(e -> {
+                        errorsBuilder.add(CommonString.getInstance().getCODE(), e.getErrorCode());
+                        sourceBuilder.add(CommonString.getInstance().getPoint(), e.getSource());
+                        errorsBuilder.add(CommonString.getInstance().getSource(), sourceBuilder);
+                        errorsBuilder.add(CommonString.getInstance().getDetail(), e.getDetail());
+                        
+                        errorArrBuilder.add(errorsBuilder);
+                    });
+        } 
+        
+        jsonBuilder.add(CommonString.getInstance().getErrors(), errorArrBuilder);
+        return jsonBuilder.build();
+    }
+
+
     
     
     
@@ -517,8 +552,5 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
     
     
 
-    @Override
-    public JsonObject convertErrors() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    } 
+
 }

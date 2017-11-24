@@ -28,6 +28,7 @@ import se.nrm.dina.collections.exceptions.CollectionsDatabaseException;
 import se.nrm.dina.collections.exceptions.CollectionsOptimisticLockException;
 import se.nrm.dina.collections.exceptions.ExceptionsHandler;
 import se.nrm.dina.collections.exceptions.utils.ErrorCode; 
+import se.nrm.dina.collections.exceptions.utils.Util;
 import se.nrm.dina.collections.jpa.CollectionsDao;
 
 /**
@@ -139,9 +140,15 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
             entityManager.remove(entity);
             entityManager.flush();                              // this is needed for throwing internal exception
         } catch (ConstraintViolationException e) {
-            log.warn(e.getMessage());
+            throw new CollectionsConstraintViolationException(entity.getClass().getSimpleName(), 
+                                                              handleConstraintViolations(e).toString(), 
+                                                              ErrorCode.DB_CONSTRAINT_VIOLATION.name(),
+                                                              e.getMessage());
         } catch (Exception e) {
-            log.warn(e.getMessage());
+            throw new CollectionsDatabaseException( entity.getClass().getSimpleName(),
+                                                    exceptionsHandler.getErrorSource(e),  
+                                                    ErrorCode.DB_EXCEPTION.name(),
+                                                    e.getMessage());
         }
     }
 
@@ -154,11 +161,17 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
             tmp = entityManager.find(clazz, id, LockModeType.OPTIMISTIC);  
             entityManager.flush();
             return tmp; 
-        } catch (OptimisticLockException ex) { 
+        } catch (OptimisticLockException e){ 
             entityManager.refresh(tmp); 
-            throw ex;
-        } catch(Exception ex) {
-            throw ex;
+            throw new CollectionsOptimisticLockException(Util.getInstance().buildEntityNameWithIdString(clazz, id),
+                                                         exceptionsHandler.getErrorSource(e),
+                                                         ErrorCode.DB_OPTIMISTIC_LOCK.name(),
+                                                         e.getMessage());
+        } catch(Exception e) {
+            throw new CollectionsDatabaseException( Util.getInstance().buildEntityNameWithIdString(clazz, id),
+                                                    exceptionsHandler.getErrorSource(e),  
+                                                    ErrorCode.DB_EXCEPTION.name(),
+                                                    e.getMessage());
         }   
     }
 

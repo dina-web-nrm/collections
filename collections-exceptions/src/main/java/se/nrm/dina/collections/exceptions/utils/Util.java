@@ -22,6 +22,13 @@ public class Util {
         return instance;
     }
     
-        
+    public String buildEntityNameWithIdString(Class clazz, long id) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(clazz.getSimpleName());
+        sb.append(": [ id = ");
+        sb.append(id);
+        sb.append(" ]");
+        return sb.toString();
+    }  
 
 }

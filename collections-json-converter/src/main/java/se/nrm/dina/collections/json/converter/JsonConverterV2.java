@@ -8,6 +8,7 @@ package se.nrm.dina.collections.json.converter;
 import java.util.List;
 import javax.json.JsonObject; 
 import se.nrm.dina.collections.data.model.impl.IndividualGroup; 
+import se.nrm.dina.collections.exceptions.CollectionsException;
 
 /**
  *
@@ -26,5 +27,5 @@ public interface JsonConverterV2<T extends Object> {
 
 //    JsonObject convert(T bean);
 
-    JsonObject convertErrors();
+    JsonObject convertErrors(List<CollectionsException> errors);
 }

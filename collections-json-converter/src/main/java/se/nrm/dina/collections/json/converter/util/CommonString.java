@@ -19,6 +19,7 @@ public class CommonString {
     private final String RELATIONSHIPS = "relationships";
     
     private final String COUNT = "count";
+    private final String CODE = "code";
     private final String POINT = "point";
     private final String DETAIL = "detail";
     private final String SOURCE = "source";
@@ -51,7 +52,11 @@ public class CommonString {
     public String getErrors() {
         return ERRORS;
     }
-    
+
+    public String getCODE() {
+        return CODE;
+    }
+     
     public String getPoint() {
         return POINT;
     }
