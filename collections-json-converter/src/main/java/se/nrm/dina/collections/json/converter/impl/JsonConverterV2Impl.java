@@ -58,7 +58,7 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
         JsonObjectBuilder dataBuilder = Json.createObjectBuilder();
         JsonArrayBuilder dataArrBuilder = Json.createArrayBuilder(); 
         
-        if(!individualGroups.isEmpty()) {
+        if(individualGroups != null && !individualGroups.isEmpty()) {
             individualGroups.stream()
                     .forEach(ig -> {
                         buildIndividualGroup(ig, dataBuilder, include);
