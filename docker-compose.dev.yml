@@ -21,8 +21,6 @@ services:
 #     - ./env/.envapi:/usr/src/myapp/project-initdata.yml
 #    ports:
 #      - "8181:8181"
-    links:
-      - db:mysql
 
 # Generic proxy, make sure that you have the certs for your application when running
   proxy-local:
