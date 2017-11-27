@@ -21,7 +21,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import lombok.extern.slf4j.Slf4j;  
+import lombok.extern.slf4j.Slf4j;   
 import se.nrm.dina.collections.logic.CollectionsLogic; 
 
 /**
@@ -107,12 +107,11 @@ public class CollectionsServices implements Serializable {
 //    }
 
     @POST
-    @Path("{entity}") 
-    public Response createNewEntity(@Context HttpServletRequest req,
-                                    @PathParam("entity") String entity, String json) {
-        log.info("createNewEntity - entity: {}", json);
-       
-        return Response.ok(logic.saveEntity(entity, json)).build();
+    @Path("/individualGroups") 
+    public Response createNewEntity(@Context HttpServletRequest req, String json) {
+        log.info("createNewEntity - json: {}", json);
+        
+        return Response.ok(logic.saveIndividualGroup(json)).build();
     }
     
     @DELETE

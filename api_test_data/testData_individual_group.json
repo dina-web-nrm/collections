@@ -1,39 +1,32 @@
-{ 
-    "feature_observations": [
-        {
-            "feature_observation_text": "This is a test",
-            "is_of_feature_observation_type_id": 2
+{
+    "data": {
+        "type": "individualGroup",
+        "attributes": {
+            "featureObservations": [{
+                "featureObservationText": "This is a test",
+                "featureObservationTypeId": 2
+            }],
+            "occurrences": [{
+                "collectorsText": "Ida Li",
+                "localityText": "Sollentuna, Sweden",
+                "occurrenceDateText": "2017-10-12"
+            }],
+            "physicalUnits": [{
+                "physicalUnitText": "This is a test",
+                "normalStorageLocation": "Stockholm",
+                "catalogedUnit": {}
+            }],
+            "identifications": [{
+                "identificationText": "This is a test"
+            }]
         },
-        {
-            "feature_observation_text": "This is a test",
-            "is_of_feature_observation_type_id": 3
-        }
-    ],
-    "occurrences": [
-        {
-            "collectors_text": "Ida Li",
-            "locality_text": "Sollentuna, Sweden",
-            "occurrence_date_text": "2017-10-12",
-            "involves_individual_group_id": { 
+        "additionalData": [{
+            "type": "catalogedUnit",
+            "attributes": {
+                "catalogNumber": "abc123"
             }
-        }
-    ],
-    "physical_units": [
-        {
-            "physical_unit_text": "This is a test",
-            "normal_storage_location": "Stockholm",
-            "belongs_to_cataloged_unit_id": {
-                "catalog_number": "test_007"
-            } 
-        },
-        {
-            "physical_unit_text": "This is a test",
-            "normal_storage_location": "Stockholm",
-            "belongs_to_cataloged_unit_id": {
-                "catalog_number": "test_008"
-            } 
-        }
-    ]  
+        }]
+    }
 }
 
  

@@ -10,9 +10,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List; 
 import java.io.IOException;
 import java.io.Serializable;     
+import java.io.StringReader;
+import java.util.ArrayList;
 import javax.ejb.EJB; 
-import javax.inject.Inject;
-import javax.json.JsonObject; 
+import javax.inject.Inject; 
+import javax.json.Json;
+import javax.json.JsonArray; 
+import javax.json.JsonObject;  
 import lombok.extern.slf4j.Slf4j;  
 import se.nrm.dina.collections.data.model.EntityBean; 
 import se.nrm.dina.collections.data.model.impl.FeatureObservation;
@@ -22,6 +26,7 @@ import se.nrm.dina.collections.data.model.impl.PhysicalUnit;
 import se.nrm.dina.collections.jpa.CollectionsDao; 
 import se.nrm.dina.collections.json.converter.JsonConverter; 
 import se.nrm.dina.collections.json.converter.JsonConverterV2;  
+import se.nrm.dina.collections.json.converter.util.CommonString;
 import se.nrm.dina.collections.logic.query.QueryBuilder;
 
 /**
@@ -58,21 +63,7 @@ public class CollectionsLogic implements Serializable  {
          
         return json2.convertIndividualGroups(dao.findByJPQL(QueryBuilder.getInstance().getQueryFindIndividualGroupsByCatalogNumber(catalogNumber)), include);
     }
-    
-//    public JsonObject getCatalogedUnits(String include) {
-//        log.info("getCatalogedUnits");
-//        
-//        return json2.convertPhysicalUnits(dao.findAll(CatalogedUnit.class), include); 
-//    }
-//
-//    public JsonObject getPhysicalUnits(String include) {
-//        log.info("getPhysiclUnits");
-//   
-//        return json2.convertPhysicalUnits(dao.findAll(PhysicalUnit.class), include); 
-//    }
-//    
-    
-    
+  
     public JsonObject getAll(String entityName) {
         log.info("getAll : {}", entityName);
         
@@ -83,6 +74,35 @@ public class CollectionsLogic implements Serializable  {
     public JsonObject getById(String entityName, long id) {
         Class clazz = Util.getInstance().convertClassNameToClass(entityName);
         return json.convert(dao.findById(id, clazz));
+    }
+    
+    public JsonObject saveIndividualGroup(String theJson) {
+        log.info("saveIndividualGroup");
+         
+        JsonObject individualGroupJson = Json.createReader(new StringReader(theJson)).readObject();
+        JsonObject dataJson = individualGroupJson.getJsonObject(CommonString.getInstance().getData());
+        log.info("dataJson : {}", dataJson);
+        
+        JsonObject attrJson = dataJson.getJsonObject(CommonString.getInstance().getAttributes());
+        JsonArray featureObservationsJson = attrJson.getJsonArray("featureObservations");
+        
+        List<FeatureObservation> featureObservations = new ArrayList<>();
+        FeatureObservation featureObservation = new FeatureObservation();
+        int count = featureObservationsJson.size();
+        for(int i = 0; i <= count; i++) {
+            JsonObject featureObservationJson = featureObservationsJson.getJsonObject(i);
+            String featureObservationText = featureObservationJson.getString("featureObservationText");
+        }
+        
+                
+        IndividualGroup individualGroup = new IndividualGroup();
+        
+        
+        
+        
+        
+        return null;
+        
     }
     
     public JsonObject saveEntity(String entityName, String theJson ) {

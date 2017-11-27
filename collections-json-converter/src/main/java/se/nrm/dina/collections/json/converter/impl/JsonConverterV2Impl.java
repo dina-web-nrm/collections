@@ -94,7 +94,7 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
             physicalUnits.stream()
                     .forEach(pu -> {
                         subBuilder.add(CommonString.getInstance().getId(), pu.getId());
-                        if(include.contains("physicalUnit")) {
+                        if(include != null && include.contains("physicalUnit")) {
                             subBuilder.add("physicalUnitText", pu.getPhysicalUnitText() == null ? "" : pu.getPhysicalUnitText());
                             subBuilder.add("normalStorageLocation", pu.getNormalStorageLocation() == null ? "" : pu.getNormalStorageLocation());
                             addCatalogedUnit(pu.getBelongsToCatalogedUnit(), subBuilder, include.contains("catalogedUnit"));  
@@ -131,7 +131,7 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
             featureObservation.stream()
                     .forEach(fo -> {
                         subBuilder.add(CommonString.getInstance().getId(), fo.getId()); 
-                        if(include.contains("fetureObservation")) {
+                        if(include != null && include.contains("fetureObservation")) {
                             subBuilder.add("featureObservationText", fo.getFeatureObservationText() == null ? "" : fo.getFeatureObservationText());
                             addFeatureObservationType(fo.getIsOfFeatureObservationType(), subBuilder, include.contains("featureObservationType")); 
                         } 
