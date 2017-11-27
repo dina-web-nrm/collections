@@ -8,6 +8,7 @@ package se.nrm.dina.collections.api.services;
 import java.io.Serializable;
 import javax.ejb.Stateless;
 import javax.inject.Inject; 
+import javax.json.JsonObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes; 
 import javax.ws.rs.DELETE;
@@ -108,7 +109,7 @@ public class CollectionsServices implements Serializable {
 
     @POST
     @Path("/individualGroups") 
-    public Response createNewEntity(@Context HttpServletRequest req, String json) {
+    public Response createNewEntity(@Context HttpServletRequest req, String json) { 
         log.info("createNewEntity - json: {}", json);
         
         return Response.ok(logic.saveIndividualGroup(json)).build();
