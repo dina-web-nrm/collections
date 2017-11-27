@@ -159,7 +159,7 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
         T tmp = null;
         try { 
             tmp = entityManager.find(clazz, id, LockModeType.OPTIMISTIC);  
-            entityManager.flush();
+            entityManager.flush(); 
             return tmp; 
         } catch (OptimisticLockException e){ 
             entityManager.refresh(tmp); 
