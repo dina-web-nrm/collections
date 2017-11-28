@@ -10,6 +10,6 @@ swarm:
     data-sources:
       DinaDS:
         driver-name: com.mysql
-        connection-url: jdbc:mysql://db:3306/dina_collections?autoReconnect=true&useSSL=false
+        connection-url: jdbc:mysql://collections_db_1:3306/dina_collections?autoReconnect=true&useSSL=false
         user-name: admin
         password: password12
