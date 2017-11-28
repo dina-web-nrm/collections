@@ -14,6 +14,7 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;  
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.LockModeType;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceContext;
@@ -23,6 +24,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import se.nrm.dina.collections.data.model.EntityBean;
+import se.nrm.dina.collections.exceptions.CollectionsBadRequestException;
 import se.nrm.dina.collections.exceptions.CollectionsConstraintViolationException; 
 import se.nrm.dina.collections.exceptions.CollectionsDatabaseException;
 import se.nrm.dina.collections.exceptions.CollectionsOptimisticLockException;
@@ -136,7 +138,7 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
     public void delete(T entity) {
         log.info("delete - {}", entity);
 
-        try {
+        try { 
             entityManager.remove(entity);
             entityManager.flush();                              // this is needed for throwing internal exception
         } catch (ConstraintViolationException e) {
@@ -144,6 +146,11 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
                                                               handleConstraintViolations(e).toString(), 
                                                               ErrorCode.DB_CONSTRAINT_VIOLATION.name(),
                                                               e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new CollectionsBadRequestException( entity.getClass().getSimpleName(),
+                                                      ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.getDetail(entity.getClass().getSimpleName()),  
+                                                      ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.name(),
+                                                      e.getMessage());
         } catch (Exception e) {
             throw new CollectionsDatabaseException( entity.getClass().getSimpleName(),
                                                     exceptionsHandler.getErrorSource(e),  

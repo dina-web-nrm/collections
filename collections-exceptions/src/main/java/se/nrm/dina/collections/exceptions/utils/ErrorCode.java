@@ -11,10 +11,34 @@ package se.nrm.dina.collections.exceptions.utils;
  */
 public enum ErrorCode {
 
-    DB_EXCEPTION,
-    DB_CONSTRAINT_VIOLATION,
-    DB_OPTIMISTIC_LOCK; 
+    DB_EXCEPTION ("database error"),
+    DB_CONSTRAINT_VIOLATION (""),
+    DB_OPTIMISTIC_LOCK (""),
+    
+    BAD_REQUEST (""),
+    BAD_REQUEST_MISSING_PARAMETER ("Missing parameter."),
+    BAD_REQUEST_ENTITY_NOT_IN_DB ("Entity is not in database."); 
+    
+    private final String detail;
+    
 
+    ErrorCode(String detail) {
+        this.detail = detail; 
+    }
+ 
+    public String getMessage() {
+        return this.detail;
+    }
+  
+    public String getDetail(String message) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(detail);
+        sb.append(" [");
+        sb.append(message);
+        sb.append("]");
+        return sb.toString();
+    }
+     
     public String getText(ErrorCode errorCode) {
         return errorCode.name();
     } 

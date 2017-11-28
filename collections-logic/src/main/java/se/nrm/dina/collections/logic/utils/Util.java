@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import lombok.extern.slf4j.Slf4j;
 import se.nrm.dina.collections.data.model.EntityBean;
 import se.nrm.dina.collections.data.model.helper.DataModelHelper;
+import se.nrm.dina.collections.exceptions.CollectionsBadRequestException;
+import se.nrm.dina.collections.exceptions.utils.ErrorCode;
 
 /**
  *
@@ -39,9 +41,12 @@ public class Util {
         log.info("convertClassNameToClass : {}", classname);
         
         try {
-            return Class.forName(DataModelHelper.getInstance().getEntityPackage()+ capitalizeFirstChar(classname));   
-        } catch (ClassNotFoundException ex) {  
-            return null;
+            return Class.forName(DataModelHelper.getInstance().getEntityPackage() + capitalizeFirstChar(classname));   
+        } catch (ClassNotFoundException ex) {   
+            throw new CollectionsBadRequestException(classname, 
+                                                     ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.getDetail(classname), 
+                                                     ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.name(), 
+                                                     ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.getMessage());
         }  
     } 
     

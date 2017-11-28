@@ -7,8 +7,7 @@ package se.nrm.dina.collections.api.services;
 
 import java.io.Serializable;
 import javax.ejb.Stateless;
-import javax.inject.Inject; 
-import javax.json.JsonObject;
+import javax.inject.Inject;  
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes; 
 import javax.ws.rs.DELETE;
@@ -23,6 +22,9 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import lombok.extern.slf4j.Slf4j;   
+import se.nrm.dina.collections.data.model.impl.IndividualGroup;
+import se.nrm.dina.collections.exceptions.CollectionsBadRequestException;
+import se.nrm.dina.collections.exceptions.CollectionsException;
 import se.nrm.dina.collections.logic.CollectionsLogic; 
 
 /**
@@ -53,8 +55,14 @@ public class CollectionsServices implements Serializable {
         
         MultivaluedMap<String, String> map = info.getQueryParameters();  
         String include = map.getFirst("include");
-        String catalogNumber = map.getFirst("filter[catalogNumber]");
-  
+         
+        String catalogNumber = map.getFirst("filter[catalogNumber]"); 
+        try {
+            logic.validateCatalogNumber(catalogNumber, IndividualGroup.class.getSimpleName());
+        } catch(CollectionsBadRequestException e) {
+            return Response.status(400).entity(logic.buildErrorJson(e)).build(); 
+        } 
+     
         return Response.ok(logic.getIndividualGroup(catalogNumber, include)).build();
     }
     
@@ -120,7 +128,12 @@ public class CollectionsServices implements Serializable {
     public Response delete(@PathParam("entity") String entity, @PathParam("id") int id) {
         log.info("delete : {}", id);
 
-        logic.delete(entity, id);
-        return Response.ok().build();
+        try {
+            logic.delete(entity, id);
+        } catch(CollectionsException e) {
+            return Response.status(400).entity(logic.buildErrorJson(e)).build(); 
+        }
+        
+        return Response.noContent().build();
     } 
 }

@@ -11,7 +11,7 @@ package se.nrm.dina.collections.data.model.helper;
  */
 public class DataModelHelper {
     
-    private final String ENTITY_PACKAGE = "se.nrm.dina.collections.data.model.impl.";
+    private final String ENTITY_PACKAGE = "se.nrm.dina.collections.data.model.impl."; 
     
     private static DataModelHelper instance = null;
      
