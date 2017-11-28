@@ -18,8 +18,7 @@ import javax.ejb.EJB;
 import javax.inject.Inject; 
 import javax.json.Json;
 import javax.json.JsonArray; 
-import javax.json.JsonObject;  
-import javax.json.JsonValue;
+import javax.json.JsonObject;   
 import lombok.extern.slf4j.Slf4j;  
 import se.nrm.dina.collections.data.model.EntityBean; 
 import se.nrm.dina.collections.data.model.impl.CatalogedUnit;
@@ -70,9 +69,7 @@ public class CollectionsLogic implements Serializable  {
          
         return json2.convertIndividualGroups(dao.findByJPQL(QueryBuilder.getInstance().getQueryFindIndividualGroupsByCatalogNumber(catalogNumber)), include);
     }
-  
-
-    
+   
     public JsonObject saveIndividualGroup(String theJson) {
         log.info("saveIndividualGroup");
          
@@ -90,21 +87,27 @@ public class CollectionsLogic implements Serializable  {
         IntStream.range(0, featureObservationsJson.size())
                 .forEach(i -> {
                     JsonObject featureObservationJson = featureObservationsJson.getJsonObject(i);
-                    String featureObservationText = featureObservationJson.getString("featureObservationText"); 
-                    featureObservation.setFeatureObservationText(featureObservationText); 
-                    
-                    int featureObservationTypeId = featureObservationJson.getInt("featureObservationTypeId"); 
-                    if(featureObservationTypeId != 0) {
-                        FeatureObservationType type = (FeatureObservationType) dao.findByReference(featureObservationTypeId, FeatureObservationType.class);
-                         
+                    String featureObservationText = featureObservationJson.getString("featureObservationText");
+                    featureObservation.setFeatureObservationText(featureObservationText);
+ 
+                    FeatureObservationType type = null; 
+                    if (featureObservationJson.containsKey("featureObservationTypeId")) {
+                        int featureObservationTypeId = featureObservationJson.getInt("featureObservationTypeId");
+                        if (featureObservationTypeId != 0) {
+                            type = (FeatureObservationType) dao.findByReference(featureObservationTypeId, FeatureObservationType.class);
+                        }
+                    } else {
+                        type = new FeatureObservationType();
+                        JsonObject typeJson = featureObservationJson.getJsonObject("featureObservationType");
+                        String typeName = typeJson.getString("name");
+                        type.setFeatureObservationTypeName(typeName);
                         featureObservation.setIsOfFeatureObservationType(type);
-                        featureObservation.setAppliesToIndividualGroup(individualGroup); 
-                    } 
-                    featureObservations.add(featureObservation); 
+                    }
+                    featureObservation.setIsOfFeatureObservationType(type);
+                    featureObservation.setAppliesToIndividualGroup(individualGroup);
+                    featureObservations.add(featureObservation);
                 });
-        
-        
-   
+ 
         JsonArray occurrencesJson = attrJson.getJsonArray("occurrences");
         List<Occurrence> occurrences = new ArrayList<>(); 
         Occurrence occurrence = new Occurrence();
@@ -156,8 +159,7 @@ public class CollectionsLogic implements Serializable  {
                         catalogedUnit.setPhysicalUnits(physicalUnits);
                     }
                 });
-        
-        
+         
         IntStream.range(0, physicalUnitsJson.size())
                 .forEach(i -> {
                     JsonObject physicalUnitJson = physicalUnitsJson.getJsonObject(i);

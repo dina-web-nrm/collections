@@ -1,0 +1,32 @@
+{
+    "data": {
+        "type": "individualGroup",
+        "attributes": {
+            "featureObservations": [{
+                "featureObservationText": "This is a test",
+                "featureObservationType": {
+                    "name": "Test"
+                }
+            }],
+            "occurrences": [{
+                "collectorsText": "Ida Li",
+                "localityText": "Sollentuna, Sweden",
+                "occurrenceDateText": "2017-10-12"
+            }],
+            "physicalUnits": [{
+                "physicalUnitText": "This is a test",
+                "normalStorageLocation": "Stockholm",
+                "catalogedUnit": {}
+            }],
+            "identifications": [{
+                "identificationText": "This is a test"
+            }]
+        },
+        "additionalData": [{
+            "type": "catalogedUnit",
+            "attributes": {
+                "catalogNumber": "abc123"
+            }
+        }]
+    }
+}

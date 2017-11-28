@@ -123,15 +123,17 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
         
     }
     
-    private void addFeatureObservations(List<FeatureObservation> featureObservation, JsonObjectBuilder attBuilder, String include) {
+    private void addFeatureObservations(List<FeatureObservation> featureObservations, JsonObjectBuilder attBuilder, String include) {
         
+        log.info("addFeatureObservations : {}", include);
+         
         JsonObjectBuilder subBuilder = Json.createObjectBuilder();
         JsonArrayBuilder dataArrBuilder = Json.createArrayBuilder(); 
-        if(featureObservation != null && !featureObservation.isEmpty()) {
-            featureObservation.stream()
+        if(featureObservations != null && !featureObservations.isEmpty()) {
+            featureObservations.stream()
                     .forEach(fo -> {
                         subBuilder.add(CommonString.getInstance().getId(), fo.getId()); 
-                        if(include != null && include.contains("fetureObservation")) {
+                        if(include != null && include.contains("featureObservations")) { 
                             subBuilder.add("featureObservationText", fo.getFeatureObservationText() == null ? "" : fo.getFeatureObservationText());
                             addFeatureObservationType(fo.getIsOfFeatureObservationType(), subBuilder, include.contains("featureObservationType")); 
                         } 
@@ -145,6 +147,8 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
     }
             
     private void addFeatureObservationType(FeatureObservationType featureObservationType, JsonObjectBuilder attBuilder, boolean isType) {
+        log.info("addFeatureObservations : {}", isType);
+        
         JsonObjectBuilder subBuilder = Json.createObjectBuilder();
         if(featureObservationType != null) { 
             if(isType) {

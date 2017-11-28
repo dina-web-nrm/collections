@@ -37,7 +37,7 @@ public class FeatureObservation extends BaseEntity {
     private String featureObservationText;
     
     @JoinColumn(name = "is_of_feature_observation_type_id", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @CollectionsManyToOne(name = "isOfFeatureObservationType", type="FeatureObservationType") 
     private FeatureObservationType isOfFeatureObservationType;
     
