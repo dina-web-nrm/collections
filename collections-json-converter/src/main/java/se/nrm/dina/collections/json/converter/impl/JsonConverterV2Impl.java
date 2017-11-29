@@ -6,13 +6,16 @@
 package se.nrm.dina.collections.json.converter.impl;
 
 import java.io.Serializable;  
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonBuilderFactory;
 import javax.json.JsonObject; 
 import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
 import lombok.extern.slf4j.Slf4j;
 import se.nrm.dina.collections.data.model.impl.CatalogedUnit;
 import se.nrm.dina.collections.data.model.impl.FeatureObservation;
@@ -36,7 +39,7 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
     
     @Override
     public JsonObject convertIndividualGroup(IndividualGroup individualGroup, String include) {
-        log.info("convertIndividualGroups");
+        log.info("convertIndividualGroup");
         
         JsonBuilderFactory factory = Json.createBuilderFactory(null);
         JsonObjectBuilder jsonBuilder = factory.createObjectBuilder();
@@ -126,7 +129,7 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
     
     private void addFeatureObservations(List<FeatureObservation> featureObservations, JsonObjectBuilder attBuilder, String include) {
         
-        log.info("addFeatureObservations : {}", include);
+        log.info("addFeatureObservations : {} -- {}", featureObservations, include);
          
         JsonObjectBuilder subBuilder = Json.createObjectBuilder();
         JsonArrayBuilder dataArrBuilder = Json.createArrayBuilder(); 
@@ -257,12 +260,27 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
     
     
 
-
+    @Override
+    public JsonObject readInJson(String json) {
+        try (JsonReader jsonReader = Json.createReader(new StringReader(json))) {
+            return jsonReader.readObject();
+        }
+    }
     
-
-    
-    
-
+    @Override
+    public JsonObject getAttributes(JsonObject json) {
+        return json.getJsonObject(CommonString.getInstance().getAttributes());
+    }
+     
+    @Override
+    public JsonArray getJsonArray(JsonObject json, String key) {
+        if(json.containsKey(key)) {
+            return json.getJsonArray(key); 
+        } else {
+            return null;
+        }
+        
+    }
 
     
  

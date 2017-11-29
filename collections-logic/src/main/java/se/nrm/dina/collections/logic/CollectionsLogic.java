@@ -7,13 +7,11 @@ package se.nrm.dina.collections.logic;
  
 import se.nrm.dina.collections.logic.utils.Util; 
 import java.util.List;  
-import java.io.Serializable;     
-import java.io.StringReader;
+import java.io.Serializable;      
 import java.util.ArrayList;
 import java.util.stream.IntStream; 
 import javax.ejb.EJB; 
-import javax.inject.Inject; 
-import javax.json.Json;
+import javax.inject.Inject;  
 import javax.json.JsonArray; 
 import javax.json.JsonObject;   
 import lombok.extern.slf4j.Slf4j;  
@@ -74,130 +72,296 @@ public class CollectionsLogic implements Serializable  {
                                                      ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getMessage()); 
         } 
     }
+    
+    public JsonObject updateIndvidualGroup(String theJson, long id) {
+        
+        JsonObject dataJson = json2.readInJson(theJson).getJsonObject(CommonString.getInstance().getData());
+        JsonObject attributesJson = dataJson.getJsonObject(CommonString.getInstance().getAttributes());
+        
+        IndividualGroup indivialGroup = (IndividualGroup) dao.findByReference(id, IndividualGroup.class);
+        
+        List<FeatureObservation> featureObservations = indivialGroup.getFeatureObservations();
+        
+        
+        return null;
+    }
+    
+
+
    
     public JsonObject saveIndividualGroup(String theJson) {
         log.info("saveIndividualGroup");
+          
+        JsonObject dataJson = json2.readInJson(theJson).getJsonObject(CommonString.getInstance().getData());
+        JsonObject attrJson = json2.getAttributes(dataJson);
+        JsonArray additionalData = json2.getJsonArray(dataJson, "additionalData");
          
-        JsonObject individualGroupJson = Json.createReader(new StringReader(theJson)).readObject();
-        JsonObject dataJson = individualGroupJson.getJsonObject(CommonString.getInstance().getData());
- 
-        IndividualGroup individualGroup = new IndividualGroup();
-         
-        JsonObject attrJson = dataJson.getJsonObject(CommonString.getInstance().getAttributes());
+        IndividualGroup individualGroup = new IndividualGroup();  
         
-        JsonArray featureObservationsJson = attrJson.getJsonArray("featureObservations"); 
-        List<FeatureObservation> featureObservations = new ArrayList<>();
-        FeatureObservation featureObservation = new FeatureObservation();
+        try {
+            addFeatureObservationsFromJson(attrJson, individualGroup, false);
+            addOccurrences(attrJson, individualGroup, false);
+            addIdentifications(attrJson, individualGroup, false);
+            addPhysicalUnit(additionalData, attrJson, individualGroup, false);
+        } catch(CollectionsBadRequestException e) {
+            return json2.convertError(e);
+        }
+         
+//        individualGroup.setFeatureObservations(getFeatureObservationFromJson(featureObservationsJson, individualGroup));
+//        individualGroup.setOccurrences(occurrences);
+//        individualGroup.setIdentifications(identifications);
+//        individualGroup.setPhysicalUnits(physicalUnits);
+        try { 
+            return json2.convertIndividualGroup((IndividualGroup) dao.create(individualGroup), null);
+        } catch(CollectionsException e) {
+            return json2.convertError(e);
+        }  
+    }
 
-        IntStream.range(0, featureObservationsJson.size())
-                .forEach(i -> {
-                    JsonObject featureObservationJson = featureObservationsJson.getJsonObject(i);
-                    String featureObservationText = featureObservationJson.getString("featureObservationText");
-                    featureObservation.setFeatureObservationText(featureObservationText);
- 
-                    FeatureObservationType type = null; 
-                    if (featureObservationJson.containsKey("featureObservationTypeId")) {
-                        int featureObservationTypeId = featureObservationJson.getInt("featureObservationTypeId");
-                        if (featureObservationTypeId != 0) {
-                            type = (FeatureObservationType) dao.findByReference(featureObservationTypeId, FeatureObservationType.class);
-                        }
-                    } else {
-                        type = new FeatureObservationType();
-                        JsonObject typeJson = featureObservationJson.getJsonObject("featureObservationType");
-                        String typeName = typeJson.getString("name");
-                        type.setFeatureObservationTypeName(typeName);
-                        featureObservation.setIsOfFeatureObservationType(type);
-                    }
-                    featureObservation.setIsOfFeatureObservationType(type);
-                    featureObservation.setAppliesToIndividualGroup(individualGroup);
-                    featureObservations.add(featureObservation);
-                });
- 
-        JsonArray occurrencesJson = attrJson.getJsonArray("occurrences");
-        List<Occurrence> occurrences = new ArrayList<>(); 
-        Occurrence occurrence = new Occurrence();
-        
-        IntStream.range(0, occurrencesJson.size())
-                .forEach(i -> {
-                    JsonObject occurrenceJson = occurrencesJson.getJsonObject(i);
-                    String collectorText = occurrenceJson.getString("collectorsText"); 
-                    String localityText = occurrenceJson.getString("localityText");
-                    String occurrenceDateText = occurrenceJson.getString("occurrenceDateText");
-                    
-                    occurrence.setCollectorsText(collectorText);
-                    occurrence.setInvolvesIndividualGroup(individualGroup);
-                    occurrence.setLocalityText(localityText);
-                    occurrence.setOccurrenceDateText(occurrenceDateText);  
-                    occurrences.add(occurrence); 
-                });
-        
-        
-        JsonArray identificationsJson = attrJson.getJsonArray("identifications");
-        List<Identification> identifications = new ArrayList<>(); 
-        Identification identification = new Identification();
-        
-        IntStream.range(0, identificationsJson.size())
-                .forEach(i -> {
-                    JsonObject identificationJson = identificationsJson.getJsonObject(i);
-                    String identificationText = identificationJson.getString("identificationText"); 
-                    
-                    identification.setIdentificationText(identificationText);
-                    identification.setAppliesToIndividualGroup(individualGroup);
- 
-                    identifications.add(identification);
-                });
-        
-        JsonArray physicalUnitsJson = attrJson.getJsonArray("physicalUnits");
-        List<PhysicalUnit> physicalUnits = new ArrayList<>(); 
-        PhysicalUnit physicalUnit = new PhysicalUnit();
-        
-        CatalogedUnit catalogedUnit = new CatalogedUnit();
-        JsonArray additionalData = dataJson.getJsonArray("additionalData");  
-        IntStream.range(0, additionalData.size())
-                .forEach(i -> { 
-                    JsonObject additionalJson = additionalData.getJsonObject(i);
-                    String type = additionalJson.getString(CommonString.getInstance().getType()); 
-                    
-                    if(type.equals("catalogedUnit")) {
-                        JsonObject catalogedUnitAttrs = additionalJson.getJsonObject(CommonString.getInstance().getAttributes());
-                        catalogedUnit.setCatalogNumber(catalogedUnitAttrs.getString("catalogNumber"));
-                        catalogedUnit.setPhysicalUnits(physicalUnits);
-                    }
-                });
-         
-        IntStream.range(0, physicalUnitsJson.size())
-                .forEach(i -> {
-                    JsonObject physicalUnitJson = physicalUnitsJson.getJsonObject(i);
-                    String physicalUnitText = physicalUnitJson.getString("physicalUnitText"); 
-                    String normalStorageLocation = physicalUnitJson.getString("normalStorageLocation");
-                    
-                    physicalUnit.setPhysicalUnitText(physicalUnitText);
-                    physicalUnit.setNormalStorageLocation(normalStorageLocation);
-                    physicalUnit.setRepresentsIndividualGroup(individualGroup);
-                    physicalUnit.setBelongsToCatalogedUnit(catalogedUnit);
- 
-                    physicalUnits.add(physicalUnit);
-                });
-        
-        
-        
-        individualGroup.setFeatureObservations(featureObservations);
-        individualGroup.setOccurrences(occurrences);
-        individualGroup.setIdentifications(identifications);
-        individualGroup.setPhysicalUnits(physicalUnits);
-        
-        IndividualGroup result = (IndividualGroup) dao.create(individualGroup);
-        
-        return json2.convertIndividualGroup(result, null); 
+    private CatalogedUnit getCatalogedUnitFromJson(JsonObject catalogedUnitJson) { 
+        CatalogedUnit catalogedUnit;
+        if(catalogedUnitJson.containsKey(CommonString.getInstance().getId())) {
+            int id = catalogedUnitJson.getInt(CommonString.getInstance().getId());
+            catalogedUnit = (CatalogedUnit) dao.findByReference(id, CatalogedUnit.class);
+        } else {
+            catalogedUnit = new CatalogedUnit();
+        } 
+        catalogedUnit.setCatalogNumber(catalogedUnitJson.getString("catalogNumber"));
+        return catalogedUnit;
     }
     
     
     
+    private PhysicalUnit getPhysicalUnitFromJson(CatalogedUnit catalogedUnit, JsonObject physicalUnitJson, boolean isEditing) {
+         
+        PhysicalUnit physicalUnit = new PhysicalUnit();
+        if(isEditing) {
+            if(physicalUnitJson.containsKey(CommonString.getInstance().getId())) {
+                int id = physicalUnitJson.getInt(CommonString.getInstance().getId());
+                physicalUnit = (PhysicalUnit) dao.findByReference(id, PhysicalUnit.class);
+                catalogedUnit = getCatalogedUnitFromJson(physicalUnitJson.getJsonObject("catalogedUnit"));
+            }  
+        }  
+       
+        if(physicalUnitJson.containsKey("physicalUnitText")) {
+            physicalUnit.setPhysicalUnitText(physicalUnitJson.getString("physicalUnitText"));
+        }
+        
+        if(physicalUnitJson.containsKey("normalStorageLocation")) {
+            physicalUnit.setNormalStorageLocation(physicalUnitJson.getString("normalStorageLocation"));
+        }
+        physicalUnit.setBelongsToCatalogedUnit(catalogedUnit);
+//        physicalUnit.setRepresentsIndividualGroup(individualGroup); 
+        return physicalUnit;
+    }
+ 
+    private void addPhysicalUnit(JsonArray additionalData, JsonObject attrJson, IndividualGroup individualGroup, boolean isEditing) {
+
+        JsonArray physicalUnitsJson = json2.getJsonArray(attrJson, "physicalUnits");
+        List<PhysicalUnit> physicalUnits = new ArrayList<>();  
+         
+        CatalogedUnit catalogedUnit = getCatalogedUnitFromJson(additionalData);
+        if(catalogedUnit != null) { 
+            catalogedUnit.setPhysicalUnits(physicalUnits);
+        }
+ 
+        IntStream.range(0, physicalUnitsJson.size())
+                .forEach(i -> {
+                    JsonObject physicalUnitJson = physicalUnitsJson.getJsonObject(i);
+                    PhysicalUnit physicalUnit = getPhysicalUnitFromJson(catalogedUnit, physicalUnitJson, isEditing);
+//                    String physicalUnitText = physicalUnitJson.getString("physicalUnitText"); 
+//                    String normalStorageLocation = physicalUnitJson.getString("normalStorageLocation");
+//                    
+//                    physicalUnit.setPhysicalUnitText(physicalUnitText);
+//                    physicalUnit.setNormalStorageLocation(normalStorageLocation);
+//                    physicalUnit.setRepresentsIndividualGroup(individualGroup);
+//                    physicalUnit.setBelongsToCatalogedUnit(catalogedUnit);
+                    physicalUnit.setRepresentsIndividualGroup(individualGroup);
+ 
+                    physicalUnits.add(physicalUnit);
+                });
+        individualGroup.setPhysicalUnits(physicalUnits);
+    }
+
+    private CatalogedUnit getCatalogedUnitFromJson(JsonArray additionalData) {
+        if (additionalData == null) {
+            return null;
+        } else {
+            CatalogedUnit catalogedUnit = new CatalogedUnit();
+            IntStream.range(0, additionalData.size())
+                    .forEach(i -> {
+                        JsonObject additionalJson = additionalData.getJsonObject(i);
+                        String type = additionalJson.getString(CommonString.getInstance().getType());
+
+                        if (type.equals("catalogedUnit")) {
+                            JsonObject catalogedUnitAttrs = additionalJson.getJsonObject(CommonString.getInstance().getAttributes());
+                            catalogedUnit.setCatalogNumber(catalogedUnitAttrs.getString("catalogNumber"));
+//                        catalogedUnit.setPhysicalUnits(physicalUnits);
+                        }
+                    });
+            return catalogedUnit;
+        }
+    }
     
+    private Identification getIdentificationFromJson(JsonObject jsonObject, boolean isEditing) {
+        Identification identification = new Identification();
+        if(isEditing) {
+            if(jsonObject.containsKey(CommonString.getInstance().getId())) {
+                int id = jsonObject.getInt(CommonString.getInstance().getId());
+                identification = (Identification) dao.findByReference(id, Identification.class);
+            }
+        }
+        String identificationText = jsonObject.getString("identificationText"); 
+        identification.setIdentificationText(identificationText);
+        return identification;
+    }
+
+    private void addIdentifications(JsonObject attrJson, IndividualGroup individualGroup, boolean isEditing) {
+         JsonArray identificationsJson = json2.getJsonArray(attrJson, "identifications");
+         
+        List<Identification> identifications = new ArrayList<>();  
+        
+        IntStream.range(0, identificationsJson.size())
+                .forEach(i -> {
+                    JsonObject identificationJson = identificationsJson.getJsonObject(i);
+                    Identification identification = getIdentificationFromJson(identificationJson, isEditing);
+                    identification.setAppliesToIndividualGroup(individualGroup);
+ 
+                    identifications.add(identification);
+                });
+        individualGroup.setIdentifications(identifications);
+    }
+ 
+    private FeatureObservationType getFeatureObservationTypeFromJson(JsonObject featureObservationJson, boolean isEditing) {
+        log.info("getFeatureObservationTypeFromJson : {}", isEditing);
+        
+        FeatureObservationType type;
+        
+        int featureObservationTypeId = 0;
+        String name = null;
+        if (featureObservationJson.containsKey("featureObservationType")) {
+            JsonObject typeJson = featureObservationJson.getJsonObject("featureObservationType");
+            if(isEditing) {
+                featureObservationTypeId = typeJson.getInt(CommonString.getInstance().getId()); 
+            } 
+            name = typeJson.getString("name");
+        } else if (featureObservationJson.containsKey("featureObservationTypeId")) {
+            featureObservationTypeId = featureObservationJson.getInt("featureObservationTypeId");
+        } else {
+            throw new CollectionsBadRequestException(FeatureObservationType.class.getSimpleName(), 
+                                                     ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getDetail(FeatureObservationType.class.getSimpleName()), 
+                                                     ErrorCode.BAD_REQUEST_MISSING_PARAMETER.name(),
+                                                     ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getMessage());
+        }
+         
+        if (featureObservationTypeId > 0) {
+            type = (FeatureObservationType) dao.findByReference(featureObservationTypeId, FeatureObservationType.class); 
+        } else {
+            type = new FeatureObservationType(); 
+            type.setFeatureObservationTypeName(name); 
+        }  
+        return type;
+    }
     
+    private FeatureObservation getFeatureObservationFromJson(JsonObject featureObservationJson, boolean isEditing) {
+
+        FeatureObservation featureObservation; 
+        if(isEditing) {
+            int id = featureObservationJson.getInt(CommonString.getInstance().getId());
+            featureObservation = (FeatureObservation) dao.findByReference(id, FeatureObservation.class);
+        } else {
+            featureObservation = new FeatureObservation();   
+        }
+        
+        try {
+            featureObservation.setIsOfFeatureObservationType(getFeatureObservationTypeFromJson(featureObservationJson, isEditing));
+        } catch (CollectionsBadRequestException e) {
+            throw e;
+        }
+        
+        String featureObservationText = featureObservationJson.getString("featureObservationText");
+        featureObservation.setFeatureObservationText(featureObservationText);
+        
+//        featureObservation.setAppliesToIndividualGroup(individualGroup);
+        return featureObservation;
+    }
+
+    private void addFeatureObservationsFromJson(JsonObject attrJson, IndividualGroup individualGroup, boolean isEditing) {
+        
+        JsonArray featureObservationsJson = json2.getJsonArray(attrJson, "featureObservations");  
+        
+        List<FeatureObservation> featureObservations = new ArrayList<>();
+        
+        IntStream.range(0, featureObservationsJson.size())
+                .forEach(i -> {
+                    JsonObject featureObservationJson = featureObservationsJson.getJsonObject(i);
+//                    String featureObservationText = featureObservationJson.getString("featureObservationText");
+//                    featureObservation.setFeatureObservationText(featureObservationText);
+// 
+//                    FeatureObservationType type = null; 
+//                    if (featureObservationJson.containsKey("featureObservationTypeId")) {
+//                        int featureObservationTypeId = featureObservationJson.getInt("featureObservationTypeId");
+//                        if (featureObservationTypeId != 0) {
+//                            type = (FeatureObservationType) dao.findByReference(featureObservationTypeId, FeatureObservationType.class);
+//                        }
+//                    } else {
+//                        type = new FeatureObservationType();
+//                        JsonObject typeJson = featureObservationJson.getJsonObject("featureObservationType");
+//                        String typeName = typeJson.getString("name");
+//                        type.setFeatureObservationTypeName(typeName);
+//                        featureObservation.setIsOfFeatureObservationType(type);
+//                    }
+//                    featureObservation.setIsOfFeatureObservationType(type);
+//                    featureObservation.setAppliesToIndividualGroup(individualGroup);
+
+                    
+                    try {
+                        FeatureObservation featureObservation = getFeatureObservationFromJson(featureObservationJson, isEditing);
+                        featureObservation.setAppliesToIndividualGroup(individualGroup);
+                        featureObservations.add(featureObservation);
+                    } catch(CollectionsBadRequestException e) {
+                        throw e;
+                    }
+                    
+                });
+        individualGroup.setFeatureObservations(featureObservations);
+    } 
     
-    
-    
+    private Occurrence getOccurrenceFromJson(JsonObject jsonObject, boolean isEditing) {
+        Occurrence occurrence = new Occurrence();
+        
+        if(isEditing) {
+            if (jsonObject.containsKey(CommonString.getInstance().getId())) {
+                int id = jsonObject.getInt(CommonString.getInstance().getId());
+                occurrence = (Occurrence) dao.findByReference(id, Occurrence.class);
+            }
+        }
+        String collectorText = jsonObject.getString("collectorsText");
+        String localityText = jsonObject.getString("localityText");
+        String occurrenceDateText = jsonObject.getString("occurrenceDateText");
+
+        occurrence.setCollectorsText(collectorText);
+        
+        occurrence.setLocalityText(localityText);
+        occurrence.setOccurrenceDateText(occurrenceDateText);
+
+        return occurrence;
+    }
+
+    private void addOccurrences(JsonObject attrJson, IndividualGroup individualGroup, boolean isEditing) {
+
+        JsonArray occurrencesJson = json2.getJsonArray(attrJson, "occurrences");
+        List<Occurrence> occurrences = new ArrayList<>();
+  
+        IntStream.range(0, occurrencesJson.size())
+                .forEach(i -> {
+                    JsonObject occurrenceJson = occurrencesJson.getJsonObject(i);
+                    Occurrence occurrence = getOccurrenceFromJson(occurrenceJson, isEditing);
+                    occurrence.setInvolvesIndividualGroup(individualGroup);
+                    occurrences.add(occurrence); 
+                });
+        individualGroup.setOccurrences(occurrences);
+    }
     
     
     

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package se.nrm.dina.collections.api.services;
-
+ 
 import java.io.Serializable;
 import javax.ejb.Stateless;
 import javax.inject.Inject;  
@@ -22,6 +22,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import lombok.extern.slf4j.Slf4j;   
+import se.nrm.dina.collections.api.PATCH;
 import se.nrm.dina.collections.data.model.impl.IndividualGroup;
 import se.nrm.dina.collections.exceptions.CollectionsBadRequestException;
 import se.nrm.dina.collections.exceptions.CollectionsException;
@@ -114,6 +115,14 @@ public class CollectionsServices implements Serializable {
 //
 //        return Response.ok(logic.getById(entity, id)).build();
 //    }
+    
+        
+    @PATCH
+    @Path("/individualGroups/{id}")
+    public Response updateUser(@Context HttpServletRequest req, String json, @PathParam("id") long id) {
+        log.info("updateUser : {}  --  {}", json, id);
+        return Response.ok(logic.updateIndvidualGroup(json, id)).build();
+    }
 
     @POST
     @Path("/individualGroups") 
