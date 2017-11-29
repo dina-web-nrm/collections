@@ -1,6 +1,9 @@
 #!/bin/bash
 # able to check the TOKEN here -> https://jwt.io/ 
 source .env
+dt=$(date '+%Y-%m-%d %H:%M:%S');
+echo $dt
+
 EXPECTED_RESULT="Hello from collections api"
 
 
@@ -22,6 +25,12 @@ echo ""
 echo "Response from ${ALPHA_SERVER} is \"$RESPONSE\" "
 [ "$RESPONSE" == "$EXPECTED_RESULT" ] && echo "TRUE : correct response " || echo "FALSE: wrong response"
 echo ""
+
+# writing to a log file
+echo "$dt">> script.log
+echo "Token is fetched from $KEYCLOAK_SERVER" >> script.log
+echo "Response from the ${ALPHA_SERVER} is \"$RESPONSE\" " >>script.log
+echo "" >>script.log
 
 
 
