@@ -6,6 +6,7 @@
 package se.nrm.dina.collections.json.converter.impl;
 
 import java.io.Serializable;  
+import java.util.ArrayList;
 import java.util.List;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -207,6 +208,10 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
     
     
     
+    @Override
+    public JsonObject convertSuccessMessage(String message) {
+        return null;
+    }
     
     
     
@@ -214,8 +219,12 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
     
     
     
-    
-    
+    @Override
+    public JsonObject convertError(CollectionsException error) {
+        List<CollectionsException> exceptions = new ArrayList<>();
+        exceptions.add(error);
+        return convertErrors(exceptions);
+    }
     
     @Override
     public JsonObject convertErrors(List<CollectionsException> errors) { 

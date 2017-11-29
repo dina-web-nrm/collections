@@ -26,6 +26,10 @@ public interface JsonConverterV2<T extends Object> {
 //    JsonObject convertPhysicalUnits(List<PhysicalUnit> physicalUnits, String include);
 
 //    JsonObject convert(T bean);
+    
+    JsonObject convertSuccessMessage(String message);
 
+    JsonObject convertError(CollectionsException error);
+    
     JsonObject convertErrors(List<CollectionsException> errors);
 }

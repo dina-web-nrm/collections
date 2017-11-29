@@ -5,15 +5,12 @@
  */
 package se.nrm.dina.collections.logic;
  
-import se.nrm.dina.collections.logic.utils.Util;
-//import com.fasterxml.jackson.databind.ObjectMapper; 
-import java.util.List; 
-//import java.io.IOException;
+import se.nrm.dina.collections.logic.utils.Util; 
+import java.util.List;  
 import java.io.Serializable;     
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.stream.IntStream;
-//import java.util.stream.StreamSupport;
+import java.util.stream.IntStream; 
 import javax.ejb.EJB; 
 import javax.inject.Inject; 
 import javax.json.Json;
@@ -27,9 +24,12 @@ import se.nrm.dina.collections.data.model.impl.FeatureObservationType;
 import se.nrm.dina.collections.data.model.impl.Identification;
 import se.nrm.dina.collections.data.model.impl.IndividualGroup;
 import se.nrm.dina.collections.data.model.impl.Occurrence;
-import se.nrm.dina.collections.data.model.impl.PhysicalUnit;
-//import se.nrm.dina.collections.data.model.impl.Occurrence;
-//import se.nrm.dina.collections.data.model.impl.PhysicalUnit;
+import se.nrm.dina.collections.data.model.impl.PhysicalUnit; 
+import se.nrm.dina.collections.exceptions.CollectionsBadRequestException; 
+import se.nrm.dina.collections.exceptions.CollectionsConstraintViolationException;
+import se.nrm.dina.collections.exceptions.CollectionsDatabaseException;
+import se.nrm.dina.collections.exceptions.CollectionsException;
+import se.nrm.dina.collections.exceptions.utils.ErrorCode;
 import se.nrm.dina.collections.jpa.CollectionsDao;  
 import se.nrm.dina.collections.json.converter.JsonConverterV2;  
 import se.nrm.dina.collections.json.converter.util.CommonString;
@@ -41,12 +41,7 @@ import se.nrm.dina.collections.logic.query.QueryBuilder;
  */
 @Slf4j
 public class CollectionsLogic implements Serializable  {
-    
-//    private final ObjectMapper mapper;
-    
-//    @Inject
-//    private JsonConverter json;
-    
+      
     @Inject 
     private JsonConverterV2 json2;
      
@@ -66,8 +61,18 @@ public class CollectionsLogic implements Serializable  {
     
     public JsonObject getIndividualGroup(String catalogNumber, String include) {
         log.info("getIndividualGroup : {}", catalogNumber);
-         
-        return json2.convertIndividualGroups(dao.findByJPQL(QueryBuilder.getInstance().getQueryFindIndividualGroupsByCatalogNumber(catalogNumber)), include);
+ 
+        return json2.convertIndividualGroups(dao.findByJPQL(QueryBuilder.getInstance()
+                                                    .getQueryFindIndividualGroupsByCatalogNumber(catalogNumber)), include);
+    }
+    
+    public void validateCatalogNumber(String catalogNumber, String source) {
+        if(catalogNumber == null || catalogNumber.isEmpty()) { 
+            throw new CollectionsBadRequestException(source, 
+                                                     ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getDetail("catalogNumer = " + catalogNumber), 
+                                                     ErrorCode.BAD_REQUEST_MISSING_PARAMETER.name(), 
+                                                     ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getMessage()); 
+        } 
     }
    
     public JsonObject saveIndividualGroup(String theJson) {
@@ -276,16 +281,25 @@ public class CollectionsLogic implements Serializable  {
      *
      * @param entityName
      * @param id
+     * @return 
      */
-    public void delete(String entityName, long id) {
+    public JsonObject delete(String entityName, long id) {
         log.info("delete");
 
-        Class clazz = Util.getInstance().convertClassNameToClass(entityName);
-        EntityBean bean = dao.findByReference(id, clazz);
-
-        if (bean != null) {
-            dao.delete(bean);
+        try {
+            Class clazz = Util.getInstance().convertClassNameToClass(entityName); 
+            EntityBean bean = dao.findByReference(id, clazz); 
+            if (bean != null) {
+                dao.delete(bean);
+            }
+        } catch(CollectionsBadRequestException | CollectionsConstraintViolationException | CollectionsDatabaseException e) {
+            throw e;
         }
+        return json2.convertSuccessMessage("Delete success");
+    }
+    
+    public JsonObject buildErrorJson(CollectionsException e) {
+        return json2.convertError(e);
     }
  
 }
