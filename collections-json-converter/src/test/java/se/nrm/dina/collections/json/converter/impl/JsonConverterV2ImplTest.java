@@ -13,13 +13,16 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import se.nrm.dina.collections.data.model.impl.CatalogedUnit;
 import se.nrm.dina.collections.data.model.impl.IndividualGroup;
 import se.nrm.dina.collections.data.model.impl.PhysicalUnit;
+import se.nrm.dina.collections.exceptions.CollectionsBadRequestException;
+import se.nrm.dina.collections.exceptions.CollectionsException;
+import se.nrm.dina.collections.exceptions.utils.ErrorCode;
 import se.nrm.dina.collections.json.converter.JsonConverterV2;
+import se.nrm.dina.collections.json.converter.util.CommonString;
 
 /**
  *
@@ -32,8 +35,10 @@ public class JsonConverterV2ImplTest {
     private final PhysicalUnit testPhysicalUnit;
     private final CatalogedUnit testCatalogedUnit;
     private final List<PhysicalUnit> physicalUnits;
-    
+
     private final JsonConverterV2 testInstance;
+    
+    private StringBuilder sb;
 
     public JsonConverterV2ImplTest() {
         testInstance = new JsonConverterV2Impl();
@@ -42,12 +47,36 @@ public class JsonConverterV2ImplTest {
         testPhysicalUnit = new PhysicalUnit((long) 18);
         testPhysicalUnit.setNormalStorageLocation("Stockholm");
         testPhysicalUnit.setPhysicalUnitText("test");
-         
+
         physicalUnits = new ArrayList();
         physicalUnits.add(testPhysicalUnit);
-        
+
         testCatalogedUnit = new CatalogedUnit((long) 20);
-        testCatalogedUnit.setCatalogNumber("abc123"); 
+        testCatalogedUnit.setCatalogNumber("abc123");
+        
+        
+        sb = new StringBuilder();
+        sb.append("{\n");
+        sb.append("	\"data\": {\n");
+        sb.append("		\"type\": \"individualGroup\",\n");
+        sb.append("		\"id\": 50,\n");
+        sb.append("		\"attributes\": {\n");
+        sb.append("			\"physicalUnits\": [{\n");
+        sb.append("				\"id\": 31\n");
+        sb.append("			}],\n");
+        sb.append("			\"featureObservations\": [{\n");
+        sb.append("				\"id\": 28\n");
+        sb.append("			}],\n");
+        sb.append("			\"identifications\": [{\n");
+        sb.append("				\"id\": 10\n");
+        sb.append("			}],\n");
+        sb.append("			\"occurrences\": [{\n");
+        sb.append("				\"id\": 35\n");
+        sb.append("			}]\n");
+        sb.append("		}\n");
+        sb.append("	}\n");
+        sb.append("}");
+        
     }
 
     @BeforeClass
@@ -67,7 +96,7 @@ public class JsonConverterV2ImplTest {
 
         String include = null;
         JsonObject result = testInstance.convertIndividualGroup(testIndividualGroup, include);
- 
+
         JsonObject dataJson = result.getJsonObject("data");
         assertNotNull(dataJson);
         assertEquals(dataJson.getString("type"), "individualGroup");
@@ -78,24 +107,24 @@ public class JsonConverterV2ImplTest {
         assertEquals(attrJson.getString("physicalUnits"), "null");
         assertEquals(attrJson.getString("featureObservations"), "null");
         assertEquals(attrJson.getString("identifications"), "null");
-        assertEquals(attrJson.getString("occurrences"), "null"); 
+        assertEquals(attrJson.getString("occurrences"), "null");
     }
-    
+
     @Test
     public void testConvertIndividualGroupWithNull() {
         System.out.println("testConvertIndividualGroupWithNull");
 
         String include = null;
         JsonObject result = testInstance.convertIndividualGroup(null, include);
- 
+
         System.out.println("result : " + result);
         JsonObject dataJson = result.getJsonObject("data");
-        assertNotNull(dataJson); 
-        
+        assertNotNull(dataJson);
+
         JsonObject attrJson = dataJson.getJsonObject("attributes");
-        assertNull(attrJson); 
+        assertNull(attrJson);
     }
-    
+
     /**
      * Test of convertIndividualGroup method, of class JsonConverterV2Impl.
      */
@@ -104,13 +133,11 @@ public class JsonConverterV2ImplTest {
         System.out.println("testConvertIndividualGroupWithPhysicalUnit");
 
         String include = "physicalUnit";
-        
-        
+
         testIndividualGroup.setPhysicalUnits(physicalUnits);
-        
+
         JsonObject result = testInstance.convertIndividualGroup(testIndividualGroup, include);
- 
-        System.out.println("result : " +result);
+
         JsonObject dataJson = result.getJsonObject("data");
         assertNotNull(dataJson);
         assertEquals(dataJson.getString("type"), "individualGroup");
@@ -118,31 +145,31 @@ public class JsonConverterV2ImplTest {
 
         JsonObject attrJson = dataJson.getJsonObject("attributes");
         assertNotNull(attrJson);
-        
+
         JsonArray physicalUnitsJson = attrJson.getJsonArray("physicalUnits");
         assertNotNull(physicalUnitsJson);
         assertEquals(physicalUnitsJson.size(), 1);
-         
+
         assertEquals(attrJson.getString("featureObservations"), "null");
         assertEquals(attrJson.getString("identifications"), "null");
-        assertEquals(attrJson.getString("occurrences"), "null"); 
+        assertEquals(attrJson.getString("occurrences"), "null");
     }
-    
+
     @Test
     public void testConvertIndividualGroupWithPhysicalUnitAndCatalogedUnit() {
         System.out.println("testConvertIndividualGroupWithPhysicalUnit");
 
         String include = "physicalUnits.catalogedUnit";
-        
+
         physicalUnits.clear();
-        testPhysicalUnit.setBelongsToCatalogedUnit(testCatalogedUnit); 
+        testPhysicalUnit.setBelongsToCatalogedUnit(testCatalogedUnit);
         physicalUnits.add(testPhysicalUnit);
-                
+
         testIndividualGroup.setPhysicalUnits(physicalUnits);
-        
+
         JsonObject result = testInstance.convertIndividualGroup(testIndividualGroup, include);
- 
-        System.out.println("result : " +result);
+
+        System.out.println("result : " + result);
         JsonObject dataJson = result.getJsonObject("data");
         assertNotNull(dataJson);
         assertEquals(dataJson.getString("type"), "individualGroup");
@@ -150,31 +177,30 @@ public class JsonConverterV2ImplTest {
 
         JsonObject attrJson = dataJson.getJsonObject("attributes");
         assertNotNull(attrJson);
-        
+
         JsonArray physicalUnitsJson = attrJson.getJsonArray("physicalUnits");
         assertNotNull(physicalUnitsJson);
         assertEquals(physicalUnitsJson.size(), 1);
-         
+
         assertEquals(attrJson.getString("featureObservations"), "null");
         assertEquals(attrJson.getString("identifications"), "null");
-        assertEquals(attrJson.getString("occurrences"), "null"); 
+        assertEquals(attrJson.getString("occurrences"), "null");
     }
-    
+
     @Test
     public void testConvertIndividualGroupWithPhysicalUnitAndCatalogedUnitIsNull() {
         System.out.println("testConvertIndividualGroupWithPhysicalUnit");
 
         String include = "physicalUnits.catalogedUnit";
-        
+
         physicalUnits.clear();
-        testPhysicalUnit.setBelongsToCatalogedUnit(null); 
+        testPhysicalUnit.setBelongsToCatalogedUnit(null);
         physicalUnits.add(testPhysicalUnit);
-                
+
         testIndividualGroup.setPhysicalUnits(physicalUnits);
-        
+
         JsonObject result = testInstance.convertIndividualGroup(testIndividualGroup, include);
- 
-        System.out.println("result : " +result);
+
         JsonObject dataJson = result.getJsonObject("data");
         assertNotNull(dataJson);
         assertEquals(dataJson.getString("type"), "individualGroup");
@@ -182,46 +208,46 @@ public class JsonConverterV2ImplTest {
 
         JsonObject attrJson = dataJson.getJsonObject("attributes");
         assertNotNull(attrJson);
-        
+
         JsonArray physicalUnitsJson = attrJson.getJsonArray("physicalUnits");
         assertNotNull(physicalUnitsJson);
         assertEquals(physicalUnitsJson.size(), 1);
-         
+
         assertEquals(attrJson.getString("featureObservations"), "null");
         assertEquals(attrJson.getString("identifications"), "null");
-        assertEquals(attrJson.getString("occurrences"), "null"); 
+        assertEquals(attrJson.getString("occurrences"), "null");
     }
 
     /**
      * Test of convertIndividualGroups method, of class JsonConverterV2Impl.
-     */ 
+     */
     @Test
     public void testConvertIndividualGroups() {
         System.out.println("convertIndividualGroups");
-        
+
         List<IndividualGroup> individualGroups = new ArrayList();
         individualGroups.add(testIndividualGroup);
         String include = "";
-  
+
         JsonObject result = testInstance.convertIndividualGroups(individualGroups, include);
-        
+
         JsonArray dataJson = result.getJsonArray("data");
-        assertNotNull(dataJson); 
-        assertEquals(dataJson.size(), 1);  
+        assertNotNull(dataJson);
+        assertEquals(dataJson.size(), 1);
     }
-    
+
     /**
      * Test of convertIndividualGroups method, of class JsonConverterV2Impl.
-     */ 
+     */
     @Test
     public void testConvertIndividualGroupsWithEmptyData() {
         System.out.println("testConvertIndividualGroupsWithNull");
-        
-        List<IndividualGroup> individualGroups = new ArrayList(); 
+
+        List<IndividualGroup> individualGroups = new ArrayList();
         String include = "";
-  
+
         JsonObject result = testInstance.convertIndividualGroups(individualGroups, include);
-        
+
         JsonArray dataJson = result.getJsonArray("data");
         assertNotNull(dataJson);
         assertEquals(dataJson.size(), 0);
@@ -239,26 +265,114 @@ public class JsonConverterV2ImplTest {
         String include = "";
 
         JsonObject result = testInstance.convertIndividualGroups(individualGroups, include);
-        
+
         JsonArray dataJson = result.getJsonArray("data");
-        assertNotNull(dataJson); 
-        assertEquals(dataJson.size(), 0); 
-      
+        assertNotNull(dataJson);
+        assertEquals(dataJson.size(), 0);
+
     }
 
     /**
      * Test of convertErrors method, of class JsonConverterV2Impl.
      */
-    @Ignore
+    @Test
+    public void testConvertError() {
+        System.out.println("convertErrors");
+
+        CollectionsException e = new CollectionsBadRequestException(CatalogedUnit.class.getSimpleName(), ErrorCode.BAD_REQUEST.name(), ErrorCode.BAD_REQUEST.getDetail("test"), ErrorCode.BAD_REQUEST.getMessage());
+
+        JsonObject result = testInstance.convertError(e);
+        System.out.println("result : " + result.toString());
+
+        assertNotNull(result);
+
+        JsonArray errorsJson = result.getJsonArray("errors");
+
+        assertNotNull(errorsJson);
+        assertEquals(errorsJson.size(), 1);
+    }
+
+    /**
+     * Test of convertError method, of class JsonConverterV2Impl.
+     */
     @Test
     public void testConvertErrors() {
         System.out.println("convertErrors");
-        JsonConverterV2Impl instance = new JsonConverterV2Impl();
-        JsonObject expResult = null;
-//        JsonObject result = instance.convertErrors();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
+
+        CollectionsException e = new CollectionsBadRequestException(CatalogedUnit.class.getSimpleName(), ErrorCode.BAD_REQUEST.name(), ErrorCode.BAD_REQUEST.getDetail("test"), ErrorCode.BAD_REQUEST.getMessage());
+        List<CollectionsException> errors = new ArrayList<>();
+        errors.add(e);
+
+        JsonObject result = testInstance.convertErrors(errors);
+        System.out.println("result : " + result.toString());
+
+        assertNotNull(result);
+
+        JsonArray errorsJson = result.getJsonArray("errors");
+
+        assertNotNull(errorsJson);
+        assertEquals(errorsJson.size(), 1);
     }
 
+    /**
+     * Test of readInJson method, of class JsonConverterV2Impl.
+     */
+    @Test
+    public void testReadInJson() {
+        System.out.println("testReadInJson");
+ 
+        JsonObject result = testInstance.readInJson(sb.toString()); 
+        assertNotNull(result);
+
+        JsonObject dataJson = result.getJsonObject(CommonString.getInstance().getData());
+
+        assertNotNull(dataJson);
+        assertEquals(dataJson.getString(CommonString.getInstance().getType()), "individualGroup");
+        assertEquals(dataJson.getInt(CommonString.getInstance().getId()), 50);
+    }
+             
+    /**
+     * Test of getAttributes method, of class JsonConverterV2Impl.
+     */
+    @Test
+    public void testGetAttributes() {
+        System.out.println("testReadInJson");
+         
+        JsonObject result = testInstance.readInJson(sb.toString()); 
+        assertNotNull(result);
+
+        JsonObject dataJson = result.getJsonObject(CommonString.getInstance().getData());
+         
+        JsonObject attrJson = testInstance.getAttributes(dataJson);
+        assertNotNull(attrJson);
+        
+        JsonArray jsonArray = attrJson.getJsonArray("physicalUnits");
+        assertNotNull(jsonArray);
+        
+        assertEquals(jsonArray.size(), 1); 
+    }
+    
+    
+        /**
+     * Test of getAttributes method, of class JsonConverterV2Impl.
+     */
+    @Test
+    public void testGetJsonArray() {
+        System.out.println("testReadInJson");
+         
+        JsonObject result = testInstance.readInJson(sb.toString()); 
+        assertNotNull(result);
+
+        JsonObject dataJson = result.getJsonObject(CommonString.getInstance().getData());
+
+        assertNotNull(dataJson);
+        
+        JsonObject attrJson = dataJson.getJsonObject(CommonString.getInstance().getAttributes());
+        assertNotNull(attrJson);
+        
+        JsonArray jsonArray = testInstance.getJsonArray(attrJson, "physicalUnits") ;
+        assertNotNull(jsonArray);
+        
+        assertEquals(jsonArray.size(), 1); 
+    }
 }

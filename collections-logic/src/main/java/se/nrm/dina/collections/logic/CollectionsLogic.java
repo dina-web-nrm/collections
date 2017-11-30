@@ -90,18 +90,10 @@ public class CollectionsLogic implements Serializable  {
 
     public JsonObject updateIndvidualGroup(String theJson, long id) {
         log.info("updateIndvidualGroup");
-
-//        JsonObject dataJson = json2.readInJson(theJson).getJsonObject(CommonString.getInstance().getData());
-//        JsonObject attrJson = json2.getAttributes(dataJson);
-
+ 
         IndividualGroup individualGroup = (IndividualGroup) dao.findByReference(id, IndividualGroup.class);
         buildIndividualGroup(theJson, true, individualGroup);
-//        boolean isEditing = true;
-//        addFeatureObservationsFromJson(attrJson, individualGroup, isEditing);
-//        addOccurrences(attrJson, individualGroup, isEditing);
-//        addIdentifications(attrJson, individualGroup, isEditing);
-//        addPhysicalUnit(null, attrJson, individualGroup, isEditing);
-
+ 
         try {
             return json2.convertIndividualGroup((IndividualGroup) dao.merge(individualGroup), null);
         } catch (CollectionsException e) {
@@ -112,22 +104,9 @@ public class CollectionsLogic implements Serializable  {
 
     public JsonObject saveIndividualGroup(String theJson) {
         log.info("saveIndividualGroup");
-          
-//        JsonObject dataJson = json2.readInJson(theJson).getJsonObject(CommonString.getInstance().getData());
-//        JsonObject attrJson = json2.getAttributes(dataJson);
-//        JsonArray additionalData = json2.getJsonArray(dataJson, "additionalData");
-         
+           
         IndividualGroup individualGroup = new IndividualGroup();  
-        
-//        boolean isEditing = false;
-//        try {
-//            addFeatureObservationsFromJson(attrJson, individualGroup, isEditing);
-//            addOccurrences(attrJson, individualGroup, isEditing);
-//            addIdentifications(attrJson, individualGroup, isEditing);
-//            addPhysicalUnit(additionalData, attrJson, individualGroup, isEditing);
-//        } catch(CollectionsBadRequestException e) {
-//            return json2.convertError(e);
-//        }
+         
         buildIndividualGroup(theJson, false, individualGroup);
           
         try { 
@@ -446,6 +425,7 @@ public class CollectionsLogic implements Serializable  {
                 dao.delete(bean);
             }
         } catch(CollectionsBadRequestException | CollectionsConstraintViolationException | CollectionsDatabaseException e) {
+            log.error("catched : {}", e.getMessage());
             throw e;
         }
         return json2.convertSuccessMessage("Delete success");

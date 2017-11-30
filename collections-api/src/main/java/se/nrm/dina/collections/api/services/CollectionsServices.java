@@ -140,6 +140,7 @@ public class CollectionsServices implements Serializable {
         try {
             logic.delete(entity, id);
         } catch(CollectionsException e) {
+            log.error("catched : {}", e.getMessage());
             return Response.status(400).entity(logic.buildErrorJson(e)).build(); 
         }
         

@@ -5,10 +5,13 @@
  */
 package se.nrm.dina.collections.exceptions;
 
+import javax.ejb.ApplicationException;
+
 /**
  *
  * @author idali
  */
+@ApplicationException
 public class CollectionsBadRequestException extends CollectionsException {
      
     public CollectionsBadRequestException(String source, String detail, String code, String errorMsg) {
