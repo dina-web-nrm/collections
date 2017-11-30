@@ -119,8 +119,8 @@ public class CollectionsServices implements Serializable {
         
     @PATCH
     @Path("/individualGroups/{id}")
-    public Response updateUser(@Context HttpServletRequest req, String json, @PathParam("id") long id) {
-        log.info("updateUser : {}  --  {}", json, id);
+    public Response updateIndividualGroups(@Context HttpServletRequest req, String json, @PathParam("id") long id) {
+        log.info("updateIndividualGroups : {}  --  {}", json, id);
         return Response.ok(logic.updateIndvidualGroup(json, id)).build();
     }
 
