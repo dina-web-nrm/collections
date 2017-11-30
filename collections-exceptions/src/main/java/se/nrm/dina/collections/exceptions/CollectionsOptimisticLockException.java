@@ -5,10 +5,13 @@
  */
 package se.nrm.dina.collections.exceptions;
 
+import javax.ejb.ApplicationException;
+
 /**
  *
  * @author idali
  */
+@ApplicationException
 public class CollectionsOptimisticLockException extends CollectionsException {
     
     public CollectionsOptimisticLockException(String source, String detail, String errorCode, String errorMsg) {

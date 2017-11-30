@@ -6,8 +6,10 @@
 package se.nrm.dina.collections.jpa.impl;
 
 import java.util.ArrayList;
-import java.util.List; 
+import java.util.List;
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.LockModeType;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceException;
@@ -17,7 +19,8 @@ import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
-import org.junit.BeforeClass; 
+import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.Matchers.any;
@@ -28,6 +31,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.runners.MockitoJUnitRunner;
 import se.nrm.dina.collections.data.model.impl.CatalogedUnit;
+import se.nrm.dina.collections.exceptions.CollectionsBadRequestException;
 import se.nrm.dina.collections.exceptions.CollectionsConstraintViolationException;
 import se.nrm.dina.collections.exceptions.CollectionsDatabaseException;
 import se.nrm.dina.collections.exceptions.CollectionsOptimisticLockException;
@@ -101,7 +105,7 @@ public class CollectionsDaoImplTest {
         assertNotNull(entityManager);
         assertNotNull(query);
     }
-    
+
     @Test
     public void testCollectionsDaoImplConstractorWithEntityManagerAndQueryAndExceptionHandler() throws Exception {
         System.out.println("testCollectionsDaoImplConstractorWithEntityManagerAndQueryAndExceptionHandler");
@@ -145,7 +149,7 @@ public class CollectionsDaoImplTest {
         verify(entityManager, times(1)).persist(testCatalogedUnit);
         verify(entityManager, times(0)).flush();
     }
-    
+
     @Test(expected = CollectionsDatabaseException.class)
     public void testCreateFailureThrowDatabaseException() throws Exception {
         System.out.println("testCreateFailureThrowDatabaseException");
@@ -172,7 +176,7 @@ public class CollectionsDaoImplTest {
         verify(entityManager, times(1)).persist(testCatalogedUnit);
         verify(entityManager, times(0)).flush();
     }
- 
+
     @Test(expected = CollectionsDatabaseException.class)
     public void testCreateThrowException() throws Exception {
         System.out.println("testCreateThrowException");
@@ -211,7 +215,7 @@ public class CollectionsDaoImplTest {
     @Test(expected = CollectionsOptimisticLockException.class)
     public void testMergeThrowOptimisticLockException() {
         System.out.println("testMergeThrowOptimisticLockException");
- 
+
         doThrow(OptimisticLockException.class).when(entityManager).merge(testCatalogedUnit);
 
         dao = new CollectionsDaoImpl(entityManager, query, exceptionsHandler);
@@ -220,11 +224,11 @@ public class CollectionsDaoImplTest {
         verify(entityManager, times(1)).merge(testCatalogedUnit);
         verify(entityManager, times(0)).flush();
     }
-    
+
     @Test(expected = CollectionsConstraintViolationException.class)
     public void testMergeConstrainViolationException() {
         System.out.println("testMergeConstrainViolationException");
- 
+
         doThrow(ConstraintViolationException.class).when(entityManager).merge(testCatalogedUnit);
 
         dao = new CollectionsDaoImpl(entityManager, query, exceptionsHandler);
@@ -233,7 +237,7 @@ public class CollectionsDaoImplTest {
         verify(entityManager, times(1)).merge(testCatalogedUnit);
         verify(entityManager, times(0)).flush();
     }
-    
+
     @Test(expected = CollectionsDatabaseException.class)
     public void testMergeThrowException() throws Exception {
         System.out.println("testMergeThrowException");
@@ -246,7 +250,7 @@ public class CollectionsDaoImplTest {
         verify(entityManager, times(1)).merge(testCatalogedUnit);
         verify(entityManager, times(0)).flush();
     }
-     
+
     /**
      * Test of delete method, of class CollectionsDaoImpl.
      *
@@ -264,33 +268,46 @@ public class CollectionsDaoImplTest {
         verify(entityManager, times(1)).remove(testCatalogedUnit);
         verify(entityManager, times(1)).flush();
     }
-    
+ 
+    @Test(expected = CollectionsBadRequestException.class)
+    public void testDeleteThrowEntityNotFoundException() {
+        System.out.println("testDeleteThrowEntityNotFoundException");
+
+        doThrow(EntityNotFoundException.class).when(entityManager).remove(testCatalogedUnit);
+
+        dao = new CollectionsDaoImpl(entityManager, query, exceptionsHandler);
+        dao.delete(testCatalogedUnit);
+        verify(entityManager).remove(testCatalogedUnit);
+        verify(entityManager, times(2)).remove(testCatalogedUnit);
+        verify(entityManager, times(2)).flush();
+    }
+
     @Test(expected = CollectionsConstraintViolationException.class)
-    public void testDeleteThrowConstraintViolationException()  {
+    public void testDeleteThrowConstraintViolationException() {
         System.out.println("testDeleteThrowConstraintViolationException");
 
         doThrow(ConstraintViolationException.class).when(entityManager).remove(testCatalogedUnit);
         dao = new CollectionsDaoImpl(entityManager, query, exceptionsHandler);
         dao.delete(testCatalogedUnit);
 
-        verify(entityManager).remove(testCatalogedUnit); 
+        verify(entityManager).remove(testCatalogedUnit);
         verify(entityManager, times(1)).remove(testCatalogedUnit);
         verify(entityManager, times(0)).flush();
     }
 
     @Test(expected = CollectionsDatabaseException.class)
-    public void testDeleteThrowException()  {
+    public void testDeleteThrowException() {
         System.out.println("testDeleteThrowException");
 
         doThrow(Exception.class).when(entityManager).remove(testCatalogedUnit);
         dao = new CollectionsDaoImpl(entityManager, query, exceptionsHandler);
         dao.delete(testCatalogedUnit);
 
-        verify(entityManager).remove(testCatalogedUnit); 
+        verify(entityManager).remove(testCatalogedUnit);
         verify(entityManager, times(1)).remove(testCatalogedUnit);
         verify(entityManager, times(0)).flush();
     }
-    
+
     /**
      * Test of findById method, of class CollectionsDaoImpl.
      *
@@ -309,7 +326,7 @@ public class CollectionsDaoImplTest {
         verify(entityManager).flush();
         assertSame(testCatalogedUnit, result);
     }
-    
+
     @Test(expected = CollectionsOptimisticLockException.class)
     public void testFindByIdThrowOptimisticLockException() {
         System.out.println("testFindByIdThrowOptimisticLockException");
@@ -320,7 +337,7 @@ public class CollectionsDaoImplTest {
         dao.findById((long) 50, CatalogedUnit.class);
 
         verify(entityManager).find(CatalogedUnit.class, (long) 50, LockModeType.OPTIMISTIC);
-        verify(entityManager).flush(); 
+        verify(entityManager).flush();
     }
 
     @Test(expected = CollectionsDatabaseException.class)
@@ -333,9 +350,9 @@ public class CollectionsDaoImplTest {
         dao.findById((long) 50, CatalogedUnit.class);
 
         verify(entityManager).find(CatalogedUnit.class, (long) 50, LockModeType.OPTIMISTIC);
-        verify(entityManager).flush(); 
+        verify(entityManager).flush();
     }
-    
+
     /**
      * Test of findByReference method, of class CollectionsDaoImpl.
      *
@@ -354,51 +371,52 @@ public class CollectionsDaoImplTest {
 
     /**
      * Test of findAll method, of class CollectionsDaoImpl.
+     *
      * @throws java.lang.Exception
-     */ 
+     */
     @Test
     public void testFindAll() throws Exception {
         System.out.println("findAll");
-        
-        Class clazz = CatalogedUnit.class; 
-        List<CatalogedUnit> catalogedUnits = new ArrayList<>(); 
+
+        Class clazz = CatalogedUnit.class;
+        List<CatalogedUnit> catalogedUnits = new ArrayList<>();
         catalogedUnits.add(testCatalogedUnit);
-        
-        when(entityManager.createNamedQuery(clazz.getSimpleName() + ".findAll")).thenReturn(query); 
+
+        when(entityManager.createNamedQuery(clazz.getSimpleName() + ".findAll")).thenReturn(query);
         when(query.getResultList()).thenReturn(catalogedUnits);
         int expResult = 1;
-        
+
         dao = new CollectionsDaoImpl(entityManager, query);
         List result = dao.findAll(clazz);
-        
+
         verify(entityManager).createNamedQuery(clazz.getSimpleName() + ".findAll");
         verify(query).getResultList();
-        assertEquals(expResult, result.size());  
+        assertEquals(expResult, result.size());
         assertSame(result, catalogedUnits);
     }
- 
 
     /**
      * Test of findByJPQL method, of class CollectionsDaoImpl.
+     *
      * @throws java.lang.Exception
-     */ 
+     */
     @Test
     public void testFindByJPQL() throws Exception {
         System.out.println("findByJPQL");
-        
+
         String jpql = "SELECT cu FROM catalogedUnit cu where cu.id = 1";
-        
-        List<CatalogedUnit> catalogedUnits = new ArrayList<>(); 
+
+        List<CatalogedUnit> catalogedUnits = new ArrayList<>();
         catalogedUnits.add(testCatalogedUnit);
-         
-        when(entityManager.createQuery(jpql)).thenReturn(query);  
+
+        when(entityManager.createQuery(jpql)).thenReturn(query);
         when(query.getResultList()).thenReturn(catalogedUnits);
-        
-        dao = new CollectionsDaoImpl(entityManager, query); 
+
+        dao = new CollectionsDaoImpl(entityManager, query);
         List result = dao.findByJPQL(jpql);
         assertEquals(result.size(), 1);
-        
+
         verify(entityManager).createQuery(jpql);
-        verify(query).getResultList();  
-    } 
+        verify(query).getResultList();
+    }
 }

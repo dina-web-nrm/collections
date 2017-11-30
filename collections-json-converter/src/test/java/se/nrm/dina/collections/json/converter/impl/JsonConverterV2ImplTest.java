@@ -212,41 +212,12 @@ public class JsonConverterV2ImplTest {
         JsonArray physicalUnitsJson = attrJson.getJsonArray("physicalUnits");
         assertNotNull(physicalUnitsJson);
         assertEquals(physicalUnitsJson.size(), 1);
-
+ 
         assertEquals(attrJson.getString("featureObservations"), "null");
         assertEquals(attrJson.getString("identifications"), "null");
         assertEquals(attrJson.getString("occurrences"), "null");
     }
-    
-    /**
-     * Test of convertIndividualGroup method, of class JsonConverterV2Impl.
-     */
-    @Test
-    public void testConvertIndividualGroupWithInclude() {
-        System.out.println("testConvertIndividualGroupWithPhysicalUnit");
-
-        String include = "physicalUnits.catalogedUnit";
-
-        testIndividualGroup.setPhysicalUnits(physicalUnits);
-
-        JsonObject result = testInstance.convertIndividualGroup(testIndividualGroup, include);
-
-        JsonObject dataJson = result.getJsonObject("data");
-        assertNotNull(dataJson);
-        assertEquals(dataJson.getString("type"), "individualGroup");
-        assertEquals(dataJson.getInt("id"), 20);
-
-        JsonObject attrJson = dataJson.getJsonObject("attributes");
-        assertNotNull(attrJson);
-
-        JsonArray physicalUnitsJson = attrJson.getJsonArray("physicalUnits");
-        assertNotNull(physicalUnitsJson);
-        assertEquals(physicalUnitsJson.size(), 1);
-
-        assertEquals(attrJson.getString("featureObservations"), "null");
-        assertEquals(attrJson.getString("identifications"), "null");
-        assertEquals(attrJson.getString("occurrences"), "null");
-    }
+ 
 
 
     /**

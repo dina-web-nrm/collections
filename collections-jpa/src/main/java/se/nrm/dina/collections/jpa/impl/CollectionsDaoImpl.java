@@ -148,7 +148,7 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
                                                               e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new CollectionsBadRequestException( entity.getClass().getSimpleName(),
-                                                      ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.getDetail(entity.getClass().getSimpleName()),  
+                                                      e.getMessage(),  
                                                       ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.name(),
                                                       e.getMessage());
         } catch (Exception e) {
