@@ -6,12 +6,10 @@
 package se.nrm.dina.collections.json.converter.util;
 
 import java.sql.Date;
-import org.junit.After; 
-import org.junit.AfterClass;
+import org.junit.After;  
 import org.junit.Before; 
 import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.BeforeClass;
+import static org.junit.Assert.*; 
 
 /**
  *
