@@ -58,13 +58,15 @@ public class CollectionsServices implements Serializable {
         String include = map.getFirst("include");
          
         String catalogNumber = map.getFirst("filter[catalogNumber]"); 
+        String taxonStandardized = map.getFirst("filter[identifiedTaxonNameStandardized]"); 
+         
         try {
             logic.validateCatalogNumber(catalogNumber, IndividualGroup.class.getSimpleName());
         } catch(CollectionsBadRequestException e) {
             return Response.status(400).entity(logic.buildErrorJson(e)).build(); 
         } 
      
-        return Response.ok(logic.getIndividualGroup(catalogNumber, include)).build();
+        return Response.ok(logic.getIndividualGroup(catalogNumber, taxonStandardized, include)).build();
     }
     
     @GET
@@ -128,6 +130,7 @@ public class CollectionsServices implements Serializable {
     @Path("/individualGroups") 
     public Response createNewEntity(@Context HttpServletRequest req, String json) { 
         log.info("createNewEntity - json: {}", json);
+        
         
         return Response.ok(logic.saveIndividualGroup(json)).build();
     }

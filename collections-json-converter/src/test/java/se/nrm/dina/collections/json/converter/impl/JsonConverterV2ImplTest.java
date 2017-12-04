@@ -38,7 +38,7 @@ public class JsonConverterV2ImplTest {
 
     private final JsonConverterV2 testInstance;
     
-    private StringBuilder sb;
+    private final StringBuilder sb;
 
     public JsonConverterV2ImplTest() {
         testInstance = new JsonConverterV2Impl();
@@ -313,6 +313,23 @@ public class JsonConverterV2ImplTest {
         assertNotNull(errorsJson);
         assertEquals(errorsJson.size(), 1);
     }
+    
+    /**
+     * Test of convertError method, of class JsonConverterV2Impl.
+     */
+    @Test
+    public void testConvertErrorsWithNull() {
+        System.out.println("testConvertErrorsWithNull");
+  
+        JsonObject result = testInstance.convertErrors(null); 
+
+        assertNotNull(result);
+
+        JsonArray errorsJson = result.getJsonArray("errors");
+
+        assertNotNull(errorsJson);
+        assertEquals(errorsJson.size(), 0);
+    }
 
     /**
      * Test of readInJson method, of class JsonConverterV2Impl.
@@ -371,8 +388,10 @@ public class JsonConverterV2ImplTest {
         assertNotNull(attrJson);
         
         JsonArray jsonArray = testInstance.getJsonArray(attrJson, "physicalUnits") ;
-        assertNotNull(jsonArray);
-        
+        assertNotNull(jsonArray); 
         assertEquals(jsonArray.size(), 1); 
+        
+        jsonArray = testInstance.getJsonArray(attrJson, "test") ;
+        assertNull(jsonArray);
     }
 }

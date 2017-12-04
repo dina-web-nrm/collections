@@ -57,11 +57,12 @@ public class CollectionsLogic implements Serializable  {
         return json2.convertIndividualGroup((IndividualGroup) dao.findById(id, IndividualGroup.class), include);
     }
     
-    public JsonObject getIndividualGroup(String catalogNumber, String include) {
-        log.info("getIndividualGroup : {}", catalogNumber);
+    public JsonObject getIndividualGroup(String catalogNumber, String taxonStandarized, String include) {
+        log.info("getIndividualGroup : {} -- {}", catalogNumber, taxonStandarized);
  
         return json2.convertIndividualGroups(dao.findByJPQL(QueryBuilder.getInstance()
-                                                    .getQueryFindIndividualGroupsByCatalogNumber(catalogNumber)), include);
+                                                    .getQueryFindIndividualGroupsByCatalogNumberAndIdentificationTaxonStanderized(catalogNumber, taxonStandarized)),
+                                                    include);
     }
     
     public void validateCatalogNumber(String catalogNumber, String source) {
