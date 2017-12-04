@@ -62,12 +62,10 @@ public class UtilTest {
     @Test
     public void testDateToString_jsDateWithNull() {
         System.out.println("dateToStringWithNull");
-         
-        Date date = null;
-        
+          
         instance = Util.getInstance();
    
-        String result = instance.dateToString(date);
+        String result = instance.dateToString(null);
         assertNull(result);  
     }
 
@@ -93,11 +91,10 @@ public class UtilTest {
     @Test
     public void testDateToString_juDateWithNull() {
         System.out.println("dateToStringWithNull");
-         
-        java.util.Date date = null; 
+          
         instance = Util.getInstance();
          
-        String result = instance.dateToString(date);
+        String result = instance.dateToString(null);
         assertNull(result);  
     }
 

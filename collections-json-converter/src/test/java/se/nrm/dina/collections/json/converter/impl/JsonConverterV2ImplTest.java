@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import se.nrm.dina.collections.data.model.impl.CatalogedUnit;
+import se.nrm.dina.collections.data.model.impl.FeatureObservation;
 import se.nrm.dina.collections.data.model.impl.IndividualGroup;
 import se.nrm.dina.collections.data.model.impl.PhysicalUnit;
 import se.nrm.dina.collections.exceptions.CollectionsBadRequestException;
@@ -35,6 +36,8 @@ public class JsonConverterV2ImplTest {
     private final PhysicalUnit testPhysicalUnit;
     private final CatalogedUnit testCatalogedUnit;
     private final List<PhysicalUnit> physicalUnits;
+    private final List<FeatureObservation> featureObservations;
+    private final FeatureObservation testFeatureObservation;
 
     private final JsonConverterV2 testInstance;
     
@@ -54,7 +57,11 @@ public class JsonConverterV2ImplTest {
         testCatalogedUnit = new CatalogedUnit((long) 20);
         testCatalogedUnit.setCatalogNumber("abc123");
         
-        
+        featureObservations = new ArrayList<>();
+        testFeatureObservation = new FeatureObservation((long) 50);
+        testFeatureObservation.setFeatureObservationText("test");
+  
+       
         sb = new StringBuilder();
         sb.append("{\n");
         sb.append("	\"data\": {\n");
@@ -282,6 +289,75 @@ public class JsonConverterV2ImplTest {
         assertEquals(attrJson.getString("featureObservations"), "null");
         assertEquals(attrJson.getString("identifications"), "null");
         assertEquals(attrJson.getString("occurrences"), "null");
+    }
+    
+    @Test
+    public void testConvertIndividualGroupWithObservationsIsEmpty() {
+        System.out.println("testConvertIndividualGroupWithPhysicalUnit");
+
+        String include = "observations";
+  
+        testIndividualGroup.setFeatureObservations(featureObservations);
+
+        JsonObject result = testInstance.convertIndividualGroup(testIndividualGroup, include);
+
+        JsonObject dataJson = result.getJsonObject("data");
+        assertNotNull(dataJson);
+        assertEquals(dataJson.getString("type"), "individualGroup");
+        assertEquals(dataJson.getInt("id"), 20);
+
+        JsonObject attrJson = dataJson.getJsonObject("attributes");
+        assertNotNull(attrJson);
+ 
+        assertEquals(attrJson.getString("featureObservations"), "null");
+    }
+    
+        
+    @Test
+    public void testConvertIndividualGroupWithObservationsIsNull() {
+        System.out.println("testConvertIndividualGroupWithPhysicalUnit");
+
+        String include = "observations";
+  
+        testIndividualGroup.setFeatureObservations(null);
+
+        JsonObject result = testInstance.convertIndividualGroup(testIndividualGroup, include);
+
+        JsonObject dataJson = result.getJsonObject("data");
+        assertNotNull(dataJson);
+        assertEquals(dataJson.getString("type"), "individualGroup");
+        assertEquals(dataJson.getInt("id"), 20);
+
+        JsonObject attrJson = dataJson.getJsonObject("attributes");
+        assertNotNull(attrJson);
+ 
+        assertEquals(attrJson.getString("featureObservations"), "null");
+    }
+    
+    @Test
+    public void testConvertIndividualGroupWithObservations() {
+        System.out.println("testConvertIndividualGroupWithPhysicalUnit");
+
+        String include = "observations";
+
+        featureObservations.add(testFeatureObservation);
+
+        testIndividualGroup.setFeatureObservations(featureObservations);
+
+        JsonObject result = testInstance.convertIndividualGroup(testIndividualGroup, include);
+
+        JsonObject dataJson = result.getJsonObject("data");
+        assertNotNull(dataJson);
+        assertEquals(dataJson.getString("type"), "individualGroup");
+        assertEquals(dataJson.getInt("id"), 20);
+
+        JsonObject attrJson = dataJson.getJsonObject("attributes");
+        assertNotNull(attrJson);
+
+        JsonArray featureObservationJson = attrJson.getJsonArray("featureObservations");
+        assertNotNull(featureObservationJson);
+        assertEquals(featureObservationJson.size(), 1);
+  
     }
 
     /**
