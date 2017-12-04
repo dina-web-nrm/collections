@@ -6,10 +6,10 @@
 package se.nrm.dina.collections.json.converter.util;
 
 import java.sql.Date;
-import org.junit.After; 
+import org.junit.After;  
 import org.junit.Before; 
 import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.*; 
 
 /**
  *
@@ -58,6 +58,16 @@ public class UtilTest {
         assertNotNull(result); 
         assertEquals(expResult, result);
     }
+    
+    @Test
+    public void testDateToString_jsDateWithNull() {
+        System.out.println("dateToStringWithNull");
+          
+        instance = Util.getInstance();
+   
+        String result = instance.dateToString(null);
+        assertNull(result);  
+    }
 
     /**
      * Test of dateToString method, of class Util.
@@ -75,4 +85,44 @@ public class UtilTest {
         assertEquals(expResult, result); 
     }
     
+    /**
+     * Test of dateToString method, of class Util.
+     */
+    @Test
+    public void testDateToString_juDateWithNull() {
+        System.out.println("dateToStringWithNull");
+          
+        instance = Util.getInstance();
+         
+        String result = instance.dateToString(null);
+        assertNull(result);  
+    }
+
+    /**
+     * Test of reformClassName method, of class Util.
+     */
+    @Test
+    public void testReformClassName() {
+        System.out.println("reformClassName");
+        String name = "PhysicalUnit";
+        
+        instance = Util.getInstance();
+        String expResult = "physicalUnit";
+        String result = instance.reformClassName(name);
+        assertEquals(expResult, result); 
+    }
+    
+    /**
+     * Test of reformClassName method, of class Util.
+     */
+    @Test
+    public void testReformClassNameWithEmptyString() {
+        System.out.println("reformClassName");
+        String name = "";
+        
+        instance = Util.getInstance();
+        String expResult = "";
+        String result = instance.reformClassName(name);
+        assertEquals(expResult, result); 
+    }
 }

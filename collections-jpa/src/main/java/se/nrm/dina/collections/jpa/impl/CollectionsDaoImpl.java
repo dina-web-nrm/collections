@@ -204,7 +204,7 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
 
     @Override
     public List<T> findByJPQL(String jpql) {
-        log.info("findByJPQL: {}", jpql);
+        log.info("findByJPQL");
         
         query = entityManager.createQuery(jpql);
         return query.getResultList(); 
