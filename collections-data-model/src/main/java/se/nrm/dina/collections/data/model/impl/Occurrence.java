@@ -4,21 +4,20 @@
  * and open the template in the editor.
  */
 package se.nrm.dina.collections.data.model.impl;
- 
-//import com.fasterxml.jackson.annotation.JsonBackReference;
-//import com.fasterxml.jackson.annotation.JsonManagedReference;
-import java.util.List; 
+  
+import java.util.List;  
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType; 
+import javax.persistence.FetchType;  
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.Table; 
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import se.nrm.dina.collections.annotation.CollectionsManyToOne;
@@ -37,6 +36,28 @@ import se.nrm.dina.collections.data.model.BaseEntity;
     @NamedQuery(name = "Occurrence.findById", query = "SELECT o FROM Occurrence o WHERE o.id = :id")})
 public class Occurrence extends BaseEntity {
  
+    @Column(name = "day_start")
+    private Integer dayStart;
+    
+    @Column(name = "day_end")
+    private Integer dayEnd;
+    
+    @Size(max = 255)
+    @Column(name = "expedition_text")
+    private String expeditionText;
+    
+    @Column(name = "month_start")
+    private Integer monthStart;
+    
+    @Column(name = "month_end")
+    private Integer monthEnd;
+    
+    @Column(name = "year_start")
+    private Integer yearStart;
+    
+    @Column(name = "year_end")
+    private Integer yearEnd;
+ 
     @Lob
     @Column(name = "collectors_text")
     private String collectorsText;
@@ -51,13 +72,11 @@ public class Occurrence extends BaseEntity {
     
     @JoinColumn(name = "involves_individual_group_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "involvesIndividualGroup", type = "IndividualGroup")
-//    @JsonBackReference
+    @CollectionsManyToOne(name = "involvesIndividualGroup", type = "IndividualGroup") 
     private IndividualGroup involvesIndividualGroup;
     
     @OneToMany(mappedBy = "isCollectedAtOccurrence", fetch = FetchType.LAZY)
-    @CollectionsOneToMany(name = "physicalUnits", type = "PhysicalUnit")
-//    @JsonManagedReference
+    @CollectionsOneToMany(name = "physicalUnits", type = "PhysicalUnit") 
     private List<PhysicalUnit> physicalUnits;
 
     public Occurrence() {
@@ -118,6 +137,62 @@ public class Occurrence extends BaseEntity {
         this.physicalUnits = physicalUnits;
     }
    
+    public Integer getDayStart() {
+        return dayStart;
+    }
+
+    public void setDayStart(Integer dayStart) {
+        this.dayStart = dayStart;
+    }
+
+    public Integer getDayEnd() {
+        return dayEnd;
+    }
+
+    public void setDayEnd(Integer dayEnd) {
+        this.dayEnd = dayEnd;
+    }
+
+    public String getExpeditionText() {
+        return expeditionText;
+    }
+
+    public void setExpeditionText(String expeditionText) {
+        this.expeditionText = expeditionText;
+    }
+
+    public Integer getMonthStart() {
+        return monthStart;
+    }
+
+    public void setMonthStart(Integer monthStart) {
+        this.monthStart = monthStart;
+    }
+
+    public Integer getMonthEnd() {
+        return monthEnd;
+    }
+
+    public void setMonthEnd(Integer monthEnd) {
+        this.monthEnd = monthEnd;
+    }
+
+    public Integer getYearStart() {
+        return yearStart;
+    }
+
+    public void setYearStart(Integer yearStart) {
+        this.yearStart = yearStart;
+    }
+
+    public Integer getYearEnd() {
+        return yearEnd;
+    }
+
+    public void setYearEnd(Integer yearEnd) {
+        this.yearEnd = yearEnd;
+    } 
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -138,5 +213,5 @@ public class Occurrence extends BaseEntity {
     @Override
     public String toString() {
         return "se.nrm.dina.collections.data.model.Occurrence[ id=" + id + " ]";
-    } 
+    }  
 }

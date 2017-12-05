@@ -7,13 +7,19 @@ package se.nrm.dina.collections.data.model.impl;
  
 //import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List; 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType; 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType; 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement; 
 import javax.xml.bind.annotation.XmlTransient;
 import se.nrm.dina.collections.annotation.CollectionsOneToMany;
@@ -30,15 +36,14 @@ import se.nrm.dina.collections.data.model.BaseEntity;
     @NamedQuery(name = "IndividualGroup.findAll", query = "SELECT i FROM IndividualGroup i"), 
     @NamedQuery(name = "IndividualGroup.findById", query = "SELECT i FROM IndividualGroup i WHERE i.id = :id")})
 public class IndividualGroup extends BaseEntity {
-  
+
+ 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "appliesToIndividualGroup", fetch = FetchType.LAZY)
-    @CollectionsOneToMany(name = "identifications", type = "Identification")
-//    @JsonManagedReference
+    @CollectionsOneToMany(name = "identifications", type = "Identification") 
     private List<Identification> identifications;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "appliesToIndividualGroup", fetch = FetchType.LAZY)
-    @CollectionsOneToMany(name = "featureObservations", type = "FeatureObservation")
-//    @JsonManagedReference
+    @CollectionsOneToMany(name = "featureObservations", type = "FeatureObservation") 
     private List<FeatureObservation> featureObservations;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "involvesIndividualGroup", fetch = FetchType.LAZY)
@@ -128,5 +133,5 @@ public class IndividualGroup extends BaseEntity {
     @Override
     public String toString() {
         return "se.nrm.dina.collections.data.model.IndividualGroup[ id=" + id + " ]";
-    } 
+    }  
 }
