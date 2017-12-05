@@ -41,11 +41,12 @@ down-prod:
 down-dev:
 	docker-compose -f docker-compose.dev.yml down
 
+test-access_get-request:
+	cd scripts && ./get_response.sh
 
-test-alpha:
-	cd scripts && ./alpha_testing_response.sh
+test-access_post-request:
+	cd scripts && ./get_response.sh
 
 # docker login
 release:
 	docker push dina/collections:v0.1
-

@@ -300,11 +300,12 @@ public class JsonConverterV2ImplTest {
         JsonArray physicalUnitsJson = attrJson.getJsonArray("physicalUnits");
         assertNotNull(physicalUnitsJson);
         assertEquals(physicalUnitsJson.size(), 1);
-
+ 
         assertEquals(attrJson.getString("featureObservations"), "null");
         assertEquals(attrJson.getString("identifications"), "null");
         assertEquals(attrJson.getString("occurrences"), "null");
     }
+ 
     
     @Test
     public void testConvertIndividualGroupWithObservationsIsEmpty() {
@@ -371,8 +372,7 @@ public class JsonConverterV2ImplTest {
 
         JsonArray featureObservationJson = attrJson.getJsonArray("featureObservations");
         assertNotNull(featureObservationJson);
-        assertEquals(featureObservationJson.size(), 1);
-  
+        assertEquals(featureObservationJson.size(), 1); 
     }
     
     @Test
@@ -513,8 +513,8 @@ public class JsonConverterV2ImplTest {
         assertNotNull(featureObservationJson);
         assertEquals(featureObservationJson.size(), 1);
   
-    }
-
+    } 
+    
     /**
      * Test of convertIndividualGroups method, of class JsonConverterV2Impl.
      */
