@@ -26,8 +26,11 @@ CREATE TABLE `cataloged_unit` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Auto-incrementing surrogate primary key.',
   `version` int(11) NOT NULL DEFAULT '1',
   `catalog_number` varchar(50) NOT NULL COMMENT 'A unique identifier for a unit within a catalog',
+  `publish_record` bit(1) DEFAULT NULL,
+  `remarks` text,
+  `stored_under_taxon_name` varchar(150) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -52,12 +55,13 @@ CREATE TABLE `feature_observation` (
   `applies_to_individual_group_id` bigint(20) DEFAULT NULL COMMENT 'Key to the IndividualGroup to which this FeatureObservation applies',
   `is_of_feature_observation_type_id` bigint(20) NOT NULL COMMENT 'Key to the FeatureObservationType of the FeatureObservation.',
   `feature_observation_text` text COMMENT 'A text describing the observation, in any chosen format.',
+  `method_text` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `feature_observation_individual_group_id_idx` (`applies_to_individual_group_id`),
   KEY `feature_observation_feature_observation_type_id_idx` (`is_of_feature_observation_type_id`),
   CONSTRAINT `feature_observation_feature_observation_type_id` FOREIGN KEY (`is_of_feature_observation_type_id`) REFERENCES `feature_observation_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `feature_observation_individual_group_id` FOREIGN KEY (`applies_to_individual_group_id`) REFERENCES `individual_group` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -81,7 +85,7 @@ CREATE TABLE `feature_observation_type` (
   `version` int(11) NOT NULL DEFAULT '1',
   `feature_observation_type_name` varchar(255) NOT NULL COMMENT 'The name of a defined FeatureObservationType.',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -90,6 +94,7 @@ CREATE TABLE `feature_observation_type` (
 
 LOCK TABLES `feature_observation_type` WRITE;
 /*!40000 ALTER TABLE `feature_observation_type` DISABLE KEYS */;
+INSERT INTO `feature_observation_type` VALUES (1,1,'sex'),(2,1,'length'),(3,1,'age'),(4,1,'weight');
 /*!40000 ALTER TABLE `feature_observation_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -105,10 +110,17 @@ CREATE TABLE `identification` (
   `version` int(11) NOT NULL DEFAULT '1',
   `applies_to_individual_group_id` bigint(20) NOT NULL COMMENT 'Key to the individualGroup to which this observation apply.',
   `identification_text` text COMMENT 'A text describing a single Identification (including e.g. taxon name, identified by, and identification date), in any chosen format.',
+  `identification_remarks` text,
+  `identified_as_verbatim` varchar(255) DEFAULT NULL,
+  `identified_by_agent_text` varchar(100) DEFAULT NULL,
+  `identified_day` int(11) DEFAULT NULL,
+  `identified_month` int(11) DEFAULT NULL,
+  `identified_year` int(11) DEFAULT NULL,
+  `identified_taxon_name_standardized` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `identification_individual_group_id_idx` (`applies_to_individual_group_id`),
   CONSTRAINT `identification_individual_group_id` FOREIGN KEY (`applies_to_individual_group_id`) REFERENCES `individual_group` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -131,7 +143,7 @@ CREATE TABLE `individual_group` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Auto-incrementing surrogate primary key.',
   `version` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -157,10 +169,17 @@ CREATE TABLE `occurrence` (
   `collectors_text` text COMMENT 'A text describing the collector(s) in any chosen format.',
   `locality_text` text COMMENT 'A text describing where the Occurrence took place, in any chosen format.',
   `occurrence_date_text` text COMMENT 'A text describing the date of the Occurrence, in any chosen format.',
+  `day_start` int(11) DEFAULT NULL,
+  `day_end` int(11) DEFAULT NULL,
+  `expedition_text` varchar(255) DEFAULT NULL,
+  `month_start` int(11) DEFAULT NULL,
+  `month_end` int(11) DEFAULT NULL,
+  `year_start` int(11) DEFAULT NULL,
+  `year_end` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `occurrence_individual_group_id_idx` (`involves_individual_group_id`),
   CONSTRAINT `occurrence_individual_group_id` FOREIGN KEY (`involves_individual_group_id`) REFERENCES `individual_group` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -187,6 +206,7 @@ CREATE TABLE `physical_unit` (
   `represents_individual_group_id` bigint(20) DEFAULT NULL COMMENT 'Key to the IndividualGroup this physical unit represent.',
   `physical_unit_text` text COMMENT 'A text describing the PhysicalUnit, in any chosen format.',
   `normal_storage_location` text COMMENT 'A text describing the normal physical storage location, in any chosen format.',
+  `alternate_identifiers_text` text,
   PRIMARY KEY (`id`),
   KEY `physical_unit_cataloged_unit_id_idx` (`belongs_to_cataloged_unit_id`),
   KEY `physical_unit_occurrence_id_idx` (`is_collected_at_occurrence_id`),
@@ -194,7 +214,7 @@ CREATE TABLE `physical_unit` (
   CONSTRAINT `physical_unit_cataloged_unit_id` FOREIGN KEY (`belongs_to_cataloged_unit_id`) REFERENCES `cataloged_unit` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `physical_unit_individual_group_id` FOREIGN KEY (`represents_individual_group_id`) REFERENCES `individual_group` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `physical_unit_occurrence_id` FOREIGN KEY (`is_collected_at_occurrence_id`) REFERENCES `occurrence` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -215,4 +235,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-06 11:50:10
+-- Dump completed on 2017-12-05 12:33:15

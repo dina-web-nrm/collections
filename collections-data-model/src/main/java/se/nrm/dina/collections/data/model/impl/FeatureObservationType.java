@@ -11,11 +11,11 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType; 
+import javax.persistence.FetchType;  
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.Table; 
 import javax.xml.bind.annotation.XmlRootElement; 
 import javax.xml.bind.annotation.XmlTransient;
 import se.nrm.dina.collections.annotation.CollectionsOneToMany;
@@ -40,8 +40,7 @@ public class FeatureObservationType extends BaseEntity {
     private String featureObservationTypeName;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "isOfFeatureObservationType", fetch = FetchType.LAZY)
-    @CollectionsOneToMany(name = "featureObservations", type = "FeatureObservation")
-//    @JsonManagedReference
+    @CollectionsOneToMany(name = "featureObservations", type = "FeatureObservation") 
     private List<FeatureObservation> featureObservations;
 
     public FeatureObservationType() {
@@ -99,6 +98,5 @@ public class FeatureObservationType extends BaseEntity {
     @Override
     public String toString() {
         return "se.nrm.dina.collections.data.model.FeatureObservationType[ id=" + id + " ]";
-    }
-
+    } 
 }

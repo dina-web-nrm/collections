@@ -4,17 +4,18 @@
  * and open the template in the editor.
  */
 package se.nrm.dina.collections.data.model.impl;
- 
-//import com.fasterxml.jackson.annotation.JsonManagedReference;
+  
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType; 
+import javax.persistence.FetchType;  
+import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.Table; 
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement; 
 import javax.xml.bind.annotation.XmlTransient;
 import se.nrm.dina.collections.annotation.CollectionsOneToMany;
@@ -33,6 +34,18 @@ import se.nrm.dina.collections.data.model.BaseEntity;
 //    @NamedQuery(name = "CatalogedUnit.findByCatalogNumber", query = "SELECT c FROM CatalogedUnit c WHERE c.catalogNumber = :catalogNumber")
 })
 public class CatalogedUnit extends BaseEntity {
+ 
+    @Column(name = "publish_record")
+    private Boolean publishRecord;
+    
+    @Lob
+    @Size(max = 65535)
+    @Column(name = "remarks")
+    private String remarks;
+    
+    @Size(max = 150)
+    @Column(name = "stored_under_taxon_name")
+    private String storedUnderTaxonName;
 
     @Basic(optional = false)
     @Column(name = "catalog_number")
@@ -75,6 +88,40 @@ public class CatalogedUnit extends BaseEntity {
  
     public void setPhysicalUnits(List<PhysicalUnit> physicalUnits) {
         this.physicalUnits = physicalUnits;
+    }
+  
+    public CatalogedUnit(Long id, int version) {
+        this.id = id;
+        this.version = version;
+    }
+ 
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public Boolean getPublishRecord() {
+        return publishRecord;
+    }
+
+    public void setPublishRecord(Boolean publishRecord) {
+        this.publishRecord = publishRecord;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public String getStoredUnderTaxonName() {
+        return storedUnderTaxonName;
+    }
+
+    public void setStoredUnderTaxonName(String storedUnderTaxonName) {
+        this.storedUnderTaxonName = storedUnderTaxonName;
     }
  
     @Override

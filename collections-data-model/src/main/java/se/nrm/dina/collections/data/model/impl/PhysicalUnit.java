@@ -4,18 +4,18 @@
  * and open the template in the editor.
  */
 package se.nrm.dina.collections.data.model.impl;
- 
-//import com.fasterxml.jackson.annotation.JsonBackReference;
+  
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType; 
+import javax.persistence.FetchType;  
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.Table; 
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import se.nrm.dina.collections.annotation.CollectionsManyToOne;
 import se.nrm.dina.collections.data.model.BaseEntity;
@@ -33,6 +33,11 @@ import se.nrm.dina.collections.data.model.BaseEntity;
 public class PhysicalUnit extends BaseEntity {
  
     @Lob
+    @Size(max = 65535)
+    @Column(name = "alternate_identifiers_text")
+    private String alternateIdentifiersText;
+ 
+    @Lob
     @Column(name = "physical_unit_text")
     private String physicalUnitText;
     
@@ -42,20 +47,17 @@ public class PhysicalUnit extends BaseEntity {
     
     @JoinColumn(name = "belongs_to_cataloged_unit_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "catalogedUnit", type="CatalogedUnit")
-//    @JsonBackReference
+    @CollectionsManyToOne(name = "catalogedUnit", type="CatalogedUnit") 
     private CatalogedUnit belongsToCatalogedUnit;
     
     @JoinColumn(name = "represents_individual_group_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "individualGroup", type="IndividualGroup")
-//    @JsonBackReference
+    @CollectionsManyToOne(name = "individualGroup", type="IndividualGroup") 
     private IndividualGroup representsIndividualGroup;
     
     @JoinColumn(name = "is_collected_at_occurrence_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "occurrence", type="Occurrence")
-//    @JsonBackReference
+    @CollectionsManyToOne(name = "occurrence", type="Occurrence") 
     private Occurrence isCollectedAtOccurrence;
 
     public PhysicalUnit() {
@@ -114,6 +116,14 @@ public class PhysicalUnit extends BaseEntity {
     public void setIsCollectedAtOccurrence(Occurrence isCollectedAtOccurrence) {
         this.isCollectedAtOccurrence = isCollectedAtOccurrence;
     }
+    
+    public String getAlternateIdentifiersText() {
+        return alternateIdentifiersText;
+    }
+
+    public void setAlternateIdentifiersText(String alternateIdentifiersText) {
+        this.alternateIdentifiersText = alternateIdentifiersText;
+    } 
 
   
     @Override
@@ -136,5 +146,5 @@ public class PhysicalUnit extends BaseEntity {
     @Override
     public String toString() {
         return "se.nrm.dina.collections.data.model.PhysicalUnit[ id=" + id + " ]";
-    } 
+    }  
 }
