@@ -129,9 +129,7 @@ public class CollectionsServices implements Serializable {
     @POST
     @Path("/individualGroups") 
     public Response createNewEntity(@Context HttpServletRequest req, String json) { 
-        log.info("createNewEntity - json: {}", json);
-        
-        
+        log.info("createNewEntity - json: {}", json); 
         return Response.ok(logic.saveIndividualGroup(json)).build();
     }
     
