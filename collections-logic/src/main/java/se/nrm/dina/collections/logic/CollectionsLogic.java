@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 import javax.ejb.EJB; 
 import javax.inject.Inject;  
 import javax.json.JsonArray; 
-import javax.json.JsonObject;    
+import javax.json.JsonObject;     
 import lombok.extern.slf4j.Slf4j;  
 import se.nrm.dina.collections.data.model.EntityBean; 
 import se.nrm.dina.collections.data.model.impl.CatalogedUnit;
@@ -59,19 +59,20 @@ public class CollectionsLogic implements Serializable  {
     public JsonObject getIndividualGroup(String catalogNumber, String taxonStandarized, String include) {
         log.info("getIndividualGroup : {} -- {}", catalogNumber, taxonStandarized);
  
-        return json2.convertIndividualGroups(dao.findByJPQL(QueryBuilder.getInstance()
-                                                    .getQueryFindIndividualGroupsByCatalogNumberAndIdentificationTaxonStanderized(catalogNumber, taxonStandarized)),
-                                                    include);
-    }
-    
-    public void validateCatalogNumber(String catalogNumber, String source) {
         if(catalogNumber == null || catalogNumber.isEmpty()) { 
-            throw new CollectionsBadRequestException(source, 
+            throw new CollectionsBadRequestException("individualGroup.physicalUnit.catalogedUnit", 
                                                      ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getDetail("catalogNumber = " + catalogNumber), 
                                                      ErrorCode.BAD_REQUEST_MISSING_PARAMETER.name(), 
                                                      ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getMessage()); 
         } 
+        
+ 
+     
+        return json2.convertIndividualGroups(dao.findByJPQL(QueryBuilder.getInstance()
+                                                .getQueryFindIndividualGroupsByCatalogNumberAndIdentificationTaxonStanderized(catalogNumber, taxonStandarized)),
+                                                include);
     }
+ 
     
     private void buildIndividualGroup(String theJson, boolean isEditing, IndividualGroup individualGroup) {
         JsonObject dataJson = json2.readInJson(theJson).getJsonObject(CommonString.getInstance().getData());
@@ -92,11 +93,18 @@ public class CollectionsLogic implements Serializable  {
         log.info("updateIndvidualGroup");
 
         try { 
-            IndividualGroup individualGroup = (IndividualGroup) dao.findByReference(id, IndividualGroup.class);
+            IndividualGroup individualGroup = (IndividualGroup) dao.findById(id, IndividualGroup.class);
+            if(individualGroup == null) {
+                return json2.convertError(new CollectionsBadRequestException("IndividualGroup [id = " + id + "]", 
+                                                                             ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.getDetail("IndividualGroup"), 
+                                                                             ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.name(), 
+                                                                             "Update IndividualGroup [id = " + id + "] not in database"));
+            }
             buildIndividualGroup(theJson, true, individualGroup);
             return json2.convertIndividualGroup((IndividualGroup) dao.merge(individualGroup), null);
         } catch (CollectionsException e) {
-            return json2.convertError(e);
+//            return json2.convertError(e);
+            throw e;
         }
     }
 
@@ -110,7 +118,8 @@ public class CollectionsLogic implements Serializable  {
         try { 
             return json2.convertIndividualGroup((IndividualGroup) dao.create(individualGroup), null);
         } catch(CollectionsException e) {
-            return json2.convertError(e);
+//            return json2.convertError(e);
+            throw e;
         }  
     }
 
@@ -118,11 +127,13 @@ public class CollectionsLogic implements Serializable  {
         CatalogedUnit catalogedUnit;
         if(catalogedUnitJson.containsKey(CommonString.getInstance().getId())) {
             int id = catalogedUnitJson.getInt(CommonString.getInstance().getId());
-            try {
-                catalogedUnit = (CatalogedUnit) dao.findByReference(id, CatalogedUnit.class);
-            } catch(CollectionsException e) {
-                throw e;
-            } 
+            catalogedUnit = (CatalogedUnit) dao.findById(id, CatalogedUnit.class);
+            if(catalogedUnit == null) {
+                throw new CollectionsBadRequestException("CatalogedUnit [id = " + id + "]", 
+                                                             ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.getDetail("CatalogedUnit with id = " + id + " not in database"),
+                                                             ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.name(), 
+                                                             "Entity not in database");
+            }
         } else {
             catalogedUnit = new CatalogedUnit();
         } 
@@ -138,8 +149,14 @@ public class CollectionsLogic implements Serializable  {
         if(isEditing) {
             if(physicalUnitJson.containsKey(CommonString.getInstance().getId())) {
                 int id = physicalUnitJson.getInt(CommonString.getInstance().getId());
-                try {
-                    physicalUnit = (PhysicalUnit) dao.findByReference(id, PhysicalUnit.class); 
+                physicalUnit = (PhysicalUnit) dao.findById(id, PhysicalUnit.class); 
+                if(physicalUnit == null) {
+                    throw new CollectionsBadRequestException("PhysicalUnit [id = " + id + "]", 
+                                                             ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.getDetail("PhysicalUnit with id = " + id + " not in database"),
+                                                             ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.name(), 
+                                                             "Entity not in database");
+                } 
+                try { 
                     catalogedUnit = getCatalogedUnitFromJson(physicalUnitJson.getJsonObject("catalogedUnit"));
                 } catch(CollectionsException e) {
                     throw e;
@@ -210,7 +227,13 @@ public class CollectionsLogic implements Serializable  {
         if(isEditing) {
             if(jsonObject.containsKey(CommonString.getInstance().getId())) {
                 int id = jsonObject.getInt(CommonString.getInstance().getId());
-                identification = (Identification) dao.findByReference(id, Identification.class);
+                identification = (Identification) dao.findById(id, Identification.class);
+                if(identification == null) {
+                     throw new CollectionsBadRequestException("Identification [id = " + id + "]", 
+                                                             ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.getDetail("Identification with id = " + id + " not in database"),
+                                                             ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.name(), 
+                                                             "Entity not in database");
+                }
             }
         } 
         if(jsonObject.containsKey("identificationText")) {
@@ -272,23 +295,24 @@ public class CollectionsLogic implements Serializable  {
         } else if (featureObservationJson.containsKey("featureObservationTypeId")) {
             featureObservationTypeId = featureObservationJson.getInt("featureObservationTypeId");
         } else {
-            throw new CollectionsBadRequestException(FeatureObservationType.class.getSimpleName(), 
-                                                     ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getDetail(FeatureObservationType.class.getSimpleName()), 
-                                                     ErrorCode.BAD_REQUEST_MISSING_PARAMETER.name(),
-                                                     ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getMessage());
+            throw new CollectionsBadRequestException(FeatureObservationType.class.getSimpleName(),
+                    ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getDetail(FeatureObservationType.class.getSimpleName()),
+                    ErrorCode.BAD_REQUEST_MISSING_PARAMETER.name(),
+                    ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getMessage());
         }
-         
-        if (featureObservationTypeId > 0) {
-            try {
-                type = (FeatureObservationType) dao.findByReference(featureObservationTypeId, FeatureObservationType.class); 
-            } catch(CollectionsException e) {
-                throw e;
+
+        if (featureObservationTypeId > 0) { 
+            type = (FeatureObservationType) dao.findById(featureObservationTypeId, FeatureObservationType.class);
+            if(type == null) {
+                throw new CollectionsBadRequestException("FeatureObservationType [id = " + featureObservationTypeId + "]", 
+                                                          ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.getDetail("FeatureObservationType with id = " + featureObservationTypeId + " not in database"),
+                                                          ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.name(), 
+                                                          "Entity not in database");
             }
-            
         } else {
-            type = new FeatureObservationType(); 
-            type.setFeatureObservationTypeName(name); 
-        }  
+            type = new FeatureObservationType();
+            type.setFeatureObservationTypeName(name);
+        }
         return type;
     }
 
@@ -352,7 +376,13 @@ public class CollectionsLogic implements Serializable  {
         if(isEditing) {
             if (jsonObject.containsKey(CommonString.getInstance().getId())) {
                 int id = jsonObject.getInt(CommonString.getInstance().getId());
-                occurrence = (Occurrence) dao.findByReference(id, Occurrence.class);
+                occurrence = (Occurrence) dao.findById(id, Occurrence.class);
+                if(occurrence == null) {
+                    throw new CollectionsBadRequestException("Occurrence [id = " + id + "]", 
+                                                             ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.getDetail("Occurrence with id = " + id + " not in database"),
+                                                             ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.name(), 
+                                                             "Entity not in database");
+                }
             }
         } 
        
@@ -383,9 +413,9 @@ public class CollectionsLogic implements Serializable  {
         if(jsonObject.containsKey("yearStart")) {
             occurrence.setYearStart(jsonObject.getInt("yearStart"));
         }
-        if(jsonObject.containsKey("yearEnd")) {
+        if (jsonObject.containsKey("yearEnd")) {
             occurrence.setYearEnd(jsonObject.getInt("yearEnd"));
-        } 
+        }
         return occurrence;
     }
 
@@ -393,20 +423,21 @@ public class CollectionsLogic implements Serializable  {
 
         JsonArray occurrencesJson = json2.getJsonArray(attrJson, "occurrences");
         List<Occurrence> occurrences = new ArrayList<>();
-  
-        IntStream.range(0, occurrencesJson.size())
-                .forEach(i -> {
-                    JsonObject occurrenceJson = occurrencesJson.getJsonObject(i);
-                    Occurrence occurrence = getOccurrenceFromJson(occurrenceJson, isEditing);
-                    occurrence.setInvolvesIndividualGroup(individualGroup);
-                    occurrences.add(occurrence); 
-                });
-        individualGroup.setOccurrences(occurrences);
+
+        try {
+            IntStream.range(0, occurrencesJson.size())
+                    .forEach(i -> {
+                        JsonObject occurrenceJson = occurrencesJson.getJsonObject(i);
+                        Occurrence occurrence = getOccurrenceFromJson(occurrenceJson, isEditing);
+                        occurrence.setInvolvesIndividualGroup(individualGroup);
+                        occurrences.add(occurrence);
+                    });
+            individualGroup.setOccurrences(occurrences);
+        } catch (CollectionsException e) {
+            throw e;
+        } 
     }
-    
-    
-    
-    
+
     //    public JsonObject getAll(String entityName) {
 //        log.info("getAll : {}", entityName);
 //        

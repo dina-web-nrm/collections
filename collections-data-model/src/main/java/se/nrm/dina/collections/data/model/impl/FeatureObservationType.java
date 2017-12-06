@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.nrm.dina.collections.data.model.impl;
- 
-//import com.fasterxml.jackson.annotation.JsonManagedReference;
+package se.nrm.dina.collections.data.model.impl; 
+
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -19,6 +18,7 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement; 
 import javax.xml.bind.annotation.XmlTransient;
 import se.nrm.dina.collections.annotation.CollectionsOneToMany;
+import se.nrm.dina.collections.annotation.CollectionsResource;
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -33,6 +33,7 @@ import se.nrm.dina.collections.data.model.BaseEntity;
     @NamedQuery(name = "FeatureObservationType.findById", query = "SELECT f FROM FeatureObservationType f WHERE f.id = :id")
 //    @NamedQuery(name = "FeatureObservationType.findByFeatureObservationTypeName", query = "SELECT f FROM FeatureObservationType f WHERE f.featureObservationTypeName = :featureObservationTypeName")
 })
+@CollectionsResource(type = "featureObservationType")
 public class FeatureObservationType extends BaseEntity {
  
     @Basic(optional = false)

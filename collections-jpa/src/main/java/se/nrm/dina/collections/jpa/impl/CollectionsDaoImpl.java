@@ -23,6 +23,7 @@ import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import se.nrm.dina.collections.annotation.CollectionsResource;
 import se.nrm.dina.collections.data.model.EntityBean;
 import se.nrm.dina.collections.exceptions.CollectionsBadRequestException;
 import se.nrm.dina.collections.exceptions.CollectionsConstraintViolationException; 
@@ -80,30 +81,29 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
             entityManager.flush();
         } catch (PersistenceException e) {
             if(exceptionsHandler.isHibernateConstraintViolationException(e)) {
-                throw new CollectionsConstraintViolationException(entity.getClass().getSimpleName(), 
+                throw new CollectionsConstraintViolationException(entity.toString(),
                                                                   exceptionsHandler.getErrorSource(e),
                                                                   ErrorCode.DB_CONSTRAINT_VIOLATION.name(),
                                                                   e.getMessage()); 
             } else {
-                throw new CollectionsDatabaseException(entity.getClass().getSimpleName(),
+                throw new CollectionsDatabaseException(entity.toString(),
                                                        exceptionsHandler.getErrorSource(e), 
                                                        ErrorCode.DB_EXCEPTION.name(),
                                                        e.getMessage());
             } 
         } catch(ConstraintViolationException e) { 
-            throw new CollectionsConstraintViolationException(entity.getClass().getSimpleName(), 
+            throw new CollectionsConstraintViolationException(entity.toString(),
                                                               handleConstraintViolations(e).toString(), 
                                                               ErrorCode.DB_CONSTRAINT_VIOLATION.name(),
                                                               e.getMessage());
         } catch (Exception e) {  
-            throw new CollectionsDatabaseException( entity.getClass().getSimpleName(),
+            throw new CollectionsDatabaseException( entity.toString(),
                                                     exceptionsHandler.getErrorSource(e),  
                                                     ErrorCode.DB_EXCEPTION.name(),
                                                     e.getMessage());
         }
         return tmp;
     }
-    
      
      
     @Override
@@ -116,17 +116,29 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
             tmp = entityManager.merge(entity); 
             entityManager.flush();                              // this one used for throwing OptimisticLockException if method called with web service
         } catch (OptimisticLockException e) { 
-            throw new CollectionsOptimisticLockException(entity.getClass().getSimpleName(),
+            throw new CollectionsOptimisticLockException(entity.toString(),
                                                          exceptionsHandler.getErrorSource(e),
                                                          ErrorCode.DB_OPTIMISTIC_LOCK.name(),
                                                          e.getMessage());
+        } catch (PersistenceException e) {
+            if(exceptionsHandler.isHibernateConstraintViolationException(e)) { 
+                throw new CollectionsConstraintViolationException(entity.toString(),
+                                                                  exceptionsHandler.getErrorSource(e),
+                                                                  ErrorCode.DB_CONSTRAINT_VIOLATION.name(),
+                                                                  e.getMessage()); 
+            } else {
+                throw new CollectionsDatabaseException(entity.toString(),
+                                                       exceptionsHandler.getErrorSource(e), 
+                                                       ErrorCode.DB_EXCEPTION.name(),
+                                                       e.getMessage());
+            }  
         } catch (ConstraintViolationException e) { 
-            throw new CollectionsConstraintViolationException(entity.getClass().getSimpleName(), 
+            throw new CollectionsConstraintViolationException(entity.toString(),
                                                               handleConstraintViolations(e).toString(), 
                                                               ErrorCode.DB_CONSTRAINT_VIOLATION.name(),
                                                               e.getMessage());
-        } catch (Exception e) {  
-            throw new CollectionsDatabaseException( entity.getClass().getSimpleName(),
+        } catch (Exception e) {   
+            throw new CollectionsDatabaseException( entity.toString(),
                                                     exceptionsHandler.getErrorSource(e),  
                                                     ErrorCode.DB_EXCEPTION.name(),
                                                     e.getMessage());
@@ -141,17 +153,17 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
             entityManager.remove(entity);
             entityManager.flush();                              // this is needed for throwing internal exception
         } catch (ConstraintViolationException e) {
-            throw new CollectionsConstraintViolationException(entity.getClass().getSimpleName(), 
+            throw new CollectionsConstraintViolationException(entity.toString(),
                                                               handleConstraintViolations(e).toString(), 
                                                               ErrorCode.DB_CONSTRAINT_VIOLATION.name(),
                                                               e.getMessage());
         } catch (EntityNotFoundException e) {
-            throw new CollectionsBadRequestException( entity.getClass().getSimpleName(),
+            throw new CollectionsBadRequestException( entity.toString(),
                                                       e.getMessage(),  
                                                       ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.name(),
                                                       e.getMessage());
         } catch (Exception e) {
-            throw new CollectionsDatabaseException( entity.getClass().getSimpleName(),
+            throw new CollectionsDatabaseException( entity.getClass().getAnnotation(CollectionsResource.class).type(),
                                                     exceptionsHandler.getErrorSource(e),  
                                                     ErrorCode.DB_EXCEPTION.name(),
                                                     e.getMessage());

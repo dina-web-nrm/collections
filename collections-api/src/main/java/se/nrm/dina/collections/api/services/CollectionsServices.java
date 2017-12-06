@@ -22,9 +22,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import lombok.extern.slf4j.Slf4j;   
-import se.nrm.dina.collections.api.PATCH;
-import se.nrm.dina.collections.data.model.impl.IndividualGroup;
-import se.nrm.dina.collections.exceptions.CollectionsBadRequestException;
+import se.nrm.dina.collections.api.PATCH; 
 import se.nrm.dina.collections.exceptions.CollectionsException;
 import se.nrm.dina.collections.logic.CollectionsLogic; 
 
@@ -61,12 +59,11 @@ public class CollectionsServices implements Serializable {
         String taxonStandardized = map.getFirst("filter[identifiedTaxonNameStandardized]"); 
          
         try {
-            logic.validateCatalogNumber(catalogNumber, IndividualGroup.class.getSimpleName());
-        } catch(CollectionsBadRequestException e) {
-            return Response.status(400).entity(logic.buildErrorJson(e)).build(); 
-        } 
-     
-        return Response.ok(logic.getIndividualGroup(catalogNumber, taxonStandardized, include)).build();
+            return Response.ok(logic.getIndividualGroup(catalogNumber, taxonStandardized, include)).build();
+        } catch(CollectionsException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(logic.buildErrorJson(e)).build(); 
+        }
+        
     }
     
     @GET
@@ -76,8 +73,6 @@ public class CollectionsServices implements Serializable {
          
         MultivaluedMap<String, String> map = info.getQueryParameters();  
         String include = map.getFirst("include");
-        
-        log.info("include : {}", include);
          
         return Response.ok(logic.getIndividualGroupById(id, include)).build();
     }
@@ -123,14 +118,23 @@ public class CollectionsServices implements Serializable {
     @Path("/individualGroups/{id}")
     public Response updateIndividualGroups(@Context HttpServletRequest req, String json, @PathParam("id") long id) {
         log.info("updateIndividualGroups : {}  --  {}", json, id);
-        return Response.ok(logic.updateIndvidualGroup(json, id)).build();
+        try {
+            return Response.ok(logic.updateIndvidualGroup(json, id)).build();
+        } catch(CollectionsException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(logic.buildErrorJson(e)).build(); 
+        } 
     }
 
     @POST
     @Path("/individualGroups") 
     public Response createNewEntity(@Context HttpServletRequest req, String json) { 
         log.info("createNewEntity - json: {}", json); 
-        return Response.ok(logic.saveIndividualGroup(json)).build();
+        
+        try {
+            return Response.ok(logic.saveIndividualGroup(json)).build();
+        } catch(CollectionsException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(logic.buildErrorJson(e)).build(); 
+        } 
     }
     
     @DELETE
@@ -140,9 +144,8 @@ public class CollectionsServices implements Serializable {
 
         try {
             logic.delete(entity, id);
-        } catch(CollectionsException e) {
-            log.error("catched : {}", e.getMessage());
-            return Response.status(400).entity(logic.buildErrorJson(e)).build(); 
+        } catch(CollectionsException e) { 
+            return Response.status(Response.Status.BAD_REQUEST).entity(logic.buildErrorJson(e)).build(); 
         }
         
         return Response.noContent().build();

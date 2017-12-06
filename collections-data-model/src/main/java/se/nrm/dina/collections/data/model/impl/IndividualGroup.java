@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement; 
 import javax.xml.bind.annotation.XmlTransient;
 import se.nrm.dina.collections.annotation.CollectionsOneToMany;
+import se.nrm.dina.collections.annotation.CollectionsResource;
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -28,8 +29,8 @@ import se.nrm.dina.collections.data.model.BaseEntity;
 @NamedQueries({
     @NamedQuery(name = "IndividualGroup.findAll", query = "SELECT i FROM IndividualGroup i"), 
     @NamedQuery(name = "IndividualGroup.findById", query = "SELECT i FROM IndividualGroup i WHERE i.id = :id")})
+@CollectionsResource(type = "individualGroup")
 public class IndividualGroup extends BaseEntity {
-
  
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "appliesToIndividualGroup", fetch = FetchType.LAZY)
     @CollectionsOneToMany(name = "identifications", type = "Identification") 

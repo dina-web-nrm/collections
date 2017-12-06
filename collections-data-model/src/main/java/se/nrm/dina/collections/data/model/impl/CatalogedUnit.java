@@ -19,6 +19,7 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement; 
 import javax.xml.bind.annotation.XmlTransient;
 import se.nrm.dina.collections.annotation.CollectionsOneToMany;
+import se.nrm.dina.collections.annotation.CollectionsResource;
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -33,6 +34,7 @@ import se.nrm.dina.collections.data.model.BaseEntity;
     @NamedQuery(name = "CatalogedUnit.findById", query = "SELECT c FROM CatalogedUnit c WHERE c.id = :id")
 //    @NamedQuery(name = "CatalogedUnit.findByCatalogNumber", query = "SELECT c FROM CatalogedUnit c WHERE c.catalogNumber = :catalogNumber")
 })
+@CollectionsResource(type = "catalogedUnit")
 public class CatalogedUnit extends BaseEntity {
  
     @Column(name = "publish_record")
