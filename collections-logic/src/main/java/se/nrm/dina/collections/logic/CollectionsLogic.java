@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 import javax.ejb.EJB; 
 import javax.inject.Inject;  
 import javax.json.JsonArray; 
-import javax.json.JsonObject;   
+import javax.json.JsonObject;    
 import lombok.extern.slf4j.Slf4j;  
 import se.nrm.dina.collections.data.model.EntityBean; 
 import se.nrm.dina.collections.data.model.impl.CatalogedUnit;
@@ -48,7 +48,6 @@ public class CollectionsLogic implements Serializable  {
     private CollectionsDao dao;
 
     public CollectionsLogic() {
-//        mapper = new ObjectMapper();
     }
     
     public JsonObject getIndividualGroupById(long id, String include) {
@@ -68,7 +67,7 @@ public class CollectionsLogic implements Serializable  {
     public void validateCatalogNumber(String catalogNumber, String source) {
         if(catalogNumber == null || catalogNumber.isEmpty()) { 
             throw new CollectionsBadRequestException(source, 
-                                                     ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getDetail("catalogNumer = " + catalogNumber), 
+                                                     ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getDetail("catalogNumber = " + catalogNumber), 
                                                      ErrorCode.BAD_REQUEST_MISSING_PARAMETER.name(), 
                                                      ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getMessage()); 
         } 
@@ -84,24 +83,22 @@ public class CollectionsLogic implements Serializable  {
             addOccurrences(attrJson, individualGroup, isEditing);
             addIdentifications(attrJson, individualGroup, isEditing);
             addPhysicalUnit(additionalData, attrJson, individualGroup, isEditing);
-        } catch (CollectionsBadRequestException e) {
+        } catch (CollectionsException e) {
             throw e;
-        }
+        } 
     }
 
     public JsonObject updateIndvidualGroup(String theJson, long id) {
         log.info("updateIndvidualGroup");
- 
-        IndividualGroup individualGroup = (IndividualGroup) dao.findByReference(id, IndividualGroup.class);
-        buildIndividualGroup(theJson, true, individualGroup);
- 
-        try {
+
+        try { 
+            IndividualGroup individualGroup = (IndividualGroup) dao.findByReference(id, IndividualGroup.class);
+            buildIndividualGroup(theJson, true, individualGroup);
             return json2.convertIndividualGroup((IndividualGroup) dao.merge(individualGroup), null);
         } catch (CollectionsException e) {
             return json2.convertError(e);
         }
     }
-
 
     public JsonObject saveIndividualGroup(String theJson) {
         log.info("saveIndividualGroup");
@@ -121,24 +118,32 @@ public class CollectionsLogic implements Serializable  {
         CatalogedUnit catalogedUnit;
         if(catalogedUnitJson.containsKey(CommonString.getInstance().getId())) {
             int id = catalogedUnitJson.getInt(CommonString.getInstance().getId());
-            catalogedUnit = (CatalogedUnit) dao.findByReference(id, CatalogedUnit.class);
+            try {
+                catalogedUnit = (CatalogedUnit) dao.findByReference(id, CatalogedUnit.class);
+            } catch(CollectionsException e) {
+                throw e;
+            } 
         } else {
             catalogedUnit = new CatalogedUnit();
         } 
-        catalogedUnit.setCatalogNumber(catalogedUnitJson.getString("catalogNumber"));
+        if(catalogedUnitJson.containsKey("catalogNumber")) {
+            catalogedUnit.setCatalogNumber(catalogedUnitJson.getString("catalogNumber"));
+        } 
         return catalogedUnit;
     }
-    
-    
-    
+     
     private PhysicalUnit getPhysicalUnitFromJson(CatalogedUnit catalogedUnit, JsonObject physicalUnitJson, boolean isEditing) {
          
         PhysicalUnit physicalUnit = new PhysicalUnit();
         if(isEditing) {
             if(physicalUnitJson.containsKey(CommonString.getInstance().getId())) {
                 int id = physicalUnitJson.getInt(CommonString.getInstance().getId());
-                physicalUnit = (PhysicalUnit) dao.findByReference(id, PhysicalUnit.class);
-                catalogedUnit = getCatalogedUnitFromJson(physicalUnitJson.getJsonObject("catalogedUnit"));
+                try {
+                    physicalUnit = (PhysicalUnit) dao.findByReference(id, PhysicalUnit.class); 
+                    catalogedUnit = getCatalogedUnitFromJson(physicalUnitJson.getJsonObject("catalogedUnit"));
+                } catch(CollectionsException e) {
+                    throw e;
+                } 
             }  
         }  
        
@@ -149,11 +154,17 @@ public class CollectionsLogic implements Serializable  {
         if(physicalUnitJson.containsKey("normalStorageLocation")) {
             physicalUnit.setNormalStorageLocation(physicalUnitJson.getString("normalStorageLocation"));
         }
+                
+        if(physicalUnitJson.containsKey("alternateIdentifiersText")) {
+            physicalUnit.setAlternateIdentifiersText(physicalUnitJson.getString("alternateIdentifiersText"));
+        }
+                
         physicalUnit.setBelongsToCatalogedUnit(catalogedUnit); 
         return physicalUnit;
     }
  
-    private void addPhysicalUnit(JsonArray additionalData, JsonObject attrJson, IndividualGroup individualGroup, boolean isEditing) {
+    private void addPhysicalUnit(JsonArray additionalData, JsonObject attrJson, 
+                                IndividualGroup individualGroup, boolean isEditing) throws CollectionsException {
 
         JsonArray physicalUnitsJson = json2.getJsonArray(attrJson, "physicalUnits");
         List<PhysicalUnit> physicalUnits = new ArrayList<>();  
@@ -201,9 +212,31 @@ public class CollectionsLogic implements Serializable  {
                 int id = jsonObject.getInt(CommonString.getInstance().getId());
                 identification = (Identification) dao.findByReference(id, Identification.class);
             }
+        } 
+        if(jsonObject.containsKey("identificationText")) {
+            identification.setIdentificationText(jsonObject.getString("identificationText"));
         }
-        String identificationText = jsonObject.getString("identificationText"); 
-        identification.setIdentificationText(identificationText);
+        if(jsonObject.containsKey("identificationRemarks")) {
+            identification.setIdentificationRemarks(jsonObject.getString("identificationRemarks"));
+        }
+        if(jsonObject.containsKey("identifiedAsVerbatim")) {
+            identification.setIdentifiedAsVerbatim(jsonObject.getString("identifiedAsVerbatim"));
+        }
+        if(jsonObject.containsKey("identifiedByAgentText")) {
+            identification.setIdentifiedByAgentText(jsonObject.getString("identifiedByAgentText"));
+        }
+        if(jsonObject.containsKey("identifiedDay")) {
+            identification.setIdentifiedDay(jsonObject.getInt("identifiedDay"));
+        } 
+        if(jsonObject.containsKey("identifiedMonth")) {
+            identification.setIdentifiedMonth(jsonObject.getInt("identifiedMonth"));
+        }
+        if(jsonObject.containsKey("identifiedYear")) {
+            identification.setIdentifiedYear(jsonObject.getInt("identifiedYear"));
+        }
+        if(jsonObject.containsKey("identifiedTaxonNameStandardized")) {
+            identification.setIdentifiedTaxonNameStandardized(jsonObject.getString("identifiedTaxonNameStandardized"));
+        } 
         return identification;
     }
 
@@ -246,32 +279,49 @@ public class CollectionsLogic implements Serializable  {
         }
          
         if (featureObservationTypeId > 0) {
-            type = (FeatureObservationType) dao.findByReference(featureObservationTypeId, FeatureObservationType.class); 
+            try {
+                type = (FeatureObservationType) dao.findByReference(featureObservationTypeId, FeatureObservationType.class); 
+            } catch(CollectionsException e) {
+                throw e;
+            }
+            
         } else {
             type = new FeatureObservationType(); 
             type.setFeatureObservationTypeName(name); 
         }  
         return type;
     }
-    
+
     private FeatureObservation getFeatureObservationFromJson(JsonObject featureObservationJson, boolean isEditing) {
 
-        FeatureObservation featureObservation; 
-        if(isEditing) {
-            int id = featureObservationJson.getInt(CommonString.getInstance().getId());
-            featureObservation = (FeatureObservation) dao.findByReference(id, FeatureObservation.class);
-        } else {
-            featureObservation = new FeatureObservation();   
-        }
-        
+        FeatureObservation featureObservation;
+
         try {
+            if (isEditing) {
+                int id = featureObservationJson.getInt(CommonString.getInstance().getId());
+                featureObservation = (FeatureObservation) dao.findById(id, FeatureObservation.class);
+                if(featureObservation == null) {
+                    throw new CollectionsBadRequestException("FeatureObservation [id = ]" + id,
+                                                             ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.getDetail("FeatureObservation [id = ]" + id), 
+                                                             ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.name(),
+                                                             ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.getMessage());
+                }
+            } else {
+                featureObservation = new FeatureObservation();
+            }
+
             featureObservation.setIsOfFeatureObservationType(getFeatureObservationTypeFromJson(featureObservationJson, isEditing));
-        } catch (CollectionsBadRequestException e) {
+        } catch (CollectionsException e) {
             throw e;
         }
-        
-        String featureObservationText = featureObservationJson.getString("featureObservationText");
-        featureObservation.setFeatureObservationText(featureObservationText); 
+
+        if (featureObservationJson.containsKey("featureObservationText")) {
+            featureObservation.setFeatureObservationText(featureObservationJson.getString("featureObservationText")); 
+        } 
+          
+        if(featureObservationJson.containsKey("methodText")) {
+            featureObservation.setMethodText(featureObservationJson.getString("methodText"));
+        } 
         return featureObservation;
     }
 
@@ -304,16 +354,38 @@ public class CollectionsLogic implements Serializable  {
                 int id = jsonObject.getInt(CommonString.getInstance().getId());
                 occurrence = (Occurrence) dao.findByReference(id, Occurrence.class);
             }
+        } 
+       
+        if(jsonObject.containsKey("collectorsText")) {
+            occurrence.setCollectorsText(jsonObject.getString("collectorsText")); 
         }
-        String collectorText = jsonObject.getString("collectorsText");
-        String localityText = jsonObject.getString("localityText");
-        String occurrenceDateText = jsonObject.getString("occurrenceDateText");
-
-        occurrence.setCollectorsText(collectorText);
-        
-        occurrence.setLocalityText(localityText);
-        occurrence.setOccurrenceDateText(occurrenceDateText);
-
+        if(jsonObject.containsKey("localityText")) {
+            occurrence.setLocalityText(jsonObject.getString("localityText"));
+        }
+        if(jsonObject.containsKey("occurrenceDateText")) {
+            occurrence.setOccurrenceDateText(jsonObject.getString("occurrenceDateText"));
+        }
+        if(jsonObject.containsKey("dayStart")) {
+            occurrence.setDayStart(jsonObject.getInt("dayStart"));
+        }
+        if(jsonObject.containsKey("dayEnd")) {
+            occurrence.setDayEnd(jsonObject.getInt("dayEnd"));
+        }
+        if(jsonObject.containsKey("expeditionText")) {
+            occurrence.setExpeditionText(jsonObject.getString("expeditionText"));
+        }
+        if(jsonObject.containsKey("monthStart")) {
+            occurrence.setMonthStart(jsonObject.getInt("monthStart"));
+        }
+        if(jsonObject.containsKey("monthEnd")) {
+            occurrence.setMonthEnd(jsonObject.getInt("monthEnd"));
+        }
+        if(jsonObject.containsKey("yearStart")) {
+            occurrence.setYearStart(jsonObject.getInt("yearStart"));
+        }
+        if(jsonObject.containsKey("yearEnd")) {
+            occurrence.setYearEnd(jsonObject.getInt("yearEnd"));
+        } 
         return occurrence;
     }
 

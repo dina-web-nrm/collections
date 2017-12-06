@@ -55,7 +55,7 @@ public class QueryBuilder {
             sb.append("'");
         } 
         if(taxonStanderized != null && !taxonStanderized.isEmpty()) {
-            sb.append(" AND id.identificationText = '");
+            sb.append(" AND id.identifiedTaxonNameStandardized = '");
             sb.append(taxonStanderized);
             sb.append("'");
         } 

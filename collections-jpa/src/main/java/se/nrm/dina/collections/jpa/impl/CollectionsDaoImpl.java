@@ -71,8 +71,7 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
     }
         
     @Override
-    public T create(T entity) {
-
+    public T create(T entity) { 
         log.info("create : {}", entity);
 
         T tmp = entity;
@@ -174,6 +173,11 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
                                                          exceptionsHandler.getErrorSource(e),
                                                          ErrorCode.DB_OPTIMISTIC_LOCK.name(),
                                                          e.getMessage());
+        } catch(EntityNotFoundException e) {
+            throw new CollectionsDatabaseException( Util.getInstance().buildEntityNameWithIdString(clazz, id),
+                                                    e.getMessage(),  
+                                                    ErrorCode.DB_EXCEPTION.name(),
+                                                    e.getMessage());
         } catch(Exception e) {
             throw new CollectionsDatabaseException( Util.getInstance().buildEntityNameWithIdString(clazz, id),
                                                     exceptionsHandler.getErrorSource(e),  
@@ -184,7 +188,28 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
 
     @Override
     public T findByReference(long id, Class<T> clazz) {
-        return entityManager.getReference(clazz, id);  
+        log.info("findByReference : {} -- {}", id, clazz.getSimpleName());
+        
+        try { 
+            return entityManager.getReference(clazz, id);  
+        } catch (OptimisticLockException e){  
+            log.error("error {} -- {}", clazz.getSimpleName() + " --- " +id, e.getMessage());
+            throw new CollectionsOptimisticLockException(Util.getInstance().buildEntityNameWithIdString(clazz, id),
+                                                         exceptionsHandler.getErrorSource(e),
+                                                         ErrorCode.DB_OPTIMISTIC_LOCK.name(),
+                                                         e.getMessage());
+        } catch(EntityNotFoundException e) {
+            log.error("error {} -- {}", clazz.getSimpleName() + " --- " +id, e.getMessage());
+            throw new CollectionsDatabaseException( Util.getInstance().buildEntityNameWithIdString(clazz, id),
+                                                    e.getMessage(),  
+                                                    ErrorCode.DB_EXCEPTION.name(),
+                                                    e.getMessage());
+        } catch(Exception e) {
+            throw new CollectionsDatabaseException( Util.getInstance().buildEntityNameWithIdString(clazz, id),
+                                                    exceptionsHandler.getErrorSource(e),  
+                                                    ErrorCode.DB_EXCEPTION.name(),
+                                                    e.getMessage());
+        }   
     }
 
     @Override
