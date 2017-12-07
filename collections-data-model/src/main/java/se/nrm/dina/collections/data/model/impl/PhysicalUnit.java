@@ -4,17 +4,17 @@
  * and open the template in the editor.
  */
 package se.nrm.dina.collections.data.model.impl;
-  
+   
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;  
+import javax.persistence.FetchType;   
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Table; 
+import javax.persistence.Table;  
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import se.nrm.dina.collections.annotation.CollectionsManyToOne;
@@ -36,17 +36,18 @@ public class PhysicalUnit extends BaseEntity {
  
     @Lob
     @Size(max = 65535)
+    @Column(name = "normal_storage_location_text")
+    private String normalStorageLocationText;
+ 
+    @Lob
+    @Size(max = 65535)
     @Column(name = "alternate_identifiers_text")
     private String alternateIdentifiersText;
  
     @Lob
     @Column(name = "physical_unit_text")
     private String physicalUnitText;
-    
-    @Lob
-    @Column(name = "normal_storage_location")
-    private String normalStorageLocation;
-    
+  
     @JoinColumn(name = "belongs_to_cataloged_unit_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @CollectionsManyToOne(name = "catalogedUnit", type="CatalogedUnit") 
@@ -86,15 +87,7 @@ public class PhysicalUnit extends BaseEntity {
     public void setPhysicalUnitText(String physicalUnitText) {
         this.physicalUnitText = physicalUnitText;
     }
-
-    public String getNormalStorageLocation() {
-        return normalStorageLocation;
-    }
-
-    public void setNormalStorageLocation(String normalStorageLocation) {
-        this.normalStorageLocation = normalStorageLocation;
-    }
-
+  
     public CatalogedUnit getBelongsToCatalogedUnit() {
         return belongsToCatalogedUnit;
     }
@@ -126,6 +119,14 @@ public class PhysicalUnit extends BaseEntity {
     public void setAlternateIdentifiersText(String alternateIdentifiersText) {
         this.alternateIdentifiersText = alternateIdentifiersText;
     } 
+    
+    public String getNormalStorageLocationText() {
+        return normalStorageLocationText;
+    }
+
+    public void setNormalStorageLocationText(String normalStorageLocationText) {
+        this.normalStorageLocationText = normalStorageLocationText;
+    } 
 
   
     @Override
@@ -148,5 +149,5 @@ public class PhysicalUnit extends BaseEntity {
     @Override
     public String toString() {
         return "se.nrm.dina.collections.data.model.PhysicalUnit[ id=" + id + " ]";
-    }  
+    }   
 }

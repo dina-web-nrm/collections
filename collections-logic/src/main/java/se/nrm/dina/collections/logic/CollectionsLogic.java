@@ -169,7 +169,7 @@ public class CollectionsLogic implements Serializable  {
         }
         
         if(physicalUnitJson.containsKey("normalStorageLocation")) {
-            physicalUnit.setNormalStorageLocation(physicalUnitJson.getString("normalStorageLocation"));
+            physicalUnit.setNormalStorageLocationText(physicalUnitJson.getString("normalStorageLocationText"));
         }
                 
         if(physicalUnitJson.containsKey("alternateIdentifiersText")) {
