@@ -6,10 +6,14 @@
 package se.nrm.dina.collections.data.model.impl;
   
 import java.util.List;  
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;  
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -17,6 +21,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table; 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -37,6 +42,13 @@ import se.nrm.dina.collections.data.model.BaseEntity;
     @NamedQuery(name = "Occurrence.findById", query = "SELECT o FROM Occurrence o WHERE o.id = :id")})
 @CollectionsResource(type = "occurrence")
 public class Occurrence extends BaseEntity {
+ 
+    @Size(max = 100)
+    @Column(name = "establishment_means_standardized")
+    private String establishmentMeansStandardized;
+    
+    @Column(name = "is_death_event")
+    private Boolean isDeathEvent;
  
     @Column(name = "day_start")
     private Integer dayStart;
@@ -195,6 +207,22 @@ public class Occurrence extends BaseEntity {
         this.yearEnd = yearEnd;
     } 
     
+    public String getEstablishmentMeansStandardized() {
+        return establishmentMeansStandardized;
+    }
+
+    public void setEstablishmentMeansStandardized(String establishmentMeansStandardized) {
+        this.establishmentMeansStandardized = establishmentMeansStandardized;
+    }
+
+    public Boolean getIsDeathEvent() {
+        return isDeathEvent;
+    }
+
+    public void setIsDeathEvent(Boolean isDeathEvent) {
+        this.isDeathEvent = isDeathEvent;
+    } 
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -215,5 +243,5 @@ public class Occurrence extends BaseEntity {
     @Override
     public String toString() {
         return "se.nrm.dina.collections.data.model.Occurrence[ id=" + id + " ]";
-    }  
+    }    
 }

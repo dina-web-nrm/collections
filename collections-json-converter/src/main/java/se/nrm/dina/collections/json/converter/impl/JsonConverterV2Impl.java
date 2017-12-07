@@ -100,7 +100,7 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
                         subBuilder.add(CommonString.getInstance().getId(), pu.getId());
                         if(include != null && include.contains("physicalUnit")) {
                             subBuilder.add("physicalUnitText", pu.getPhysicalUnitText() == null ? "" : pu.getPhysicalUnitText());
-                            subBuilder.add("normalStorageLocation", pu.getNormalStorageLocation() == null ? "" : pu.getNormalStorageLocation());
+                            subBuilder.add("normalStorageLocationText", pu.getNormalStorageLocationText()== null ? "" : pu.getNormalStorageLocationText());
                             subBuilder.add("alternateIdentifiersText", pu.getAlternateIdentifiersText() == null ? "" : pu.getAlternateIdentifiersText());
                       
                             addCatalogedUnit(pu.getBelongsToCatalogedUnit(), subBuilder, include.contains("catalogedUnit"));  

@@ -6,13 +6,21 @@
 package se.nrm.dina.collections.data.model.impl;
   
 import java.util.List;  
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;  
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;  
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table; 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement; 
 import javax.xml.bind.annotation.XmlTransient;
 import se.nrm.dina.collections.annotation.CollectionsOneToMany;
@@ -31,6 +39,20 @@ import se.nrm.dina.collections.data.model.BaseEntity;
     @NamedQuery(name = "IndividualGroup.findById", query = "SELECT i FROM IndividualGroup i WHERE i.id = :id")})
 @CollectionsResource(type = "individualGroup")
 public class IndividualGroup extends BaseEntity {
+
+ 
+    @Size(max = 255)
+    @Column(name = "cause_of_death_standardized")
+    private String causeOfDeathStandardized;
+    
+    @Lob
+    @Size(max = 65535)
+    @Column(name = "cause_of_death_text")
+    private String causeOfDeathText;
+    
+    @Size(max = 100)
+    @Column(name = "origin_standardized")
+    private String originStandardized;
  
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "appliesToIndividualGroup", fetch = FetchType.LAZY)
     @CollectionsOneToMany(name = "identifications", type = "Identification") 
@@ -42,14 +64,12 @@ public class IndividualGroup extends BaseEntity {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "involvesIndividualGroup", fetch = FetchType.LAZY)
     @CollectionsOneToMany(name = "occurrences", type = "Occurrence")
-//    @JsonManagedReference
     private List<Occurrence> occurrences;
     
     @OneToMany( cascade = CascadeType.ALL, 
                 mappedBy = "representsIndividualGroup",  
                 fetch = FetchType.LAZY)
     @CollectionsOneToMany(name = "physicalUnits", type = "PhysicalUnit")
-//    @JsonManagedReference
     private List<PhysicalUnit> physicalUnits;
 
     public IndividualGroup() {
@@ -105,7 +125,29 @@ public class IndividualGroup extends BaseEntity {
         this.physicalUnits = physicalUnits;
     }
  
-    
+    public String getCauseOfDeathStandardized() {
+        return causeOfDeathStandardized;
+    }
+
+    public void setCauseOfDeathStandardized(String causeOfDeathStandardized) {
+        this.causeOfDeathStandardized = causeOfDeathStandardized;
+    }
+
+    public String getCauseOfDeathText() {
+        return causeOfDeathText;
+    }
+
+    public void setCauseOfDeathText(String causeOfDeathText) {
+        this.causeOfDeathText = causeOfDeathText;
+    }
+
+    public String getOriginStandardized() {
+        return originStandardized;
+    }
+
+    public void setOriginStandardized(String originStandardized) {
+        this.originStandardized = originStandardized;
+    } 
     
     @Override
     public int hashCode() {
@@ -127,5 +169,5 @@ public class IndividualGroup extends BaseEntity {
     @Override
     public String toString() {
         return "se.nrm.dina.collections.data.model.IndividualGroup[ id=" + id + " ]";
-    }  
+    }   
 }

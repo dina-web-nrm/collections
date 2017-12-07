@@ -4,17 +4,17 @@
  * and open the template in the editor.
  */
 package se.nrm.dina.collections.data.model.impl;
-   
+    
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;  
+import javax.persistence.FetchType;   
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Table; 
+import javax.persistence.Table;  
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import se.nrm.dina.collections.annotation.CollectionsManyToOne; 
@@ -125,5 +125,5 @@ public class FeatureObservation extends BaseEntity {
     @Override
     public String toString() {
         return "se.nrm.dina.collections.data.model.FeatureObservation[ id=" + id + " ]";
-    }    
+    }     
 }

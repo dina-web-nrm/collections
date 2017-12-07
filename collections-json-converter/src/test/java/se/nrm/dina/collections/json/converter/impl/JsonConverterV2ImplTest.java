@@ -56,7 +56,7 @@ public class JsonConverterV2ImplTest {
 
         testIndividualGroup = new IndividualGroup((long) 20);
         testPhysicalUnit = new PhysicalUnit((long) 18);
-        testPhysicalUnit.setNormalStorageLocation("Stockholm");
+        testPhysicalUnit.setNormalStorageLocationText("Stockholm");
         testPhysicalUnit.setPhysicalUnitText("test");
 
         physicalUnits = new ArrayList();

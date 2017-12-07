@@ -5,16 +5,22 @@
  */
 package se.nrm.dina.collections.data.model.impl;
   
+import java.math.BigInteger;
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;  
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table; 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import se.nrm.dina.collections.annotation.CollectionsManyToOne;
@@ -33,6 +39,9 @@ import se.nrm.dina.collections.data.model.BaseEntity;
     @NamedQuery(name = "Identification.findById", query = "SELECT i FROM Identification i WHERE i.id = :id")})
 @CollectionsResource(type = "identification")
 public class Identification extends BaseEntity {
+ 
+    @Column(name = "is_current_identification")
+    private BigInteger isCurrentIdentification;
  
     @Lob
     @Size(max = 65535)
@@ -66,8 +75,7 @@ public class Identification extends BaseEntity {
     
     @JoinColumn(name = "applies_to_individual_group_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "appliesToIndividualGroup", type="IndividualGroup")
-//    @JsonBackReference
+    @CollectionsManyToOne(name = "appliesToIndividualGroup", type="IndividualGroup") 
     private IndividualGroup appliesToIndividualGroup;
 
     public Identification() {
@@ -158,6 +166,14 @@ public class Identification extends BaseEntity {
     public void setIdentifiedTaxonNameStandardized(String identifiedTaxonNameStandardized) {
         this.identifiedTaxonNameStandardized = identifiedTaxonNameStandardized;
     }
+
+    public BigInteger getIsCurrentIdentification() {
+        return isCurrentIdentification;
+    }
+
+    public void setIsCurrentIdentification(BigInteger isCurrentIdentification) {
+        this.isCurrentIdentification = isCurrentIdentification;
+    } 
   
     @Override
     public int hashCode() {
@@ -179,5 +195,5 @@ public class Identification extends BaseEntity {
     @Override
     public String toString() {
         return "se.nrm.dina.collections.data.model.Identification[ id=" + id + " ]";
-    }  
+    }   
 }
