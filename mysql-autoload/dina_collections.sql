@@ -30,7 +30,7 @@ CREATE TABLE `cataloged_unit` (
   `remarks` text,
   `stored_under_taxon_name` varchar(150) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -61,7 +61,7 @@ CREATE TABLE `feature_observation` (
   KEY `feature_observation_feature_observation_type_id_idx` (`is_of_feature_observation_type_id`),
   CONSTRAINT `feature_observation_feature_observation_type_id` FOREIGN KEY (`is_of_feature_observation_type_id`) REFERENCES `feature_observation_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `feature_observation_individual_group_id` FOREIGN KEY (`applies_to_individual_group_id`) REFERENCES `individual_group` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -117,11 +117,11 @@ CREATE TABLE `identification` (
   `identified_month` int(11) DEFAULT NULL,
   `identified_year` int(11) DEFAULT NULL,
   `identified_taxon_name_standardized` varchar(255) DEFAULT NULL,
-  `is_current_identification` bigint(1) DEFAULT NULL,
+  `is_current_identification` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `identification_individual_group_id_idx` (`applies_to_individual_group_id`),
   CONSTRAINT `identification_individual_group_id` FOREIGN KEY (`applies_to_individual_group_id`) REFERENCES `individual_group` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -147,7 +147,7 @@ CREATE TABLE `individual_group` (
   `cause_of_death_text` text,
   `origin_standardized` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -185,7 +185,7 @@ CREATE TABLE `occurrence` (
   PRIMARY KEY (`id`),
   KEY `occurrence_individual_group_id_idx` (`involves_individual_group_id`),
   CONSTRAINT `occurrence_individual_group_id` FOREIGN KEY (`involves_individual_group_id`) REFERENCES `individual_group` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -220,7 +220,7 @@ CREATE TABLE `physical_unit` (
   CONSTRAINT `physical_unit_cataloged_unit_id` FOREIGN KEY (`belongs_to_cataloged_unit_id`) REFERENCES `cataloged_unit` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `physical_unit_individual_group_id` FOREIGN KEY (`represents_individual_group_id`) REFERENCES `individual_group` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `physical_unit_occurrence_id` FOREIGN KEY (`is_collected_at_occurrence_id`) REFERENCES `occurrence` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -241,4 +241,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-12-07 12:46:20
+-- Dump completed on 2017-12-07 15:48:16
