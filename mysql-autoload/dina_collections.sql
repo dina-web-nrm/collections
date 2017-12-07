@@ -85,7 +85,7 @@ CREATE TABLE `feature_observation_type` (
   `version` int(11) NOT NULL DEFAULT '1',
   `feature_observation_type_name` varchar(255) NOT NULL COMMENT 'The name of a defined FeatureObservationType.',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -94,7 +94,7 @@ CREATE TABLE `feature_observation_type` (
 
 LOCK TABLES `feature_observation_type` WRITE;
 /*!40000 ALTER TABLE `feature_observation_type` DISABLE KEYS */;
-INSERT INTO `feature_observation_type` VALUES (1,1,'sex'),(2,1,'length'),(3,1,'age'),(4,1,'weight');
+INSERT INTO `feature_observation_type` VALUES (1,1,'sex'),(2,1,'length'),(3,1,'age'),(4,1,'weight'),(5,1,'conditionAtCollecting');
 /*!40000 ALTER TABLE `feature_observation_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -117,6 +117,7 @@ CREATE TABLE `identification` (
   `identified_month` int(11) DEFAULT NULL,
   `identified_year` int(11) DEFAULT NULL,
   `identified_taxon_name_standardized` varchar(255) DEFAULT NULL,
+  `is_current_identification` bigint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `identification_individual_group_id_idx` (`applies_to_individual_group_id`),
   CONSTRAINT `identification_individual_group_id` FOREIGN KEY (`applies_to_individual_group_id`) REFERENCES `individual_group` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -142,6 +143,9 @@ DROP TABLE IF EXISTS `individual_group`;
 CREATE TABLE `individual_group` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Auto-incrementing surrogate primary key.',
   `version` int(11) NOT NULL DEFAULT '1',
+  `cause_of_death_standardized` varchar(255) DEFAULT NULL,
+  `cause_of_death_text` text,
+  `origin_standardized` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -176,6 +180,8 @@ CREATE TABLE `occurrence` (
   `month_end` int(11) DEFAULT NULL,
   `year_start` int(11) DEFAULT NULL,
   `year_end` int(11) DEFAULT NULL,
+  `establishment_means_standardized` varchar(100) DEFAULT NULL,
+  `is_death_event` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `occurrence_individual_group_id_idx` (`involves_individual_group_id`),
   CONSTRAINT `occurrence_individual_group_id` FOREIGN KEY (`involves_individual_group_id`) REFERENCES `individual_group` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -205,7 +211,7 @@ CREATE TABLE `physical_unit` (
   `is_collected_at_occurrence_id` bigint(20) DEFAULT NULL COMMENT 'Key to the Occurrence at which the material was collected.',
   `represents_individual_group_id` bigint(20) DEFAULT NULL COMMENT 'Key to the IndividualGroup this physical unit represent.',
   `physical_unit_text` text COMMENT 'A text describing the PhysicalUnit, in any chosen format.',
-  `normal_storage_location` text COMMENT 'A text describing the normal physical storage location, in any chosen format.',
+  `normal_storage_location_text` text COMMENT 'A text describing the normal physical storage location, in any chosen format.',
   `alternate_identifiers_text` text,
   PRIMARY KEY (`id`),
   KEY `physical_unit_cataloged_unit_id_idx` (`belongs_to_cataloged_unit_id`),
@@ -235,4 +241,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-12-05 12:33:15
+-- Dump completed on 2017-12-07 12:46:20
