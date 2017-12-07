@@ -78,8 +78,20 @@ public class CollectionsLogic implements Serializable  {
         JsonObject dataJson = json2.readInJson(theJson).getJsonObject(CommonString.getInstance().getData());
         JsonObject attrJson = json2.getAttributes(dataJson);
         JsonArray additionalData = json2.getJsonArray(dataJson, "additionalData");
-
-        try {
+ 
+        if(attrJson.containsKey("causeOfDeathStandardized")) {
+            individualGroup.setCauseOfDeathStandardized(attrJson.getString("causeOfDeathStandardized")); 
+        }
+        
+        if(attrJson.containsKey("causeOfDeathText")) {
+            individualGroup.setCauseOfDeathText(attrJson.getString("causeOfDeathText")); 
+        }
+        
+        if(attrJson.containsKey("originStandardized")) {
+            individualGroup.setOriginStandardized(attrJson.getString("originStandardized")); 
+        }
+        
+        try { 
             addFeatureObservationsFromJson(attrJson, individualGroup, isEditing);
             addOccurrences(attrJson, individualGroup, isEditing);
             addIdentifications(attrJson, individualGroup, isEditing);
@@ -140,6 +152,18 @@ public class CollectionsLogic implements Serializable  {
         if(catalogedUnitJson.containsKey("catalogNumber")) {
             catalogedUnit.setCatalogNumber(catalogedUnitJson.getString("catalogNumber"));
         } 
+        
+        if(catalogedUnitJson.containsKey("publishRecord")) {
+            catalogedUnit.setPublishRecord(catalogedUnitJson.getBoolean("publishRecord"));
+        } 
+        
+        if(catalogedUnitJson.containsKey("remarks")) {
+            catalogedUnit.setRemarks(catalogedUnitJson.getString("remarks"));
+        } 
+        
+        if(catalogedUnitJson.containsKey("storedUnderTaxonName")) {
+            catalogedUnit.setStoredUnderTaxonName(catalogedUnitJson.getString("storedUnderTaxonName"));
+        } 
         return catalogedUnit;
     }
      
@@ -168,7 +192,7 @@ public class CollectionsLogic implements Serializable  {
             physicalUnit.setPhysicalUnitText(physicalUnitJson.getString("physicalUnitText"));
         }
         
-        if(physicalUnitJson.containsKey("normalStorageLocation")) {
+        if(physicalUnitJson.containsKey("normalStorageLocationText")) {
             physicalUnit.setNormalStorageLocationText(physicalUnitJson.getString("normalStorageLocationText"));
         }
                 
@@ -215,6 +239,23 @@ public class CollectionsLogic implements Serializable  {
                         if (type.equals("catalogedUnit")) {
                             JsonObject catalogedUnitAttrs = additionalJson.getJsonObject(CommonString.getInstance().getAttributes());
                             catalogedUnit.setCatalogNumber(catalogedUnitAttrs.getString("catalogNumber"));
+
+                            if (catalogedUnitAttrs.containsKey("catalogNumber")) {
+                                catalogedUnit.setCatalogNumber(catalogedUnitAttrs.getString("catalogNumber"));
+                            }
+
+                            if (catalogedUnitAttrs.containsKey("publishRecord")) {
+                                catalogedUnit.setPublishRecord(catalogedUnitAttrs.getBoolean("publishRecord"));
+                            }
+
+                            if (catalogedUnitAttrs.containsKey("remarks")) {
+                                catalogedUnit.setRemarks(catalogedUnitAttrs.getString("remarks"));
+                            }
+
+                            if (catalogedUnitAttrs.containsKey("storedUnderTaxonName")) {
+                                catalogedUnit.setStoredUnderTaxonName(catalogedUnitAttrs.getString("storedUnderTaxonName"));
+                            }
+
 //                        catalogedUnit.setPhysicalUnits(physicalUnits);
                         }
                     });
@@ -236,29 +277,41 @@ public class CollectionsLogic implements Serializable  {
                 }
             }
         } 
-        if(jsonObject.containsKey("identificationText")) {
-            identification.setIdentificationText(jsonObject.getString("identificationText"));
-        }
+        
         if(jsonObject.containsKey("identificationRemarks")) {
             identification.setIdentificationRemarks(jsonObject.getString("identificationRemarks"));
         }
+          
+        if(jsonObject.containsKey("identificationText")) {
+            identification.setIdentificationText(jsonObject.getString("identificationText"));
+        }
+      
         if(jsonObject.containsKey("identifiedAsVerbatim")) {
             identification.setIdentifiedAsVerbatim(jsonObject.getString("identifiedAsVerbatim"));
         }
+        
         if(jsonObject.containsKey("identifiedByAgentText")) {
             identification.setIdentifiedByAgentText(jsonObject.getString("identifiedByAgentText"));
         }
+        
         if(jsonObject.containsKey("identifiedDay")) {
             identification.setIdentifiedDay(jsonObject.getInt("identifiedDay"));
         } 
+        
         if(jsonObject.containsKey("identifiedMonth")) {
             identification.setIdentifiedMonth(jsonObject.getInt("identifiedMonth"));
         }
+        
         if(jsonObject.containsKey("identifiedYear")) {
             identification.setIdentifiedYear(jsonObject.getInt("identifiedYear"));
         }
+        
         if(jsonObject.containsKey("identifiedTaxonNameStandardized")) {
             identification.setIdentifiedTaxonNameStandardized(jsonObject.getString("identifiedTaxonNameStandardized"));
+        } 
+        
+        if(jsonObject.containsKey("isCurrentIdentification")) {
+            identification.setIsCurrentIdentification(jsonObject.getBoolean("isCurrentIdentification"));
         } 
         return identification;
     }
@@ -285,13 +338,15 @@ public class CollectionsLogic implements Serializable  {
         FeatureObservationType type;
         
         int featureObservationTypeId = 0;
-        String name = null;
+        String featureObservationTypeName = null;
         if (featureObservationJson.containsKey("featureObservationType")) {
             JsonObject typeJson = featureObservationJson.getJsonObject("featureObservationType");
             if(isEditing) {
                 featureObservationTypeId = typeJson.getInt(CommonString.getInstance().getId()); 
             } 
-            name = typeJson.getString("name");
+            if(typeJson.containsKey("featureObservationTypeName")) {
+                featureObservationTypeName = typeJson.getString("featureObservationTypeName");
+            } 
         } else if (featureObservationJson.containsKey("featureObservationTypeId")) {
             featureObservationTypeId = featureObservationJson.getInt("featureObservationTypeId");
         } else {
@@ -311,7 +366,7 @@ public class CollectionsLogic implements Serializable  {
             }
         } else {
             type = new FeatureObservationType();
-            type.setFeatureObservationTypeName(name);
+            type.setFeatureObservationTypeName(featureObservationTypeName);
         }
         return type;
     }
@@ -389,30 +444,47 @@ public class CollectionsLogic implements Serializable  {
         if(jsonObject.containsKey("collectorsText")) {
             occurrence.setCollectorsText(jsonObject.getString("collectorsText")); 
         }
-        if(jsonObject.containsKey("localityText")) {
-            occurrence.setLocalityText(jsonObject.getString("localityText"));
-        }
-        if(jsonObject.containsKey("occurrenceDateText")) {
-            occurrence.setOccurrenceDateText(jsonObject.getString("occurrenceDateText"));
-        }
+ 
         if(jsonObject.containsKey("dayStart")) {
             occurrence.setDayStart(jsonObject.getInt("dayStart"));
         }
+        
         if(jsonObject.containsKey("dayEnd")) {
             occurrence.setDayEnd(jsonObject.getInt("dayEnd"));
         }
+         
+        if(jsonObject.containsKey("establishmentMeansStandardized")) {
+            occurrence.setEstablishmentMeansStandardized(jsonObject.getString("establishmentMeansStandardized"));
+        }
+        
         if(jsonObject.containsKey("expeditionText")) {
             occurrence.setExpeditionText(jsonObject.getString("expeditionText"));
         }
+ 
+        if(jsonObject.containsKey("isDeathEvent")) {
+            occurrence.setIsDeathEvent(jsonObject.getBoolean("isDeathEvent"));
+        }
+         
+        if(jsonObject.containsKey("localityText")) {
+            occurrence.setLocalityText(jsonObject.getString("localityText"));
+        }
+        
         if(jsonObject.containsKey("monthStart")) {
             occurrence.setMonthStart(jsonObject.getInt("monthStart"));
         }
+ 
         if(jsonObject.containsKey("monthEnd")) {
             occurrence.setMonthEnd(jsonObject.getInt("monthEnd"));
         }
+        
+        if(jsonObject.containsKey("occurrenceDateText")) {
+            occurrence.setOccurrenceDateText(jsonObject.getString("occurrenceDateText"));
+        }
+        
         if(jsonObject.containsKey("yearStart")) {
             occurrence.setYearStart(jsonObject.getInt("yearStart"));
         }
+        
         if (jsonObject.containsKey("yearEnd")) {
             occurrence.setYearEnd(jsonObject.getInt("yearEnd"));
         }

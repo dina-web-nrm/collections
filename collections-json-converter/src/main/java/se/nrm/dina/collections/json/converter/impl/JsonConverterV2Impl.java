@@ -197,6 +197,9 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
                             subBuilder.add("identifiedYear", i.getIdentifiedYear() == null ? 0 : i.getIdentifiedYear());
                             subBuilder.add("identifiedTaxonNameStandardized", i.getIdentifiedTaxonNameStandardized() == null ?
                                                         "" : i.getIdentifiedTaxonNameStandardized());
+                            subBuilder.add("isCurrentIdentification", i.getIsCurrentIdentification() == null ?
+                                                        false : i.getIsCurrentIdentification());
+                            
                         }
                         dataArrBuilder.add(subBuilder);
                     }); 
@@ -222,11 +225,13 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
                             subBuilder.add("occuenceDateText", o.getOccurrenceDateText() == null ? "" : o.getOccurrenceDateText());
                             subBuilder.add("dayEnd", o.getDayEnd() == null ? 0 : o.getDayEnd());
                             subBuilder.add("dayStart", o.getDayStart() == null ? 0 : o.getDayStart());
+                            subBuilder.add("establishmentMeansStandardized", o.getEstablishmentMeansStandardized() == null ? "" : o.getEstablishmentMeansStandardized());
                             subBuilder.add("expeditionText", o.getExpeditionText() == null ? "" : o.getExpeditionText());
                             subBuilder.add("monthStart", o.getMonthStart() == null ? 0 : o.getMonthStart());
                             subBuilder.add("monthEnd", o.getMonthEnd() == null ? 0 : o.getMonthEnd());
                             subBuilder.add("yearStart", o.getYearStart() == null ? 0 : o.getYearStart());
                             subBuilder.add("yearEnd", o.getYearEnd() == null ? 0 : o.getYearEnd());
+                            subBuilder.add("isDeathEvent", o.getIsDeathEvent() == null ? false : o.getIsDeathEvent());
                         }
                         dataArrBuilder.add(subBuilder);
                     }); 

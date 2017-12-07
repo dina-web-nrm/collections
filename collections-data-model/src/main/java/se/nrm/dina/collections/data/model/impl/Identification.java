@@ -5,12 +5,12 @@
  */
 package se.nrm.dina.collections.data.model.impl;
   
-import java.math.BigInteger;
+import java.math.BigInteger; 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;  
+import javax.persistence.FetchType;   
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,7 +19,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Table; 
+import javax.persistence.Table;  
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -41,7 +41,7 @@ import se.nrm.dina.collections.data.model.BaseEntity;
 public class Identification extends BaseEntity {
  
     @Column(name = "is_current_identification")
-    private BigInteger isCurrentIdentification;
+    private Boolean isCurrentIdentification;
  
     @Lob
     @Size(max = 65535)
@@ -167,13 +167,13 @@ public class Identification extends BaseEntity {
         this.identifiedTaxonNameStandardized = identifiedTaxonNameStandardized;
     }
 
-    public BigInteger getIsCurrentIdentification() {
+    public Boolean getIsCurrentIdentification() {
         return isCurrentIdentification;
     }
 
-    public void setIsCurrentIdentification(BigInteger isCurrentIdentification) {
+    public void setIsCurrentIdentification(Boolean isCurrentIdentification) {
         this.isCurrentIdentification = isCurrentIdentification;
-    } 
+    }
   
     @Override
     public int hashCode() {
@@ -195,5 +195,6 @@ public class Identification extends BaseEntity {
     @Override
     public String toString() {
         return "se.nrm.dina.collections.data.model.Identification[ id=" + id + " ]";
-    }   
+    }    
+ 
 }
