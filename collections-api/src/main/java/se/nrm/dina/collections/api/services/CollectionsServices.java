@@ -74,7 +74,11 @@ public class CollectionsServices implements Serializable {
         MultivaluedMap<String, String> map = info.getQueryParameters();  
         String include = map.getFirst("include");
          
-        return Response.ok(logic.getIndividualGroupById(id, include)).build();
+        try {
+            return Response.ok(logic.getIndividualGroupById(id, include)).build();
+        } catch(CollectionsException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(logic.buildErrorJson(e)).build(); 
+        } 
     }
     
 //    @GET

@@ -53,7 +53,11 @@ public class CollectionsLogic implements Serializable  {
     public JsonObject getIndividualGroupById(long id, String include) {
         log.info("getIndividualGroupById");
         
-        return json2.convertIndividualGroup((IndividualGroup) dao.findById(id, IndividualGroup.class), include);
+        try {
+            return json2.convertIndividualGroup((IndividualGroup) dao.findById(id, IndividualGroup.class), include);
+        } catch(CollectionsException e) {
+            throw e;
+        } 
     }
     
     public JsonObject getIndividualGroup(String catalogNumber, String taxonStandarized, String include) {
