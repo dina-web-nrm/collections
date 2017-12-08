@@ -9,7 +9,7 @@ script:
   - mvn clean verify
 env:
   global:
-    - secure: 0a0c4a36e4bef8e32c6e035b61f7e434db50db52
+    - secure: "DKISjSt0+ExRBV97STCglRDU0+gxys9T5X0Eyv52tfvDuF+2vLSh3lWmZxfsoHXZJnUnXYeAngy56xKTQexxMh2Z+pYYmkAcUx10H6z84Inbovl9ejOs0b8pnXDgC0YLUEOA+OdWEHZ1EQC/jQpgsuUFdSZeObauU6GtowfC5Z96eHZMCdVwJqHEMRUXHC/9kw/DhYnQi/N7krjlvyo+PsgZV5spmrR2NNH0xrM7KbG+NFJinQqVhJ72D7rEj61IHbFUee9gQwD6W9/TsJ36vpad9yFskm0BBERTMQxq/trxF+zqO2/F2m1NdG6SnvKMq3XU7A2LskSRTzurrFhc+QcvbFIvss8EmjZqry5dPIByQdQeIJABLVQLl5efn0GXutCrHWY0MUrWeEdQBfRXRjyP0N39af6QVjrB+qhwsRGaa7NxHoXoZ2zEvWaX6O9Mhfb4jF3J1ATn/6tOumrxtbvxf9EQynsmnVkKG9Cx9L02Sn3bi2LiMjfZ36pfZPwgi7zsNnrBNq2+GnM4qpFwYyBajlrv7Pg2Zf5gWIbVz5zGpvPGMyX43mzjbtuR0WHJY3vyLq+0Nla3yyRu+t9kjx00JMj0fYKLetkFpRQJvSoGygl6wW/wc51M7CogwWe2f1XZGxvvXj+rRCOedJnT6dlYKtfHLIHd1tpK+eQD4Mw="
 before_install:
   - pip install --user codecov
 after_success:
@@ -22,7 +22,6 @@ deploy:
   provider: releases
   api_key:
     secure: "DKISjSt0+ExRBV97STCglRDU0+gxys9T5X0Eyv52tfvDuF+2vLSh3lWmZxfsoHXZJnUnXYeAngy56xKTQexxMh2Z+pYYmkAcUx10H6z84Inbovl9ejOs0b8pnXDgC0YLUEOA+OdWEHZ1EQC/jQpgsuUFdSZeObauU6GtowfC5Z96eHZMCdVwJqHEMRUXHC/9kw/DhYnQi/N7krjlvyo+PsgZV5spmrR2NNH0xrM7KbG+NFJinQqVhJ72D7rEj61IHbFUee9gQwD6W9/TsJ36vpad9yFskm0BBERTMQxq/trxF+zqO2/F2m1NdG6SnvKMq3XU7A2LskSRTzurrFhc+QcvbFIvss8EmjZqry5dPIByQdQeIJABLVQLl5efn0GXutCrHWY0MUrWeEdQBfRXRjyP0N39af6QVjrB+qhwsRGaa7NxHoXoZ2zEvWaX6O9Mhfb4jF3J1ATn/6tOumrxtbvxf9EQynsmnVkKG9Cx9L02Sn3bi2LiMjfZ36pfZPwgi7zsNnrBNq2+GnM4qpFwYyBajlrv7Pg2Zf5gWIbVz5zGpvPGMyX43mzjbtuR0WHJY3vyLq+0Nla3yyRu+t9kjx00JMj0fYKLetkFpRQJvSoGygl6wW/wc51M7CogwWe2f1XZGxvvXj+rRCOedJnT6dlYKtfHLIHd1tpK+eQD4Mw="
-
   file:  
     - collections-api/target/collections-api-swarm.jar  
   skip_cleanup: true
