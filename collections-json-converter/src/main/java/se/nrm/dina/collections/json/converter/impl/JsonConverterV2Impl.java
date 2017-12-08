@@ -99,10 +99,18 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
                     .forEach(pu -> {
                         subBuilder.add(CommonString.getInstance().getId(), pu.getId());
                         if(include != null && include.contains("physicalUnit")) {
-                            subBuilder.add("physicalUnitText", pu.getPhysicalUnitText() == null ? "" : pu.getPhysicalUnitText());
-                            subBuilder.add("normalStorageLocationText", pu.getNormalStorageLocationText()== null ? "" : pu.getNormalStorageLocationText());
-                            subBuilder.add("alternateIdentifiersText", pu.getAlternateIdentifiersText() == null ? "" : pu.getAlternateIdentifiersText());
-                      
+                            if(pu.getPhysicalUnitText() != null) {
+                                subBuilder.add("physicalUnitText", pu.getPhysicalUnitText());
+                            }
+                            if(pu.getPhysicalUnitText() != null) {
+                                subBuilder.add("physicalUnitText", pu.getPhysicalUnitText());
+                            }
+                            if(pu.getNormalStorageLocationText() != null) {
+                                subBuilder.add("normalStorageLocationText", pu.getNormalStorageLocationText());
+                            }
+                            if(pu.getAlternateIdentifiersText() != null) {
+                                subBuilder.add("alternateIdentifiersText", pu.getAlternateIdentifiersText());
+                            } 
                             addCatalogedUnit(pu.getBelongsToCatalogedUnit(), subBuilder, include.contains("catalogedUnit"));  
                         } 
                         dataArrBuilder.add(subBuilder);
@@ -119,12 +127,22 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
         JsonObjectBuilder subBuilder = Json.createObjectBuilder();
         if(catalogedUnit != null) {
             if(isCatalogedUnit) {
-                subBuilder.add("catalogNumber", catalogedUnit.getCatalogNumber());
-                subBuilder.add(CommonString.getInstance().getId(), catalogedUnit.getId()); 
-                subBuilder.add("remarks", catalogedUnit.getRemarks() == null ? "" : catalogedUnit.getRemarks());
-                subBuilder.add("publishRecord", catalogedUnit.getPublishRecord() == null ? false : catalogedUnit.getPublishRecord());
-                subBuilder.add("storedUnderTaxonName", catalogedUnit.getStoredUnderTaxonName() == null ? "" : catalogedUnit.getStoredUnderTaxonName());
-                
+                if(catalogedUnit.getCatalogNumber() != null) {
+                    subBuilder.add("catalogNumber", catalogedUnit.getCatalogNumber());
+                } 
+                if(catalogedUnit.getId() != null) {
+                    subBuilder.add(CommonString.getInstance().getId(), catalogedUnit.getId()); 
+                }
+                if(catalogedUnit.getRemarks() != null) {
+                    subBuilder.add("remarks", catalogedUnit.getRemarks());
+                }
+                if(catalogedUnit.getPublishRecord() != null) {
+                    subBuilder.add("publishRecord", catalogedUnit.getPublishRecord());
+                }
+                if(catalogedUnit.getStoredUnderTaxonName() != null) {
+                    subBuilder.add("storedUnderTaxonName", catalogedUnit.getStoredUnderTaxonName());
+                }
+                 
                 attBuilder.add("catalogedUnit", subBuilder);
             } else {
                 attBuilder.add("catalogedUnitId", catalogedUnit.getId());
@@ -145,10 +163,15 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
         if(featureObservations != null && !featureObservations.isEmpty()) {
             featureObservations.stream()
                     .forEach(fo -> {
-                        subBuilder.add(CommonString.getInstance().getId(), fo.getId()); 
+                        subBuilder.add(CommonString.getInstance().getId(), fo.getId());  
+                        
                         if(include != null && include.contains("featureObservations")) { 
-                            subBuilder.add("featureObservationText", fo.getFeatureObservationText() == null ? "" : fo.getFeatureObservationText());
-                            subBuilder.add("methodText", fo.getMethodText() == null ? "" : fo.getMethodText());
+                            if(fo.getFeatureObservationText() != null) {
+                                subBuilder.add("featureObservationText", fo.getFeatureObservationText());
+                            }
+                            if(fo.getMethodText() != null) {
+                                subBuilder.add("methodText", fo.getMethodText());
+                            } 
                             addFeatureObservationType(fo.getIsOfFeatureObservationType(), subBuilder, include.contains("featureObservationType")); 
                         } 
                         dataArrBuilder.add(subBuilder);
@@ -169,7 +192,9 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
         if(featureObservationType != null) { 
             if(isType) {
                 subBuilder.add(CommonString.getInstance().getId(), featureObservationType.getId());   
-                subBuilder.add("featureObservationTypeName", featureObservationType.getFeatureObservationTypeName());   
+                if(featureObservationType.getFeatureObservationTypeName() != null) {
+                    subBuilder.add("featureObservationTypeName", featureObservationType.getFeatureObservationTypeName());   
+                } 
                 attBuilder.add("featureObservationType", subBuilder);
             } else {
                 attBuilder.add("featureObservationTypeId", featureObservationType.getId());
@@ -188,18 +213,33 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
                     .forEach(i -> {
                         subBuilder.add(CommonString.getInstance().getId(), i.getId());
                         if(isIdentification) {
-                            subBuilder.add("identificationText", i.getIdentificationText() == null ? "" : i.getIdentificationText()); 
-                            subBuilder.add("identificationRemarks", i.getIdentificationRemarks() == null ? "" : i.getIdentificationRemarks());
-                            subBuilder.add("identifiedAsVerbatim", i.getIdentifiedAsVerbatim() == null ? "" : i.getIdentifiedAsVerbatim());
-                            subBuilder.add("identifiedByAgentText", i.getIdentifiedByAgentText() == null ? "" : i.getIdentifiedByAgentText());
-                            subBuilder.add("identifiedDay", i.getIdentifiedDay() == null ? 0 : i.getIdentifiedDay());
-                            subBuilder.add("identifiedMonth", i.getIdentifiedMonth() == null ? 0 : i.getIdentifiedMonth());
-                            subBuilder.add("identifiedYear", i.getIdentifiedYear() == null ? 0 : i.getIdentifiedYear());
-                            subBuilder.add("identifiedTaxonNameStandardized", i.getIdentifiedTaxonNameStandardized() == null ?
-                                                        "" : i.getIdentifiedTaxonNameStandardized());
-                            subBuilder.add("isCurrentIdentification", i.getIsCurrentIdentification() == null ?
-                                                        false : i.getIsCurrentIdentification());
-                            
+                            if(i.getIdentificationText() != null) {
+                                subBuilder.add("identificationText", i.getIdentificationText()); 
+                            }
+                            if(i.getIdentificationRemarks() != null) {
+                                subBuilder.add("identificationRemarks", i.getIdentificationRemarks());
+                            }
+                            if(i.getIdentifiedAsVerbatim() != null) {
+                                subBuilder.add("identifiedAsVerbatim", i.getIdentifiedAsVerbatim());
+                            }
+                            if(i.getIdentifiedByAgentText() != null) {
+                                subBuilder.add("identifiedByAgentText", i.getIdentifiedByAgentText());
+                            }
+                            if(i.getIdentifiedDay() != null) {
+                                subBuilder.add("identifiedDay", i.getIdentifiedDay());
+                            }
+                            if(i.getIdentifiedMonth() != null) {
+                                subBuilder.add("identifiedMonth", i.getIdentifiedMonth());
+                            }
+                            if(i.getIdentifiedYear() != null) {
+                                subBuilder.add("identifiedYear", i.getIdentifiedYear());
+                            }
+                            if(i.getIdentifiedTaxonNameStandardized() != null) {
+                                subBuilder.add("identifiedTaxonNameStandardized", i.getIdentifiedTaxonNameStandardized());
+                            }
+                            if(i.getIsCurrentIdentification() != null) {
+                                subBuilder.add("isCurrentIdentification", i.getIsCurrentIdentification()); 
+                            } 
                         }
                         dataArrBuilder.add(subBuilder);
                     }); 
@@ -220,18 +260,42 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
                     .forEach(o -> {
                         subBuilder.add(CommonString.getInstance().getId(), o.getId());
                         if(isOccurrences) {
-                            subBuilder.add("collectorsText", o.getCollectorsText() == null ? "" : o.getCollectorsText()); 
-                            subBuilder.add("localityText", o.getLocalityText() == null ? "" : o.getLocalityText());
-                            subBuilder.add("occuenceDateText", o.getOccurrenceDateText() == null ? "" : o.getOccurrenceDateText());
-                            subBuilder.add("dayEnd", o.getDayEnd() == null ? 0 : o.getDayEnd());
-                            subBuilder.add("dayStart", o.getDayStart() == null ? 0 : o.getDayStart());
-                            subBuilder.add("establishmentMeansStandardized", o.getEstablishmentMeansStandardized() == null ? "" : o.getEstablishmentMeansStandardized());
-                            subBuilder.add("expeditionText", o.getExpeditionText() == null ? "" : o.getExpeditionText());
-                            subBuilder.add("monthStart", o.getMonthStart() == null ? 0 : o.getMonthStart());
-                            subBuilder.add("monthEnd", o.getMonthEnd() == null ? 0 : o.getMonthEnd());
-                            subBuilder.add("yearStart", o.getYearStart() == null ? 0 : o.getYearStart());
-                            subBuilder.add("yearEnd", o.getYearEnd() == null ? 0 : o.getYearEnd());
-                            subBuilder.add("isDeathEvent", o.getIsDeathEvent() == null ? false : o.getIsDeathEvent());
+                            if(o.getCollectorsText() != null) {
+                                subBuilder.add("collectorsText", o.getCollectorsText()); 
+                            }
+                            if(o.getLocalityText() != null) {
+                                subBuilder.add("localityText", o.getLocalityText());
+                            }
+                            if(o.getOccurrenceDateText() != null) {
+                                subBuilder.add("occurrenceDateText", o.getOccurrenceDateText());
+                            }
+                            if(o.getDayEnd() != null) {
+                                subBuilder.add("dayEnd", o.getDayEnd());
+                            }
+                            if(o.getDayStart() != null) {
+                                subBuilder.add("dayStart", o.getDayStart());
+                            }
+                            if(o.getEstablishmentMeansStandardized() != null) {
+                                subBuilder.add("establishmentMeansStandardized", o.getEstablishmentMeansStandardized());
+                            }
+                            if(o.getExpeditionText() != null) {
+                                subBuilder.add("expeditionText", o.getExpeditionText());
+                            } 
+                            if(o.getMonthStart() != null) {
+                                subBuilder.add("monthStart", o.getMonthStart());
+                            }
+                            if(o.getMonthEnd() != null) {
+                                subBuilder.add("monthEnd", o.getMonthEnd());
+                            }
+                            if(o.getYearStart() != null) {
+                                subBuilder.add("yearStart", o.getYearStart());
+                            }
+                            if(o.getYearEnd() != null) {
+                                subBuilder.add("yearEnd", o.getYearEnd());
+                            }
+                            if(o.getIsDeathEvent() != null) {
+                                subBuilder.add("isDeathEvent", o.getIsDeathEvent());
+                            } 
                         }
                         dataArrBuilder.add(subBuilder);
                     }); 
