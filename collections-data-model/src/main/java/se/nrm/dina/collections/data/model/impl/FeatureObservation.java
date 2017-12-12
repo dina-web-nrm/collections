@@ -16,9 +16,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;  
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import se.nrm.dina.collections.annotation.CollectionsManyToOne; 
-import se.nrm.dina.collections.annotation.CollectionsResource;
+import javax.xml.bind.annotation.XmlRootElement; 
+import se.nrm.dina.collections.annotation.CollectionsResource; 
+//import se.nrm.dina.collections.annotation.CollectionsManyToOne;  
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -44,12 +44,12 @@ public class FeatureObservation extends BaseEntity {
     
     @JoinColumn(name = "is_of_feature_observation_type_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "isOfFeatureObservationType", type="FeatureObservationType") 
+//    @CollectionsManyToOne(name = "isOfFeatureObservationType", type="FeatureObservationType") 
     private FeatureObservationType isOfFeatureObservationType;
     
     @JoinColumn(name = "applies_to_individual_group_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "appliesToIndividualGroup", type="IndividualGroup") 
+//    @CollectionsManyToOne(name = "appliesToIndividualGroup", type="IndividualGroup") 
     private IndividualGroup appliesToIndividualGroup;
 
     public FeatureObservation() {
@@ -93,9 +93,6 @@ public class FeatureObservation extends BaseEntity {
         this.appliesToIndividualGroup = appliesToIndividualGroup;
     }
  
-    public void setVersion(int version) {
-        this.version = version;
-    }
 
     public String getMethodText() {
         return methodText;

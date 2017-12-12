@@ -604,8 +604,7 @@ public class CollectionsLogic implements Serializable  {
             if (bean != null) {
                 dao.delete(bean);
             }
-        } catch(CollectionsBadRequestException | CollectionsConstraintViolationException | CollectionsDatabaseException e) {
-            log.error("catched : {}", e.getMessage());
+        } catch(CollectionsBadRequestException | CollectionsConstraintViolationException | CollectionsDatabaseException e) { 
             throw e;
         }
         return json2.convertSuccessMessage("Delete success");

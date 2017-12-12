@@ -17,9 +17,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;  
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement; 
-import javax.xml.bind.annotation.XmlTransient;
-import se.nrm.dina.collections.annotation.CollectionsOneToMany;
-import se.nrm.dina.collections.annotation.CollectionsResource;
+import javax.xml.bind.annotation.XmlTransient; 
+import se.nrm.dina.collections.annotation.CollectionsResource; 
+//import se.nrm.dina.collections.annotation.CollectionsOneToMany; 
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -37,14 +37,6 @@ import se.nrm.dina.collections.data.model.BaseEntity;
 @CollectionsResource(type = "catalogedUnit")
 public class CatalogedUnit extends BaseEntity {
  
-    @Column(name = "publish_record")
-    private Boolean publishRecord;
-    
-    @Lob
-    @Size(max = 65535)
-    @Column(name = "remarks")
-    private String remarks;
-    
     @Size(max = 150)
     @Column(name = "stored_under_taxon_name")
     private String storedUnderTaxonName;
@@ -52,9 +44,17 @@ public class CatalogedUnit extends BaseEntity {
     @Basic(optional = false)
     @Column(name = "catalog_number")
     private String catalogNumber;
+     
+    @Column(name = "publish_record")
+    private Boolean publishRecord;
+     
+    @Lob
+    @Size(max = 65535)
+    @Column(name = "remarks")
+    private String remarks;
     
     @OneToMany(mappedBy = "belongsToCatalogedUnit", fetch = FetchType.LAZY)
-    @CollectionsOneToMany(name = "physicalUnits", type = "PhysicalUnit") 
+//    @CollectionsOneToMany(name = "physicalUnits", type = "PhysicalUnit") 
     private List<PhysicalUnit> physicalUnits;
 
     public CatalogedUnit() {
@@ -96,12 +96,7 @@ public class CatalogedUnit extends BaseEntity {
         this.id = id;
         this.version = version;
     }
- 
-
-    public void setVersion(int version) {
-        this.version = version;
-    }
-
+  
     public Boolean getPublishRecord() {
         return publishRecord;
     }

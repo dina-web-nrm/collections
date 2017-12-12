@@ -17,9 +17,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;  
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement; 
-import javax.xml.bind.annotation.XmlTransient;
-import se.nrm.dina.collections.annotation.CollectionsOneToMany;
-import se.nrm.dina.collections.annotation.CollectionsResource;
+import javax.xml.bind.annotation.XmlTransient; 
+import se.nrm.dina.collections.annotation.CollectionsResource; 
+//import se.nrm.dina.collections.annotation.CollectionsOneToMany; 
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -49,21 +49,21 @@ public class IndividualGroup extends BaseEntity {
     private String originStandardized;
  
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "appliesToIndividualGroup", fetch = FetchType.LAZY)
-    @CollectionsOneToMany(name = "identifications", type = "Identification") 
+//    @CollectionsOneToMany(name = "identifications", type = "Identification") 
     private List<Identification> identifications;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "appliesToIndividualGroup", fetch = FetchType.LAZY)
-    @CollectionsOneToMany(name = "featureObservations", type = "FeatureObservation") 
+//    @CollectionsOneToMany(name = "featureObservations", type = "FeatureObservation") 
     private List<FeatureObservation> featureObservations;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "involvesIndividualGroup", fetch = FetchType.LAZY)
-    @CollectionsOneToMany(name = "occurrences", type = "Occurrence")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "involvesIndividualGroup", fetch = FetchType.LAZY) 
+//    @CollectionsOneToMany(name = "occurrences", type = "Occurrence")  
     private List<Occurrence> occurrences;
     
     @OneToMany( cascade = CascadeType.ALL, 
                 mappedBy = "representsIndividualGroup",  
-                fetch = FetchType.LAZY)
-    @CollectionsOneToMany(name = "physicalUnits", type = "PhysicalUnit")
+                fetch = FetchType.LAZY) 
+//    @CollectionsOneToMany(name = "physicalUnits", type = "PhysicalUnit")  
     private List<PhysicalUnit> physicalUnits;
 
     public IndividualGroup() {
