@@ -20,8 +20,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import se.nrm.dina.collections.annotation.CollectionsManyToOne;
-import se.nrm.dina.collections.annotation.CollectionsOneToMany;
+//import se.nrm.dina.collections.annotation.CollectionsManyToOne;
+//import se.nrm.dina.collections.annotation.CollectionsOneToMany;
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -72,11 +72,11 @@ public class Occurrence extends BaseEntity {
     
     @JoinColumn(name = "involves_individual_group_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "involvesIndividualGroup", type = "IndividualGroup") 
+//    @CollectionsManyToOne(name = "involvesIndividualGroup", type = "IndividualGroup") 
     private IndividualGroup involvesIndividualGroup;
     
     @OneToMany(mappedBy = "isCollectedAtOccurrence", fetch = FetchType.LAZY)
-    @CollectionsOneToMany(name = "physicalUnits", type = "PhysicalUnit") 
+//    @CollectionsOneToMany(name = "physicalUnits", type = "PhysicalUnit") 
     private List<PhysicalUnit> physicalUnits;
 
     public Occurrence() {

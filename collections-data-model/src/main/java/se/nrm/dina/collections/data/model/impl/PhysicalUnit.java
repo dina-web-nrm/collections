@@ -17,7 +17,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table; 
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import se.nrm.dina.collections.annotation.CollectionsManyToOne;
+//import se.nrm.dina.collections.annotation.CollectionsManyToOne;
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -47,17 +47,17 @@ public class PhysicalUnit extends BaseEntity {
     
     @JoinColumn(name = "belongs_to_cataloged_unit_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "catalogedUnit", type="CatalogedUnit") 
+//    @CollectionsManyToOne(name = "catalogedUnit", type="CatalogedUnit") 
     private CatalogedUnit belongsToCatalogedUnit;
     
     @JoinColumn(name = "represents_individual_group_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "individualGroup", type="IndividualGroup") 
+//    @CollectionsManyToOne(name = "individualGroup", type="IndividualGroup") 
     private IndividualGroup representsIndividualGroup;
     
     @JoinColumn(name = "is_collected_at_occurrence_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @CollectionsManyToOne(name = "occurrence", type="Occurrence") 
+//    @CollectionsManyToOne(name = "occurrence", type="Occurrence") 
     private Occurrence isCollectedAtOccurrence;
 
     public PhysicalUnit() {

@@ -4,8 +4,7 @@
  * and open the template in the editor.
  */
 package se.nrm.dina.collections.data.model.impl;
- 
-//import com.fasterxml.jackson.annotation.JsonManagedReference;
+  
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -18,7 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table; 
 import javax.xml.bind.annotation.XmlRootElement; 
 import javax.xml.bind.annotation.XmlTransient;
-import se.nrm.dina.collections.annotation.CollectionsOneToMany;
+//import se.nrm.dina.collections.annotation.CollectionsOneToMany;
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -40,7 +39,7 @@ public class FeatureObservationType extends BaseEntity {
     private String featureObservationTypeName;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "isOfFeatureObservationType", fetch = FetchType.LAZY)
-    @CollectionsOneToMany(name = "featureObservations", type = "FeatureObservation") 
+//    @CollectionsOneToMany(name = "featureObservations", type = "FeatureObservation") 
     private List<FeatureObservation> featureObservations;
 
     public FeatureObservationType() {
