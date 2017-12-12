@@ -17,7 +17,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;  
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement; 
-import se.nrm.dina.collections.annotation.CollectionsResource; 
+//import se.nrm.dina.collections.annotation.CollectionsResource; 
 //import se.nrm.dina.collections.annotation.CollectionsManyToOne;  
 import se.nrm.dina.collections.data.model.BaseEntity;
 
@@ -31,7 +31,7 @@ import se.nrm.dina.collections.data.model.BaseEntity;
 @NamedQueries({
     @NamedQuery(name = "FeatureObservation.findAll", query = "SELECT f FROM FeatureObservation f"), 
     @NamedQuery(name = "FeatureObservation.findById", query = "SELECT f FROM FeatureObservation f WHERE f.id = :id")})
-@CollectionsResource(type = "featureObservation")
+//@CollectionsResource(type = "featureObservation")
 public class FeatureObservation extends BaseEntity {
  
     @Size(max = 100)

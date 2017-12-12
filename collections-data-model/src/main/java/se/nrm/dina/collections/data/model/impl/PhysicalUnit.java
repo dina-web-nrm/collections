@@ -17,7 +17,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;  
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement; 
-import se.nrm.dina.collections.annotation.CollectionsResource; 
+//import se.nrm.dina.collections.annotation.CollectionsResource; 
 //import se.nrm.dina.collections.annotation.CollectionsManyToOne; 
 import se.nrm.dina.collections.data.model.BaseEntity;
 
@@ -31,7 +31,7 @@ import se.nrm.dina.collections.data.model.BaseEntity;
 @NamedQueries({
     @NamedQuery(name = "PhysicalUnit.findAll", query = "SELECT p FROM PhysicalUnit p"), 
     @NamedQuery(name = "PhysicalUnit.findById", query = "SELECT p FROM PhysicalUnit p WHERE p.id = :id")})
-@CollectionsResource(type = "physicalUnit")
+//@CollectionsResource(type = "physicalUnit")
 public class PhysicalUnit extends BaseEntity {
  
     @Lob

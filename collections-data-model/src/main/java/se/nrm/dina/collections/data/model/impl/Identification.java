@@ -17,7 +17,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;   
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement; 
-import se.nrm.dina.collections.annotation.CollectionsResource; 
+//import se.nrm.dina.collections.annotation.CollectionsResource; 
 //import se.nrm.dina.collections.annotation.CollectionsManyToOne; 
 import se.nrm.dina.collections.data.model.BaseEntity;
 
@@ -31,7 +31,7 @@ import se.nrm.dina.collections.data.model.BaseEntity;
 @NamedQueries({
     @NamedQuery(name = "Identification.findAll", query = "SELECT i FROM Identification i"), 
     @NamedQuery(name = "Identification.findById", query = "SELECT i FROM Identification i WHERE i.id = :id")})
-@CollectionsResource(type = "identification")
+//@CollectionsResource(type = "identification")
 public class Identification extends BaseEntity {
  
     @Column(name = "is_current_identification")

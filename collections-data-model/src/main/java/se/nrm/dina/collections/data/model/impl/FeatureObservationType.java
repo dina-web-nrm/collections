@@ -16,7 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;  
 import javax.xml.bind.annotation.XmlRootElement; 
 import javax.xml.bind.annotation.XmlTransient; 
-import se.nrm.dina.collections.annotation.CollectionsResource; 
+//import se.nrm.dina.collections.annotation.CollectionsResource; 
 //import se.nrm.dina.collections.annotation.CollectionsOneToMany; 
 import se.nrm.dina.collections.data.model.BaseEntity;
 
@@ -32,7 +32,7 @@ import se.nrm.dina.collections.data.model.BaseEntity;
     @NamedQuery(name = "FeatureObservationType.findById", query = "SELECT f FROM FeatureObservationType f WHERE f.id = :id")
 //    @NamedQuery(name = "FeatureObservationType.findByFeatureObservationTypeName", query = "SELECT f FROM FeatureObservationType f WHERE f.featureObservationTypeName = :featureObservationTypeName")
 })
-@CollectionsResource(type = "featureObservationType")
+//@CollectionsResource(type = "featureObservationType")
 public class FeatureObservationType extends BaseEntity {
   
     @Basic(optional = false)

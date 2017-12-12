@@ -23,7 +23,7 @@ import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
-import se.nrm.dina.collections.annotation.CollectionsResource;
+//import se.nrm.dina.collections.annotation.CollectionsResource;
 import se.nrm.dina.collections.data.model.EntityBean;
 import se.nrm.dina.collections.exceptions.CollectionsBadRequestException;
 import se.nrm.dina.collections.exceptions.CollectionsConstraintViolationException; 
@@ -163,7 +163,7 @@ public class CollectionsDaoImpl<T extends EntityBean> implements CollectionsDao<
                                                       ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.name(),
                                                       e.getMessage());
         } catch (Exception e) {
-            throw new CollectionsDatabaseException( entity.getClass().getAnnotation(CollectionsResource.class).type(),
+            throw new CollectionsDatabaseException( entity.toString(),
                                                     exceptionsHandler.getErrorSource(e),  
                                                     ErrorCode.DB_EXCEPTION.name(),
                                                     e.getMessage());

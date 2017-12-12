@@ -20,7 +20,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient; 
-import se.nrm.dina.collections.annotation.CollectionsResource; 
+//import se.nrm.dina.collections.annotation.CollectionsResource; 
 //import se.nrm.dina.collections.annotation.CollectionsManyToOne;
 //import se.nrm.dina.collections.annotation.CollectionsOneToMany; 
 import se.nrm.dina.collections.data.model.BaseEntity;
@@ -35,7 +35,7 @@ import se.nrm.dina.collections.data.model.BaseEntity;
 @NamedQueries({
     @NamedQuery(name = "Occurrence.findAll", query = "SELECT o FROM Occurrence o"), 
     @NamedQuery(name = "Occurrence.findById", query = "SELECT o FROM Occurrence o WHERE o.id = :id")})
-@CollectionsResource(type = "occurrence")
+//@CollectionsResource(type = "occurrence")
 public class Occurrence extends BaseEntity {
  
     @Size(max = 100)
