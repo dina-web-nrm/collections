@@ -42,6 +42,7 @@ public class CatalogedUnit extends BaseEntity {
     private String storedUnderTaxonName;
 
     @Basic(optional = false)
+    @Size(min = 6, max = 10)
     @Column(name = "catalog_number")
     private String catalogNumber;
      
