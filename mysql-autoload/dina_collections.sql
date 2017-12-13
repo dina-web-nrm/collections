@@ -56,6 +56,8 @@ CREATE TABLE `feature_observation` (
   `is_of_feature_observation_type_id` bigint(20) NOT NULL COMMENT 'Key to the FeatureObservationType of the FeatureObservation.',
   `feature_observation_text` text COMMENT 'A text describing the observation, in any chosen format.',
   `method_text` varchar(100) DEFAULT NULL,
+  `feature_observation_agent` varchar(100) DEFAULT NULL,
+  `feature_observation_date` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `feature_observation_individual_group_id_idx` (`applies_to_individual_group_id`),
   KEY `feature_observation_feature_observation_type_id_idx` (`is_of_feature_observation_type_id`),
@@ -241,4 +243,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-12-07 15:48:16
+-- Dump completed on 2017-12-13 13:05:26

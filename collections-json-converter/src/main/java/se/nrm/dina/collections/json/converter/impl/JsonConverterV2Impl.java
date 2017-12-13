@@ -172,6 +172,14 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
                             if(fo.getMethodText() != null) {
                                 subBuilder.add("methodText", fo.getMethodText());
                             } 
+                            
+                            if(fo.getFeatureObservationAgent() != null) {
+                                subBuilder.add("featureObservationAgent", fo.getFeatureObservationAgent());
+                            } 
+                            
+                            if(fo.getFeatureObservationDate() != null) {
+                                subBuilder.add("featureObservationDate", fo.getFeatureObservationDate());
+                            } 
                             addFeatureObservationType(fo.getIsOfFeatureObservationType(), subBuilder, include.contains("featureObservationType")); 
                         } 
                         dataArrBuilder.add(subBuilder);

@@ -10,10 +10,14 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;   
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;  
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement; 
 import javax.xml.bind.annotation.XmlTransient; 
 //import se.nrm.dina.collections.annotation.CollectionsResource; 
@@ -34,6 +38,7 @@ import se.nrm.dina.collections.data.model.BaseEntity;
 })
 //@CollectionsResource(type = "featureObservationType")
 public class FeatureObservationType extends BaseEntity {
+ 
   
     @Basic(optional = false)
     @Column(name = "feature_observation_type_name")
@@ -98,5 +103,5 @@ public class FeatureObservationType extends BaseEntity {
     @Override
     public String toString() {
         return "se.nrm.dina.collections.data.model.FeatureObservationType[ id=" + id + " ]";
-    }  
+    }   
 }

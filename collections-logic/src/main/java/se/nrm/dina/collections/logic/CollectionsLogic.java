@@ -407,6 +407,14 @@ public class CollectionsLogic implements Serializable  {
         if(featureObservationJson.containsKey("methodText")) {
             featureObservation.setMethodText(featureObservationJson.getString("methodText"));
         } 
+        
+        if(featureObservationJson.containsKey("featureObservationAgent")) {
+            featureObservation.setFeatureObservationAgent(featureObservationJson.getString("featureObservationAgent"));
+        } 
+        
+        if(featureObservationJson.containsKey("featureObservationDate")) {
+            featureObservation.setFeatureObservationDate(featureObservationJson.getString("featureObservationDate"));
+        } 
         return featureObservation;
     }
 
