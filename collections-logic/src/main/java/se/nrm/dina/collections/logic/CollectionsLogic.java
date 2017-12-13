@@ -398,7 +398,7 @@ public class CollectionsLogic implements Serializable  {
             throw e;
         }
 
-        if (featureObservationJson.containsKey("featureObservationText")) {
+        if (featureObservationJson.containsKey("featureObservationText")) { 
             featureObservation.setFeatureObservationText(featureObservationJson.getString("featureObservationText")); 
         } 
           
@@ -410,7 +410,7 @@ public class CollectionsLogic implements Serializable  {
 
     private void addFeatureObservationsFromJson(JsonObject attrJson, IndividualGroup individualGroup, boolean isEditing) {
         
-        JsonArray featureObservationsJson = json2.getJsonArray(attrJson, "featureObservations");  
+        JsonArray featureObservationsJson = json2.getJsonArray(attrJson, "featureObservations");   
         
         List<FeatureObservation> featureObservations = new ArrayList<>();
         
@@ -513,81 +513,7 @@ public class CollectionsLogic implements Serializable  {
             throw e;
         } 
     }
-
-    //    public JsonObject getAll(String entityName) {
-//        log.info("getAll : {}", entityName);
-//        
-//        Class clazz = Util.getInstance().convertClassNameToClass(entityName); 
-//        return json.convert(dao.findAll(clazz));
-//    }
-//    
-//    public JsonObject getById(String entityName, long id) {
-//        Class clazz = Util.getInstance().convertClassNameToClass(entityName);
-//        return json.convert(dao.findById(id, clazz));
-//    }
-    
-    
-//    public JsonObject saveEntity(String entityName, String theJson ) {
-//        log.info("saveEntity : {} -- {}", entityName, theJson);
-//        
-//        IndividualGroup ig;
-//        try { 
-//            Class clazz = Util.getInstance().convertClassNameToClass(entityName);
-//            EntityBean bean = (EntityBean) mapper.readValue(theJson, clazz);
-//            if(bean instanceof PhysicalUnit) {
-//                PhysicalUnit pu = (PhysicalUnit) bean;
-//                ig = pu.getRepresentsIndividualGroup();
-//                Occurrence occurrence = pu.getIsCollectedAtOccurrence();
-//                if(occurrence != null) {
-//                    occurrence.setInvolvesIndividualGroup(ig); 
-//                }
-//            } else if(bean instanceof IndividualGroup) {
-//                ig = (IndividualGroup) bean; 
-//                
-//                List<Occurrence> occurrences = ig.getOccurrences();
-//                if(occurrences != null) {
-//                    occurrences.stream().forEach(o -> {
-//                        o.setInvolvesIndividualGroup(ig); 
-//                    });
-//                }
-//                
-//                List<PhysicalUnit> physicalUnits = ig.getPhysicalUnits(); 
-//                if(physicalUnits != null) {
-//                    physicalUnits.stream().forEach(p -> {
-//                        p.setRepresentsIndividualGroup(ig);
-//                        if(occurrences != null && !occurrences.isEmpty()) {
-//                            Occurrence o = occurrences.get(0);
-//                            p.setIsCollectedAtOccurrence(o);
-//                        }
-//                    });
-//                } 
-// 
-//                List<FeatureObservation> foList = ig.getFeatureObservations();
-//                if(foList != null) {
-//                    foList.stream().forEach(f -> {
-//                        f.setAppliesToIndividualGroup(ig);
-//                    });
-//                }
-//            }
-//            return json.convert(dao.create(bean));
-//        } catch (IOException ex) {
-//            log.error(ex.getMessage());
-//            return null;
-//        } 
-//    }
-//
-//    public JsonObject savePhysicalUnit(String theJson) {
-//        log.info("savePhysicalUnit : {}", theJson);
-// 
-//        try {
-//            EntityBean bean = mapper.readValue(theJson, PhysicalUnit.class); 
-//            return json.convert(dao.create(bean));
-//        } catch (IOException ex) {
-//            log.error(ex.getMessage());
-//            return null;
-//        } 
-//    }
-
+ 
     /**
      * Deletes an entity in database
      *

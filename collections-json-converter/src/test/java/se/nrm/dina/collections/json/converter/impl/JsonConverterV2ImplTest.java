@@ -13,6 +13,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import se.nrm.dina.collections.data.model.impl.CatalogedUnit;
@@ -147,7 +148,7 @@ public class JsonConverterV2ImplTest {
 
     /**
      * Test of convertIndividualGroup method, of class JsonConverterV2Impl.
-     */
+     */ 
     @Test
     public void testConvertIndividualGroupWithPhysicalUnit() {
         System.out.println("testConvertIndividualGroupWithPhysicalUnit");
@@ -157,7 +158,8 @@ public class JsonConverterV2ImplTest {
         testIndividualGroup.setPhysicalUnits(physicalUnits);
 
         JsonObject result = testInstance.convertIndividualGroup(testIndividualGroup, include);
-
+        System.out.println("result : " + result);
+        
         JsonObject dataJson = result.getJsonObject("data");
         assertNotNull(dataJson);
         assertEquals(dataJson.getString("type"), "individualGroup");

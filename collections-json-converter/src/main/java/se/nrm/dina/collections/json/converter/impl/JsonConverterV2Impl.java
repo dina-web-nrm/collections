@@ -27,7 +27,7 @@ import se.nrm.dina.collections.data.model.impl.PhysicalUnit;
 import se.nrm.dina.collections.exceptions.CollectionsException;
 import se.nrm.dina.collections.json.converter.JsonConverterV2;
 import se.nrm.dina.collections.json.converter.util.CommonString;
-import se.nrm.dina.collections.json.converter.util.Util;
+import se.nrm.dina.collections.json.converter.util.Util; 
 
 /**
  *
@@ -49,8 +49,8 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
             buildIndividualGroup(individualGroup, dataBuilder, include);
         }
         
-        jsonBuilder.add(CommonString.getInstance().getData(), dataBuilder);
-        return jsonBuilder.build();
+        jsonBuilder.add(CommonString.getInstance().getData(), dataBuilder); 
+        return jsonBuilder.build(); 
     }
     
     @Override
@@ -97,7 +97,7 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
         if(physicalUnits != null && !physicalUnits.isEmpty()) {
             physicalUnits.stream()
                     .forEach(pu -> {
-                        subBuilder.add(CommonString.getInstance().getId(), pu.getId());
+                        subBuilder.add(CommonString.getInstance().getId(), pu.getId()); 
                         if(include != null && include.contains("physicalUnit")) {
                             if(pu.getPhysicalUnitText() != null) {
                                 subBuilder.add("physicalUnitText", pu.getPhysicalUnitText());
@@ -175,12 +175,8 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
                             addFeatureObservationType(fo.getIsOfFeatureObservationType(), subBuilder, include.contains("featureObservationType")); 
                         } 
                         dataArrBuilder.add(subBuilder);
-                    }); 
-//            attBuilder.add("featureObservations", dataArrBuilder);
-        } 
-//        else {
-//            attBuilder.add("featureObservations", "null");
-//        }
+                    });  
+        }  
         attBuilder.add("featureObservations", dataArrBuilder);
         
     }
