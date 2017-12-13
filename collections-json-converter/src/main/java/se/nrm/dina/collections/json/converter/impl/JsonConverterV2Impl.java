@@ -160,7 +160,7 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
          
         JsonObjectBuilder subBuilder = Json.createObjectBuilder();
         JsonArrayBuilder dataArrBuilder = Json.createArrayBuilder(); 
-        if(featureObservations != null && !featureObservations.isEmpty()) {
+        if(featureObservations != null && !featureObservations.isEmpty()) { 
             featureObservations.stream()
                     .forEach(fo -> {
                         subBuilder.add(CommonString.getInstance().getId(), fo.getId());  
@@ -201,12 +201,13 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
     }
         
     private void addIdentifications(List<Identification> identification, JsonObjectBuilder attBuilder, boolean isIdentification) {
+        log.info("addIdentifications" );
         
         JsonObjectBuilder subBuilder = Json.createObjectBuilder();
         JsonArrayBuilder dataArrBuilder = Json.createArrayBuilder(); 
         if(identification != null && !identification.isEmpty()) {
             identification.stream()
-                    .forEach(i -> {
+                    .forEach(i -> { 
                         subBuilder.add(CommonString.getInstance().getId(), i.getId());
                         if(isIdentification) {
                             if(i.getIdentificationText() != null) {

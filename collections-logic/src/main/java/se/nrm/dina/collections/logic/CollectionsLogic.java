@@ -346,7 +346,9 @@ public class CollectionsLogic implements Serializable  {
         if (featureObservationJson.containsKey("featureObservationType")) {
             JsonObject typeJson = featureObservationJson.getJsonObject("featureObservationType");
             if(isEditing) {
-                featureObservationTypeId = typeJson.getInt(CommonString.getInstance().getId()); 
+                if(typeJson.containsKey(CommonString.getInstance().getId())) {
+                    featureObservationTypeId = typeJson.getInt(CommonString.getInstance().getId()); 
+                } 
             } 
             if(typeJson.containsKey("featureObservationTypeName")) {
                 featureObservationTypeName = typeJson.getString("featureObservationTypeName");
@@ -377,21 +379,21 @@ public class CollectionsLogic implements Serializable  {
 
     private FeatureObservation getFeatureObservationFromJson(JsonObject featureObservationJson, boolean isEditing) {
 
-        FeatureObservation featureObservation;
+        FeatureObservation featureObservation = new FeatureObservation();
 
         try {
             if (isEditing) {
-                int id = featureObservationJson.getInt(CommonString.getInstance().getId());
-                featureObservation = (FeatureObservation) dao.findById(id, FeatureObservation.class);
-                if(featureObservation == null) {
-                    throw new CollectionsBadRequestException("FeatureObservation [id = ]" + id,
-                                                             ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.getDetail("FeatureObservation [id = ]" + id), 
-                                                             ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.name(),
-                                                             ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.getMessage());
-                }
-            } else {
-                featureObservation = new FeatureObservation();
-            }
+                if(featureObservationJson.containsKey(CommonString.getInstance().getId())) {
+                    int id = featureObservationJson.getInt(CommonString.getInstance().getId());
+                    featureObservation = (FeatureObservation) dao.findById(id, FeatureObservation.class);
+                    if(featureObservation == null) {
+                        throw new CollectionsBadRequestException("FeatureObservation [id = ]" + id,
+                                                                 ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.getDetail("FeatureObservation [id = ]" + id), 
+                                                                 ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.name(),
+                                                                 ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.getMessage());
+                    }
+                }  
+            }   
 
             featureObservation.setIsOfFeatureObservationType(getFeatureObservationTypeFromJson(featureObservationJson, isEditing));
         } catch (CollectionsException e) {
