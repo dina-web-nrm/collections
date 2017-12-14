@@ -62,12 +62,12 @@ public class CollectionsLogic implements Serializable {
     public JsonObject getIndividualGroup(String catalogNumber, String taxonStandarized, String include) {
         log.info("getIndividualGroup : {} -- {}", catalogNumber, taxonStandarized);
 
-        if (catalogNumber == null || catalogNumber.isEmpty()) {
-            throw new CollectionsBadRequestException("individualGroup.physicalUnit.catalogedUnit",
-                    ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getDetail("catalogNumber = " + catalogNumber),
-                    ErrorCode.BAD_REQUEST_MISSING_PARAMETER.name(),
-                    ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getMessage());
-        }
+//        if (catalogNumber == null || catalogNumber.isEmpty()) {
+//            throw new CollectionsBadRequestException("individualGroup.physicalUnit.catalogedUnit",
+//                    ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getDetail("catalogNumber = " + catalogNumber),
+//                    ErrorCode.BAD_REQUEST_MISSING_PARAMETER.name(),
+//                    ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getMessage());
+//        }
 
         return json2.convertIndividualGroups(dao.findByJPQL(QueryBuilder.getInstance()
                 .getQueryFindIndividualGroupsByCatalogNumberAndIdentificationTaxonStanderized(catalogNumber, taxonStandarized)),
