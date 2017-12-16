@@ -17,7 +17,8 @@ public enum ErrorCode {
     
     BAD_REQUEST (""),
     BAD_REQUEST_MISSING_PARAMETER ("Missing parameter."),
-    BAD_REQUEST_ENTITY_NOT_IN_DB ("Entity is not in database."); 
+    BAD_REQUEST_ENTITY_NOT_IN_DB ("Entity is not in database."),
+    BAD_REQUEST_INVALID_JSON ("Invalid json");
     
     private final String detail;
     
