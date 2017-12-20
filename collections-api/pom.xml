@@ -61,10 +61,10 @@
             <artifactId>ejb</artifactId> 
         </dependency>
         
-<!--        <dependency>
+        <dependency>
             <groupId>org.wildfly.swarm</groupId>
             <artifactId>jaxrs-jsonp</artifactId>
-        </dependency>    -->
+        </dependency>    
          
         <dependency>
             <groupId>org.wildfly.swarm</groupId>

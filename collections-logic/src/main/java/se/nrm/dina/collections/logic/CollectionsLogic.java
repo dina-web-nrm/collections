@@ -242,10 +242,14 @@ public class CollectionsLogic implements Serializable {
 
                         if (type.equals("catalogedUnit")) {
                             JsonObject catalogedUnitAttrs = additionalJson.getJsonObject(CommonString.getInstance().getAttributes());
-                            catalogedUnit.setCatalogNumber(catalogedUnitAttrs.getString("catalogNumber"));
-
+                    
                             if (catalogedUnitAttrs.containsKey("catalogNumber")) {
                                 catalogedUnit.setCatalogNumber(catalogedUnitAttrs.getString("catalogNumber"));
+                            } else {
+                                throw new CollectionsBadRequestException("individualGroup.physicalUnit.catalogedUnit",
+                                    ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getDetail("catalogNumber is missing "),
+                                    ErrorCode.BAD_REQUEST_MISSING_PARAMETER.name(),
+                                    ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getMessage());
                             }
 
                             if (catalogedUnitAttrs.containsKey("publishRecord")) {
