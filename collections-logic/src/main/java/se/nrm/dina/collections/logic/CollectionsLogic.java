@@ -108,6 +108,13 @@ public class CollectionsLogic implements Serializable {
 
     public JsonObject updateIndvidualGroup(String theJson, long id) {
         log.info("updateIndvidualGroup");
+        
+        if(theJson.trim().isEmpty()) {
+            throw new CollectionsBadRequestException(ErrorCode.BAD_REQUEST_INVALID_JSON.name(),
+                            ErrorCode.BAD_REQUEST_INVALID_JSON.getDetail("No Json"),
+                            ErrorCode.BAD_REQUEST_INVALID_JSON.name(),
+                            "No Json");
+        }
 
         try {
             IndividualGroup individualGroup = (IndividualGroup) dao.findById(id, IndividualGroup.class);
