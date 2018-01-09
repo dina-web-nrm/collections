@@ -68,7 +68,6 @@ public class CollectionsLogic implements Serializable {
 //                    ErrorCode.BAD_REQUEST_MISSING_PARAMETER.name(),
 //                    ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getMessage());
 //        }
-
         return json2.convertIndividualGroups(dao.findByJPQL(QueryBuilder.getInstance()
                 .getQueryFindIndividualGroupsByCatalogNumberAndIdentificationTaxonStanderized(catalogNumber, taxonStandarized)),
                 include);
@@ -76,22 +75,28 @@ public class CollectionsLogic implements Serializable {
 
     private void buildIndividualGroup(String theJson, boolean isEditing, IndividualGroup individualGroup) {
         JsonObject dataJson = json2.readInJson(theJson).getJsonObject(CommonString.getInstance().getData());
-        JsonObject attrJson = json2.getAttributes(dataJson);
-        JsonArray additionalData = json2.getJsonArray(dataJson, "additionalData");
-
-        if (attrJson.containsKey("causeOfDeathStandardized")) {
-            individualGroup.setCauseOfDeathStandardized(attrJson.getString("causeOfDeathStandardized"));
+        if(dataJson == null) {
+            throw new CollectionsBadRequestException(ErrorCode.BAD_REQUEST_INVALID_JSON.name(),
+                            ErrorCode.BAD_REQUEST_INVALID_JSON.getDetail("No body"),
+                            ErrorCode.BAD_REQUEST_INVALID_JSON.name(),
+                            "No body");
         }
+        
+        try { 
+            JsonObject attrJson = json2.getAttributes(dataJson);
+            JsonArray additionalData = json2.getJsonArray(dataJson, "additionalData");
 
-        if (attrJson.containsKey("causeOfDeathText")) {
-            individualGroup.setCauseOfDeathText(attrJson.getString("causeOfDeathText"));
-        }
+            if (attrJson.containsKey("causeOfDeathStandardized")) {
+                individualGroup.setCauseOfDeathStandardized(attrJson.getString("causeOfDeathStandardized"));
+            }
 
-        if (attrJson.containsKey("originStandardized")) {
-            individualGroup.setOriginStandardized(attrJson.getString("originStandardized"));
-        }
+            if (attrJson.containsKey("causeOfDeathText")) {
+                individualGroup.setCauseOfDeathText(attrJson.getString("causeOfDeathText"));
+            }
 
-        try {
+            if (attrJson.containsKey("originStandardized")) {
+                individualGroup.setOriginStandardized(attrJson.getString("originStandardized"));
+            } 
             addFeatureObservationsFromJson(attrJson, individualGroup, isEditing);
             addOccurrences(attrJson, individualGroup, isEditing);
             addIdentifications(attrJson, individualGroup, isEditing);
@@ -241,29 +246,32 @@ public class CollectionsLogic implements Serializable {
                         String type = additionalJson.getString(CommonString.getInstance().getType());
 
                         if (type.equals("catalogedUnit")) {
-                            JsonObject catalogedUnitAttrs = additionalJson.getJsonObject(CommonString.getInstance().getAttributes());
-                    
-                            if (catalogedUnitAttrs.containsKey("catalogNumber")) {
-                                catalogedUnit.setCatalogNumber(catalogedUnitAttrs.getString("catalogNumber"));
-                            } else {
-                                throw new CollectionsBadRequestException("individualGroup.physicalUnit.catalogedUnit",
-                                    ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getDetail("catalogNumber is missing "),
-                                    ErrorCode.BAD_REQUEST_MISSING_PARAMETER.name(),
-                                    ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getMessage());
-                            }
+                            try {
+                                JsonObject catalogedUnitAttrs = additionalJson.getJsonObject(CommonString.getInstance().getAttributes());
 
-                            if (catalogedUnitAttrs.containsKey("publishRecord")) {
-                                catalogedUnit.setPublishRecord(catalogedUnitAttrs.getBoolean("publishRecord"));
-                            }
+                                if (catalogedUnitAttrs.containsKey("catalogNumber")) {
+                                    catalogedUnit.setCatalogNumber(catalogedUnitAttrs.getString("catalogNumber"));
+                                } else {
+                                    throw new CollectionsBadRequestException("individualGroup.physicalUnit.catalogedUnit",
+                                            ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getDetail("catalogNumber is missing "),
+                                            ErrorCode.BAD_REQUEST_MISSING_PARAMETER.name(),
+                                            ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getMessage());
+                                }
 
-                            if (catalogedUnitAttrs.containsKey("remarks")) {
-                                catalogedUnit.setRemarks(catalogedUnitAttrs.getString("remarks"));
-                            }
+                                if (catalogedUnitAttrs.containsKey("publishRecord")) {
+                                    catalogedUnit.setPublishRecord(catalogedUnitAttrs.getBoolean("publishRecord"));
+                                }
 
-                            if (catalogedUnitAttrs.containsKey("storedUnderTaxonName")) {
-                                catalogedUnit.setStoredUnderTaxonName(catalogedUnitAttrs.getString("storedUnderTaxonName"));
-                            }
+                                if (catalogedUnitAttrs.containsKey("remarks")) {
+                                    catalogedUnit.setRemarks(catalogedUnitAttrs.getString("remarks"));
+                                }
 
+                                if (catalogedUnitAttrs.containsKey("storedUnderTaxonName")) {
+                                    catalogedUnit.setStoredUnderTaxonName(catalogedUnitAttrs.getString("storedUnderTaxonName"));
+                                }
+                            } catch (CollectionsException e) {
+                                throw e;
+                            }
 //                        catalogedUnit.setPhysicalUnits(physicalUnits);
                         }
                     });

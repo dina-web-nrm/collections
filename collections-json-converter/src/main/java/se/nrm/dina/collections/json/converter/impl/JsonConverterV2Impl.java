@@ -24,7 +24,9 @@ import se.nrm.dina.collections.data.model.impl.Identification;
 import se.nrm.dina.collections.data.model.impl.IndividualGroup;
 import se.nrm.dina.collections.data.model.impl.Occurrence;
 import se.nrm.dina.collections.data.model.impl.PhysicalUnit;
+import se.nrm.dina.collections.exceptions.CollectionsBadRequestException;
 import se.nrm.dina.collections.exceptions.CollectionsException;
+import se.nrm.dina.collections.exceptions.utils.ErrorCode;
 import se.nrm.dina.collections.json.converter.JsonConverterV2;
 import se.nrm.dina.collections.json.converter.util.CommonString;
 import se.nrm.dina.collections.json.converter.util.Util; 
@@ -352,8 +354,15 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
     }
     
     @Override
-    public JsonObject getAttributes(JsonObject json) {
-        return json.getJsonObject(CommonString.getInstance().getAttributes());
+    public JsonObject getAttributes(JsonObject json) { 
+         
+        if(json.containsKey(CommonString.getInstance().getAttributes())) {
+            return json.getJsonObject(CommonString.getInstance().getAttributes());
+        }
+        throw new CollectionsBadRequestException(ErrorCode.BAD_REQUEST_INVALID_JSON.name(),
+                            ErrorCode.BAD_REQUEST_INVALID_JSON.getDetail("No body"),
+                            ErrorCode.BAD_REQUEST_INVALID_JSON.name(),
+                            "No body");
     }
      
     @Override
