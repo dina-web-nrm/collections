@@ -76,6 +76,8 @@ public class QueryBuilder {
             }  
             sb.append(" GROUP BY ig"); 
         } 
+        
+        log.info("query : {}", sb.toString());
         return sb.toString();
     }
 

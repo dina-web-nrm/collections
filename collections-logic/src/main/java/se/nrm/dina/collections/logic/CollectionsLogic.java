@@ -61,10 +61,13 @@ public class CollectionsLogic implements Serializable {
 
     public JsonObject getIndividualGroup(String catalogNumber, String taxonStandarized, String include) {
         log.info("getIndividualGroup : {} -- {}", catalogNumber, taxonStandarized);
+        log.info("include : {}", include);
  
         JsonObject json = json2.convertIndividualGroups(dao.findByJPQL(QueryBuilder.getInstance()
                                     .getQueryFindIndividualGroupsByCatalogNumberAndIdentificationTaxonStanderized(catalogNumber, taxonStandarized)),
                                     include); 
+        
+        log.info("json : {}", json.toString());
         return json;
     }
 
