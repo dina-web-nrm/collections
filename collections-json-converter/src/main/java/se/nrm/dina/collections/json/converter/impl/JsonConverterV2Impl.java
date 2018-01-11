@@ -57,7 +57,7 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
     
     @Override
     public JsonObject convertIndividualGroups(List<IndividualGroup> individualGroups, String include) {
-        log.info("convertIndividualGroups");
+        log.info("convertIndividualGroups : {}", individualGroups);
         
         JsonBuilderFactory factory = Json.createBuilderFactory(null);
         JsonObjectBuilder jsonBuilder = factory.createObjectBuilder();
@@ -66,8 +66,8 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
         
         if(individualGroups != null && !individualGroups.isEmpty()) {
             individualGroups.stream()
-                    .forEach(ig -> {
-                        buildIndividualGroup(ig, dataBuilder, include);
+                    .forEach(individualGroup -> {
+                        buildIndividualGroup(individualGroup, dataBuilder, include);
                         dataArrBuilder.add(dataBuilder);
                     });
         }
@@ -98,22 +98,19 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
         JsonArrayBuilder dataArrBuilder = Json.createArrayBuilder(); 
         if(physicalUnits != null && !physicalUnits.isEmpty()) {
             physicalUnits.stream()
-                    .forEach(pu -> {
-                        subBuilder.add(CommonString.getInstance().getId(), pu.getId()); 
+                    .forEach(physicalUnit -> {
+                        subBuilder.add(CommonString.getInstance().getId(), physicalUnit.getId()); 
                         if(include != null && include.contains("physicalUnit")) {
-                            if(pu.getPhysicalUnitText() != null) {
-                                subBuilder.add("physicalUnitText", pu.getPhysicalUnitText());
-                            }
-                            if(pu.getPhysicalUnitText() != null) {
-                                subBuilder.add("physicalUnitText", pu.getPhysicalUnitText());
-                            }
-                            if(pu.getNormalStorageLocationText() != null) {
-                                subBuilder.add("normalStorageLocationText", pu.getNormalStorageLocationText());
-                            }
-                            if(pu.getAlternateIdentifiersText() != null) {
-                                subBuilder.add("alternateIdentifiersText", pu.getAlternateIdentifiersText());
+                            if(physicalUnit.getAlternateIdentifiersText() != null) {
+                                subBuilder.add("alternateIdentifiersText", physicalUnit.getAlternateIdentifiersText());
                             } 
-                            addCatalogedUnit(pu.getBelongsToCatalogedUnit(), subBuilder, include.contains("catalogedUnit"));  
+                            if(physicalUnit.getNormalStorageLocationText() != null) {
+                                subBuilder.add("normalStorageLocationText", physicalUnit.getNormalStorageLocationText());
+                            }
+                            if(physicalUnit.getPhysicalUnitText() != null) {
+                                subBuilder.add("physicalUnitText", physicalUnit.getPhysicalUnitText());
+                            }  
+                            addCatalogedUnit(physicalUnit.getBelongsToCatalogedUnit(), subBuilder, include.contains("catalogedUnit"));  
                         } 
                         dataArrBuilder.add(subBuilder);
                     });  
@@ -124,31 +121,28 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
     private void addCatalogedUnit(CatalogedUnit catalogedUnit, JsonObjectBuilder attBuilder, boolean isCatalogedUnit) { 
         JsonObjectBuilder subBuilder = Json.createObjectBuilder();
         if(catalogedUnit != null) {
-            if(isCatalogedUnit) {
-                if(catalogedUnit.getCatalogNumber() != null) {
-                    subBuilder.add("catalogNumber", catalogedUnit.getCatalogNumber());
-                } 
-                if(catalogedUnit.getId() != null) {
-                    subBuilder.add(CommonString.getInstance().getId(), catalogedUnit.getId()); 
+            subBuilder.add(CommonString.getInstance().getId(), catalogedUnit.getId()); 
+            if(isCatalogedUnit) { 
+                if(catalogedUnit.getPublishRecord() != null) {
+                    subBuilder.add("publishRecord", catalogedUnit.getPublishRecord());
                 }
                 if(catalogedUnit.getRemarks() != null) {
                     subBuilder.add("remarks", catalogedUnit.getRemarks());
                 }
-                if(catalogedUnit.getPublishRecord() != null) {
-                    subBuilder.add("publishRecord", catalogedUnit.getPublishRecord());
-                }
                 if(catalogedUnit.getStoredUnderTaxonName() != null) {
                     subBuilder.add("storedUnderTaxonName", catalogedUnit.getStoredUnderTaxonName());
                 }
-                 
-                attBuilder.add("catalogedUnit", subBuilder);
-            } else {
-                attBuilder.add("catalogedUnitId", catalogedUnit.getId());
+                if(catalogedUnit.getCatalogNumber() != null) {
+                    subBuilder.add("catalogNumber", catalogedUnit.getCatalogNumber());
+                }    
+//                attBuilder.add("catalogedUnit", subBuilder);
             } 
-        } else { 
-            attBuilder.add("catalogedUnit", subBuilder);
-        }
-        
+//            else {
+//                attBuilder.add(CommonString.getInstance().getId(), catalogedUnit.getId()); 
+//          //      attBuilder.add("catalogedUnitId", catalogedUnit.getId()); // TODO: ?
+//            } 
+        } 
+        attBuilder.add("catalogedUnit", subBuilder); 
     }
     
     private void addFeatureObservations(List<FeatureObservation> featureObservations, JsonObjectBuilder attBuilder, String include) {
@@ -159,25 +153,23 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
         JsonArrayBuilder dataArrBuilder = Json.createArrayBuilder(); 
         if(featureObservations != null && !featureObservations.isEmpty()) { 
             featureObservations.stream()
-                    .forEach(fo -> {
-                        subBuilder.add(CommonString.getInstance().getId(), fo.getId());  
+                    .forEach(featureObservation -> {
+                        subBuilder.add(CommonString.getInstance().getId(), featureObservation.getId());  
                         
-                        if(include != null && include.contains("featureObservations")) { 
-                            if(fo.getFeatureObservationText() != null) {
-                                subBuilder.add("featureObservationText", fo.getFeatureObservationText());
-                            }
-                            if(fo.getMethodText() != null) {
-                                subBuilder.add("methodText", fo.getMethodText());
+                        if(include != null && include.contains("featureObservation")) { 
+                            if(featureObservation.getFeatureObservationAgent() != null) {
+                                subBuilder.add("featureObservationAgent", featureObservation.getFeatureObservationAgent());
                             } 
-                            
-                            if(fo.getFeatureObservationAgent() != null) {
-                                subBuilder.add("featureObservationAgent", fo.getFeatureObservationAgent());
+                            if(featureObservation.getFeatureObservationDate() != null) {
+                                subBuilder.add("featureObservationDate", featureObservation.getFeatureObservationDate());
                             } 
-                            
-                            if(fo.getFeatureObservationDate() != null) {
-                                subBuilder.add("featureObservationDate", fo.getFeatureObservationDate());
+                            if(featureObservation.getFeatureObservationText() != null) {
+                                subBuilder.add("featureObservationText", featureObservation.getFeatureObservationText());
                             } 
-                            addFeatureObservationType(fo.getIsOfFeatureObservationType(), subBuilder, include.contains("featureObservationType")); 
+                            if(featureObservation.getMethodText() != null) {
+                                subBuilder.add("methodText", featureObservation.getMethodText());
+                            }  
+                            addFeatureObservationType(featureObservation.getIsOfFeatureObservationType(), subBuilder, include.contains("featureObservationType")); 
                         } 
                         dataArrBuilder.add(subBuilder);
                     });  
@@ -187,60 +179,56 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
     }
             
     private void addFeatureObservationType(FeatureObservationType featureObservationType, JsonObjectBuilder attBuilder, boolean isType) {
-        log.info("addFeatureObservations : {}", isType);
+        log.info("addFeatureObservationType : {} -- {}", featureObservationType, isType);
         
         JsonObjectBuilder subBuilder = Json.createObjectBuilder();
         if(featureObservationType != null) { 
-            if(isType) {
-                subBuilder.add(CommonString.getInstance().getId(), featureObservationType.getId());   
+            subBuilder.add(CommonString.getInstance().getId(), featureObservationType.getId());  
+            if(isType) { 
                 if(featureObservationType.getFeatureObservationTypeName() != null) {
                     subBuilder.add("featureObservationTypeName", featureObservationType.getFeatureObservationTypeName());   
-                } 
-                attBuilder.add("featureObservationType", subBuilder);
-            } else {
-                attBuilder.add("featureObservationTypeId", featureObservationType.getId());
-            } 
-        } else {
-            attBuilder.add("featureObservationType", subBuilder);
+                }  
+            }  
         } 
+        attBuilder.add("featureObservationType", subBuilder); 
     }
         
-    private void addIdentifications(List<Identification> identification, JsonObjectBuilder attBuilder, boolean isIdentification) {
+    private void addIdentifications(List<Identification> identifications, JsonObjectBuilder attBuilder, boolean isIdentification) {
         log.info("addIdentifications" );
         
         JsonObjectBuilder subBuilder = Json.createObjectBuilder();
         JsonArrayBuilder dataArrBuilder = Json.createArrayBuilder(); 
-        if(identification != null && !identification.isEmpty()) {
-            identification.stream()
-                    .forEach(i -> { 
-                        subBuilder.add(CommonString.getInstance().getId(), i.getId());
+        if(identifications != null && !identifications.isEmpty()) {
+            identifications.stream()
+                    .forEach(identification -> { 
+                        subBuilder.add(CommonString.getInstance().getId(), identification.getId());
                         if(isIdentification) {
-                            if(i.getIdentificationText() != null) {
-                                subBuilder.add("identificationText", i.getIdentificationText()); 
+                            if(identification.getIdentificationRemarks() != null) {
+                                subBuilder.add("identificationRemarks", identification.getIdentificationRemarks());
                             }
-                            if(i.getIdentificationRemarks() != null) {
-                                subBuilder.add("identificationRemarks", i.getIdentificationRemarks());
+                            if(identification.getIdentificationText() != null) {
+                                subBuilder.add("identificationText", identification.getIdentificationText()); 
                             }
-                            if(i.getIdentifiedAsVerbatim() != null) {
-                                subBuilder.add("identifiedAsVerbatim", i.getIdentifiedAsVerbatim());
+                            if(identification.getIdentifiedAsVerbatim() != null) {
+                                subBuilder.add("identifiedAsVerbatim", identification.getIdentifiedAsVerbatim());
                             }
-                            if(i.getIdentifiedByAgentText() != null) {
-                                subBuilder.add("identifiedByAgentText", i.getIdentifiedByAgentText());
+                            if(identification.getIdentifiedByAgentText() != null) {
+                                subBuilder.add("identifiedByAgentText", identification.getIdentifiedByAgentText());
                             }
-                            if(i.getIdentifiedDay() != null) {
-                                subBuilder.add("identifiedDay", i.getIdentifiedDay());
+                            if(identification.getIdentifiedDay() != null) {
+                                subBuilder.add("identifiedDay", identification.getIdentifiedDay());
                             }
-                            if(i.getIdentifiedMonth() != null) {
-                                subBuilder.add("identifiedMonth", i.getIdentifiedMonth());
+                            if(identification.getIdentifiedMonth() != null) {
+                                subBuilder.add("identifiedMonth", identification.getIdentifiedMonth());
                             }
-                            if(i.getIdentifiedYear() != null) {
-                                subBuilder.add("identifiedYear", i.getIdentifiedYear());
+                            if(identification.getIdentifiedTaxonNameStandardized() != null) {
+                                subBuilder.add("identifiedTaxonNameStandardized", identification.getIdentifiedTaxonNameStandardized());
                             }
-                            if(i.getIdentifiedTaxonNameStandardized() != null) {
-                                subBuilder.add("identifiedTaxonNameStandardized", i.getIdentifiedTaxonNameStandardized());
-                            }
-                            if(i.getIsCurrentIdentification() != null) {
-                                subBuilder.add("isCurrentIdentification", i.getIsCurrentIdentification()); 
+                            if(identification.getIdentifiedYear() != null) {
+                                subBuilder.add("identifiedYear", identification.getIdentifiedYear());
+                            } 
+                            if(identification.getIsCurrentIdentification() != null) {
+                                subBuilder.add("isCurrentIdentification", identification.getIsCurrentIdentification()); 
                             } 
                         }
                         dataArrBuilder.add(subBuilder);
@@ -255,45 +243,45 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
         JsonArrayBuilder dataArrBuilder = Json.createArrayBuilder(); 
         if(occurrences != null && !occurrences.isEmpty()) {
             occurrences.stream()
-                    .forEach(o -> {
-                        subBuilder.add(CommonString.getInstance().getId(), o.getId());
+                    .forEach(occurrence -> {
+                        subBuilder.add(CommonString.getInstance().getId(), occurrence.getId());
                         if(isOccurrences) {
-                            if(o.getCollectorsText() != null) {
-                                subBuilder.add("collectorsText", o.getCollectorsText()); 
+                            if(occurrence.getCollectorsText() != null) {
+                                subBuilder.add("collectorsText", occurrence.getCollectorsText()); 
                             }
-                            if(o.getLocalityText() != null) {
-                                subBuilder.add("localityText", o.getLocalityText());
+                            if(occurrence.getDayEnd() != null) {
+                                subBuilder.add("dayEnd", occurrence.getDayEnd());
                             }
-                            if(o.getOccurrenceDateText() != null) {
-                                subBuilder.add("occurrenceDateText", o.getOccurrenceDateText());
+                            if(occurrence.getDayStart() != null) {
+                                subBuilder.add("dayStart", occurrence.getDayStart());
                             }
-                            if(o.getDayEnd() != null) {
-                                subBuilder.add("dayEnd", o.getDayEnd());
+                            if(occurrence.getEstablishmentMeansStandardized() != null) {
+                                subBuilder.add("establishmentMeansStandardized", occurrence.getEstablishmentMeansStandardized());
                             }
-                            if(o.getDayStart() != null) {
-                                subBuilder.add("dayStart", o.getDayStart());
-                            }
-                            if(o.getEstablishmentMeansStandardized() != null) {
-                                subBuilder.add("establishmentMeansStandardized", o.getEstablishmentMeansStandardized());
-                            }
-                            if(o.getExpeditionText() != null) {
-                                subBuilder.add("expeditionText", o.getExpeditionText());
+                            if(occurrence.getExpeditionText() != null) {
+                                subBuilder.add("expeditionText", occurrence.getExpeditionText());
                             } 
-                            if(o.getMonthStart() != null) {
-                                subBuilder.add("monthStart", o.getMonthStart());
-                            }
-                            if(o.getMonthEnd() != null) {
-                                subBuilder.add("monthEnd", o.getMonthEnd());
-                            }
-                            if(o.getYearStart() != null) {
-                                subBuilder.add("yearStart", o.getYearStart());
-                            }
-                            if(o.getYearEnd() != null) {
-                                subBuilder.add("yearEnd", o.getYearEnd());
-                            }
-                            if(o.getIsDeathEvent() != null) {
-                                subBuilder.add("isDeathEvent", o.getIsDeathEvent());
+                            if(occurrence.getIsDeathEvent() != null) {
+                                subBuilder.add("isDeathEvent", occurrence.getIsDeathEvent());
                             } 
+                            if(occurrence.getLocalityText() != null) {
+                                subBuilder.add("localityText", occurrence.getLocalityText());
+                            }
+                            if(occurrence.getMonthEnd() != null) {
+                                subBuilder.add("monthEnd", occurrence.getMonthEnd());
+                            }
+                            if(occurrence.getMonthStart() != null) {
+                                subBuilder.add("monthStart", occurrence.getMonthStart());
+                            } 
+                            if(occurrence.getOccurrenceDateText() != null) {
+                                subBuilder.add("occurrenceDateText", occurrence.getOccurrenceDateText());
+                            }
+                            if(occurrence.getYearEnd() != null) {
+                                subBuilder.add("yearEnd", occurrence.getYearEnd());
+                            }
+                            if(occurrence.getYearStart() != null) {
+                                subBuilder.add("yearStart", occurrence.getYearStart());
+                            }  
                         }
                         dataArrBuilder.add(subBuilder);
                     });  

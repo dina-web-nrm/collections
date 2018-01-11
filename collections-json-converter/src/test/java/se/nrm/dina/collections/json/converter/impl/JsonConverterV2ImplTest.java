@@ -12,8 +12,7 @@ import javax.json.JsonObject;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.Ignore;
+import static org.junit.Assert.*; 
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import se.nrm.dina.collections.data.model.impl.CatalogedUnit;
@@ -208,7 +207,7 @@ public class JsonConverterV2ImplTest {
     public void testConvertIndividualGroupWithPhysicalUnitWithoutCatalogedUnit() {
         System.out.println("testConvertIndividualGroupWithPhysicalUnit");
 
-        String include = "physicalUnits";
+        String include = "physicalUnit";
 
         physicalUnits.clear();
         testPhysicalUnit.setBelongsToCatalogedUnit(testCatalogedUnit);
@@ -231,10 +230,8 @@ public class JsonConverterV2ImplTest {
         assertNotNull(physicalUnitsJson);
         assertEquals(physicalUnitsJson.size(), 1);
 
-        JsonObject physicalUnitJson = physicalUnitsJson.getJsonObject(0);
-        int catalogedUnitId = physicalUnitJson.getInt("catalogedUnitId");
-
-        assertEquals(catalogedUnitId, 20);
+        JsonObject physicalUnitJson = physicalUnitsJson.getJsonObject(0);  
+        assertEquals(physicalUnitJson.getInt("id"), 18);
 
 //        assertEquals(attrJson.getString("featureObservations"), "null");
 //        assertEquals(attrJson.getString("identifications"), "null");

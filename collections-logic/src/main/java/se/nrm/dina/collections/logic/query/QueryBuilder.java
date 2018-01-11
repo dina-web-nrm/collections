@@ -26,9 +26,9 @@ public class QueryBuilder {
     public String getQueryFindIndividualGroupsByCatalogNumber(String catalogNumber) {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT ig ");
-        sb.append("FROM IndividualGroup AS ig ");
-        sb.append("JOIN ig.physicalUnits pu ");
-        sb.append("JOIN pu.belongsToCatalogedUnit cu ");
+        sb.append("FROM IndividualGroup ig ");
+        sb.append("LEFT JOIN ig.physicalUnits pu ");
+        sb.append("LEFT JOIN pu.belongsToCatalogedUnit cu ");
         sb.append("WHERE pu.representsIndividualGroup = ig ");
         sb.append("AND pu.belongsToCatalogedUnit = cu ");
         if (catalogNumber != null && !catalogNumber.isEmpty()) {
@@ -40,24 +40,41 @@ public class QueryBuilder {
     }
     
     public String getQueryFindIndividualGroupsByCatalogNumberAndIdentificationTaxonStanderized(String catalogNumber, String taxonStanderized) {
+        
+        boolean isCondition = false;
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT ig ");
-        sb.append("FROM IndividualGroup AS ig ");
-        sb.append("JOIN ig.physicalUnits pu ");
-        sb.append("JOIN pu.belongsToCatalogedUnit cu ");
-        sb.append("JOIN ig.identifications id ");
-        sb.append("WHERE pu.representsIndividualGroup = ig ");
-        sb.append("AND id.appliesToIndividualGroup = ig ");
-        sb.append("AND pu.belongsToCatalogedUnit = cu");
-        if (catalogNumber != null && !catalogNumber.isEmpty()) {
-            sb.append(" AND cu.catalogNumber = '");
-            sb.append(catalogNumber);
-            sb.append("'");
-        } 
+        sb.append("FROM IndividualGroup ig");
+        if(catalogNumber != null && !catalogNumber.isEmpty()) {
+            sb.append(" JOIN ig.physicalUnits pu");
+            sb.append(" JOIN pu.belongsToCatalogedUnit cu");
+            isCondition = true;
+        }
         if(taxonStanderized != null && !taxonStanderized.isEmpty()) {
-            sb.append(" AND id.identifiedTaxonNameStandardized = '");
-            sb.append(taxonStanderized);
-            sb.append("'");
+            sb.append(" JOIN ig.identifications id");
+            isCondition = true;
+        } 
+        if(isCondition) {
+            sb.append(" WHERE");
+            
+            if(catalogNumber != null && !catalogNumber.isEmpty()) {
+                sb.append(" pu.representsIndividualGroup = ig");
+                sb.append(" AND pu.belongsToCatalogedUnit = cu");
+                sb.append(" AND cu.catalogNumber = '");
+                sb.append(catalogNumber);
+                sb.append("'");
+            }
+            
+            if(taxonStanderized != null && !taxonStanderized.isEmpty()) {
+                if(catalogNumber != null && !catalogNumber.isEmpty()) {
+                    sb.append(" AND");
+                }
+                sb.append(" id.appliesToIndividualGroup = ig");
+                sb.append(" AND id.identifiedTaxonNameStandardized = '");
+                sb.append(taxonStanderized);
+                sb.append("'");
+            }  
+            sb.append(" GROUP BY ig"); 
         } 
         return sb.toString();
     }
