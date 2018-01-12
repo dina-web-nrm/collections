@@ -156,7 +156,7 @@ public class CollectionsLogic implements Serializable {
                         "Entity not in database");
             }
         } else {
-            catalogedUnit = new CatalogedUnit();
+            catalogedUnit = new CatalogedUnit(); 
         }
         if (catalogedUnitJson.containsKey("catalogNumber")) {
             catalogedUnit.setCatalogNumber(catalogedUnitJson.getString("catalogNumber"));
@@ -172,10 +172,10 @@ public class CollectionsLogic implements Serializable {
 
         if (catalogedUnitJson.containsKey("storedUnderTaxonName")) {
             catalogedUnit.setStoredUnderTaxonName(catalogedUnitJson.getString("storedUnderTaxonName"));
-        }
+        } 
         return catalogedUnit;
     }
-
+    
     private PhysicalUnit getPhysicalUnitFromJson(CatalogedUnit catalogedUnit, JsonObject physicalUnitJson, boolean isEditing) {
 
         PhysicalUnit physicalUnit = new PhysicalUnit();
@@ -190,7 +190,14 @@ public class CollectionsLogic implements Serializable {
                             "Entity not in database");
                 }
                 try {
-                    catalogedUnit = getCatalogedUnitFromJson(physicalUnitJson.getJsonObject("catalogedUnit"));
+                    if(physicalUnitJson.containsKey("catalogedUnit")) {
+                        catalogedUnit = getCatalogedUnitFromJson(physicalUnitJson.getJsonObject("catalogedUnit"));
+                    } else {
+                        throw new CollectionsBadRequestException("individualGroup.physicalUnit.catalogedUnit",
+                                            ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getDetail("catalogedUnit is missing"),
+                                            ErrorCode.BAD_REQUEST_MISSING_PARAMETER.name(),
+                                            ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getMessage());
+                    } 
                 } catch (CollectionsException e) {
                     throw e;
                 }
@@ -212,9 +219,10 @@ public class CollectionsLogic implements Serializable {
         physicalUnit.setBelongsToCatalogedUnit(catalogedUnit);
         return physicalUnit;
     }
+ 
 
     private void addPhysicalUnit(JsonArray additionalData, JsonObject attrJson,
-                                            IndividualGroup individualGroup, boolean isEditing) throws CollectionsException {
+                                            IndividualGroup individualGroup, boolean isEditing) {
 
         JsonArray physicalUnitsJson = json2.getJsonArray(attrJson, "physicalUnits");
 
