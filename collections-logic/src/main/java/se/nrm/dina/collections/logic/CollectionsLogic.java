@@ -61,14 +61,10 @@ public class CollectionsLogic implements Serializable {
 
     public JsonObject getIndividualGroup(String catalogNumber, String taxonStandarized, String include) {
         log.info("getIndividualGroup : {} -- {}", catalogNumber, taxonStandarized);
-        log.info("include : {}", include);
- 
-        JsonObject json = json2.convertIndividualGroups(dao.findByJPQL(QueryBuilder.getInstance()
+    
+        return json2.convertIndividualGroups(dao.findByJPQL(QueryBuilder.getInstance()
                                     .getQueryFindIndividualGroupsByCatalogNumberAndIdentificationTaxonStanderized(catalogNumber, taxonStandarized)),
-                                    include); 
-        
-        log.info("json : {}", json.toString());
-        return json;
+                                    include);   
     }
 
     private void buildIndividualGroup(String theJson, boolean isEditing, IndividualGroup individualGroup) {
@@ -378,19 +374,24 @@ public class CollectionsLogic implements Serializable {
                             ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.name(),
                             "Entity not in database");
                 }
-            } 
-            
-            if (featureObservationTypeJson.containsKey("featureObservationTypeName")) {
-                String featureObservationTypeName = featureObservationTypeJson.getString("featureObservationTypeName");
-                featureObservationType.setFeatureObservationTypeName(featureObservationTypeName);
             } else {
-                if(!isEditing) {
-                    throw new CollectionsBadRequestException(FeatureObservationType.class.getSimpleName(),
-                                                            ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getDetail(FeatureObservationType.class.getSimpleName() + ".featureObservationTypeName"),
+                throw new CollectionsBadRequestException(FeatureObservationType.class.getSimpleName() + " id is missing.",
+                                                            ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getDetail(FeatureObservationType.class.getSimpleName() + ".id"),
                                                             ErrorCode.BAD_REQUEST_MISSING_PARAMETER.name(),
                                                             ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getMessage());
-                } 
-            } 
+            }
+            
+//            if (featureObservationTypeJson.containsKey("featureObservationTypeName")) {
+//                String featureObservationTypeName = featureObservationTypeJson.getString("featureObservationTypeName");
+//                featureObservationType.setFeatureObservationTypeName(featureObservationTypeName);
+//            } else {
+//                if(!isEditing) {
+//                    throw new CollectionsBadRequestException(FeatureObservationType.class.getSimpleName(),
+//                                                            ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getDetail(FeatureObservationType.class.getSimpleName() + ".featureObservationTypeName"),
+//                                                            ErrorCode.BAD_REQUEST_MISSING_PARAMETER.name(),
+//                                                            ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getMessage());
+//                } 
+//            } 
         } else {
             throw new CollectionsBadRequestException(FeatureObservationType.class.getSimpleName(),
                                                     ErrorCode.BAD_REQUEST_MISSING_PARAMETER.getDetail(FeatureObservationType.class.getSimpleName()),
@@ -453,28 +454,28 @@ public class CollectionsLogic implements Serializable {
                                 ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.getMessage());
                     }
                 }
-            } 
-        } catch (CollectionsException e) {
+            }  
+            if (featureObservationJson.containsKey("featureObservationAgent")) {
+                featureObservation.setFeatureObservationAgent(featureObservationJson.getString("featureObservationAgent"));
+            }
+
+            if (featureObservationJson.containsKey("featureObservationDate")) {
+                featureObservation.setFeatureObservationDate(featureObservationJson.getString("featureObservationDate"));
+            }
+
+            if (featureObservationJson.containsKey("featureObservationText")) {
+                featureObservation.setFeatureObservationText(featureObservationJson.getString("featureObservationText"));
+            }
+
+            if (featureObservationJson.containsKey("methodText")) {
+                featureObservation.setMethodText(featureObservationJson.getString("methodText"));
+            }  
+      
+            featureObservation.setIsOfFeatureObservationType(getFeatureObservationTypeFromJson(featureObservationJson, isEditing)); 
+        } catch(CollectionsException e) {
             throw e;
         }
         
-        if (featureObservationJson.containsKey("featureObservationAgent")) {
-            featureObservation.setFeatureObservationAgent(featureObservationJson.getString("featureObservationAgent"));
-        }
-        
-        if (featureObservationJson.containsKey("featureObservationDate")) {
-            featureObservation.setFeatureObservationDate(featureObservationJson.getString("featureObservationDate"));
-        }
-
-        if (featureObservationJson.containsKey("featureObservationText")) {
-            featureObservation.setFeatureObservationText(featureObservationJson.getString("featureObservationText"));
-        }
-
-        if (featureObservationJson.containsKey("methodText")) {
-            featureObservation.setMethodText(featureObservationJson.getString("methodText"));
-        }  
- 
-        featureObservation.setIsOfFeatureObservationType(getFeatureObservationTypeFromJson(featureObservationJson, isEditing)); 
         return featureObservation;
     }
 
