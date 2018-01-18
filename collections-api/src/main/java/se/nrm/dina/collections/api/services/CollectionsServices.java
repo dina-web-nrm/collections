@@ -62,8 +62,7 @@ public class CollectionsServices implements Serializable {
             return Response.ok(logic.getIndividualGroup(catalogNumber, taxonStandardized, include)).build();
         } catch(CollectionsException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(logic.buildErrorJson(e)).build(); 
-        }
-        
+        } 
     }
     
     @GET

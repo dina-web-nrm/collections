@@ -7,6 +7,7 @@ package se.nrm.dina.collections.json.converter.impl;
 
 import java.io.Serializable;  
 import java.io.StringReader; 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.json.Json;
@@ -22,6 +23,7 @@ import se.nrm.dina.collections.data.model.impl.FeatureObservation;
 import se.nrm.dina.collections.data.model.impl.FeatureObservationType;
 import se.nrm.dina.collections.data.model.impl.Identification;
 import se.nrm.dina.collections.data.model.impl.IndividualGroup;
+import se.nrm.dina.collections.data.model.impl.LocalityInformation;
 import se.nrm.dina.collections.data.model.impl.Occurrence;
 import se.nrm.dina.collections.data.model.impl.PhysicalUnit;
 import se.nrm.dina.collections.exceptions.CollectionsBadRequestException;
@@ -87,7 +89,7 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
         addPhysicalUnits(individualGroup.getPhysicalUnits(), attBuilder, include);
         addFeatureObservations(individualGroup.getFeatureObservations(), attBuilder, include);
         addIdentifications(individualGroup.getIdentifications(), attBuilder, include != null && include.contains("identification"));
-        addOccurrences(individualGroup.getOccurrences(), attBuilder, include != null && include.contains("occurrence"));
+        addOccurrences(individualGroup.getOccurrences(), attBuilder, include);
   
         dataBuilder.add(CommonString.getInstance().getAttributes(), attBuilder);
     }
@@ -215,18 +217,10 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
                             if(identification.getIdentifiedByAgentText() != null) {
                                 subBuilder.add("identifiedByAgentText", identification.getIdentifiedByAgentText());
                             }
-                            if(identification.getIdentifiedDay() != null) {
-                                subBuilder.add("identifiedDay", identification.getIdentifiedDay());
+                            if(identification.getIdentifiedDateText()!= null) {
+                                subBuilder.add("identifiedDateText", identification.getIdentifiedDateText());
                             }
-                            if(identification.getIdentifiedMonth() != null) {
-                                subBuilder.add("identifiedMonth", identification.getIdentifiedMonth());
-                            }
-                            if(identification.getIdentifiedTaxonNameStandardized() != null) {
-                                subBuilder.add("identifiedTaxonNameStandardized", identification.getIdentifiedTaxonNameStandardized());
-                            }
-                            if(identification.getIdentifiedYear() != null) {
-                                subBuilder.add("identifiedYear", identification.getIdentifiedYear());
-                            } 
+                             
                             if(identification.getIsCurrentIdentification() != null) {
                                 subBuilder.add("isCurrentIdentification", identification.getIsCurrentIdentification()); 
                             } 
@@ -237,7 +231,7 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
         attBuilder.add("identifications", dataArrBuilder);
     }
     
-    private void addOccurrences(List<Occurrence> occurrences, JsonObjectBuilder attBuilder, boolean isOccurrences) {
+    private void addOccurrences(List<Occurrence> occurrences, JsonObjectBuilder attBuilder, String include) {
 
         JsonObjectBuilder subBuilder = Json.createObjectBuilder();
         JsonArrayBuilder dataArrBuilder = Json.createArrayBuilder(); 
@@ -245,7 +239,7 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
             occurrences.stream()
                     .forEach(occurrence -> {
                         subBuilder.add(CommonString.getInstance().getId(), occurrence.getId());
-                        if(isOccurrences) {
+                        if(include != null && include.contains("occurrence")) {
                             if(occurrence.getCollectorsText() != null) {
                                 subBuilder.add("collectorsText", occurrence.getCollectorsText()); 
                             }
@@ -282,14 +276,86 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
                             if(occurrence.getYearStart() != null) {
                                 subBuilder.add("yearStart", occurrence.getYearStart());
                             }  
+                            addLocalityInformation(occurrence.getLocalityInformation(), subBuilder, include.contains("localityInformation"));
                         }
                         dataArrBuilder.add(subBuilder);
                     });  
         } 
-        attBuilder.add("occurrences", dataArrBuilder); 
+        attBuilder.add("occurrences", dataArrBuilder);
     }
-    
-    
+
+    private void addLocalityInformation(LocalityInformation localityInformation, JsonObjectBuilder attBuilder, boolean isLocality) {
+        JsonObjectBuilder subBuilder = Json.createObjectBuilder();
+        if (localityInformation != null) {
+            subBuilder.add(CommonString.getInstance().getId(), localityInformation.getId());
+            if (isLocality) {
+                if (localityInformation.getContinentStandardized() != null) {
+                    subBuilder.add("coordinatesVerbatim", localityInformation.getContinentStandardized());
+                }
+
+                if (localityInformation.getCoordinateUncertaintyInMeters() != null) {
+                    subBuilder.add("coordinateUncertaintyInMeters", localityInformation.getCoordinateUncertaintyInMeters());
+                }
+
+                if (localityInformation.getCountryStandardized() != null) {
+                    subBuilder.add("countryStandardized", localityInformation.getCountryStandardized());
+                }
+                
+                if (localityInformation.getDistrictStandardized()!= null) {
+                    subBuilder.add("districtStandardized", localityInformation.getDistrictStandardized());
+                }
+                
+                if (localityInformation.getGeodeticDatumStandardized()!= null) {
+                    subBuilder.add("geodeticDatumStandardized", localityInformation.getGeodeticDatumStandardized());
+                }
+                
+                if (localityInformation.getGeoreferenceSourcesText()!= null) {
+                    subBuilder.add("georeferenceSourcesText", localityInformation.getGeoreferenceSourcesText());
+                }
+                
+                if (localityInformation.getLatitudeStandardized()!= null) {
+                    subBuilder.add("latitudeStandardized", localityInformation.getLatitudeStandardized());
+                }
+                
+                if (localityInformation.getLocalityRemarks()!= null) {
+                    subBuilder.add("localityRemarks", localityInformation.getLocalityRemarks());
+                }
+                
+                if (localityInformation.getLocalityStandardized()!= null) {
+                    subBuilder.add("localityStandardized", localityInformation.getLocalityStandardized());
+                }
+                
+                if (localityInformation.getLocalityVerbatim()!= null) {
+                    subBuilder.add("localityVerbatim", localityInformation.getLocalityVerbatim());
+                }
+                
+                if (localityInformation.getLongitudeStandardized()!= null) {
+                    subBuilder.add("longitudeStandardized", localityInformation.getLongitudeStandardized());
+                }
+                
+                if (localityInformation.getMaximumDepthInMeters()!= null) {
+                    subBuilder.add("maximumDepthInMeters", localityInformation.getMaximumDepthInMeters());
+                }
+                
+                if (localityInformation.getMaximumElevationInMeters()!= null) {
+                    subBuilder.add("maximumElevationInMeters", localityInformation.getMaximumElevationInMeters());
+                }
+                
+                if (localityInformation.getMinimumDepthInMeters()!= null) {
+                    subBuilder.add("minimumDepthInMeters", localityInformation.getMinimumDepthInMeters());
+                }
+                
+                if (localityInformation.getMinimumElevationInMeters()!= null) {
+                    subBuilder.add("minimumElevationInMeters", localityInformation.getMinimumElevationInMeters());
+                }
+                
+                if (localityInformation.getProvinceStandardized()!= null) {
+                    subBuilder.add("provinceStandardized", localityInformation.getProvinceStandardized());
+                }
+            }
+        }
+        attBuilder.add("localityInformation", subBuilder); 
+    }
     
     
     

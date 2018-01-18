@@ -9,17 +9,15 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;   
+import javax.persistence.FetchType;    
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;  
+import javax.persistence.Table;   
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement; 
-import javax.xml.bind.annotation.XmlTransient; 
-//import se.nrm.dina.collections.annotation.CollectionsResource; 
-//import se.nrm.dina.collections.annotation.CollectionsOneToMany; 
+import javax.xml.bind.annotation.XmlTransient;  
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -31,12 +29,10 @@ import se.nrm.dina.collections.data.model.BaseEntity;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "CatalogedUnit.findAll", query = "SELECT c FROM CatalogedUnit c"),
-    @NamedQuery(name = "CatalogedUnit.findById", query = "SELECT c FROM CatalogedUnit c WHERE c.id = :id")
-//    @NamedQuery(name = "CatalogedUnit.findByCatalogNumber", query = "SELECT c FROM CatalogedUnit c WHERE c.catalogNumber = :catalogNumber")
-})
-//@CollectionsResource(type = "catalogedUnit")
+    @NamedQuery(name = "CatalogedUnit.findById", query = "SELECT c FROM CatalogedUnit c WHERE c.id = :id") 
+}) 
 public class CatalogedUnit extends BaseEntity {
- 
+  
     @Size(max = 150)
     @Column(name = "stored_under_taxon_name")
     private String storedUnderTaxonName;
@@ -142,5 +138,5 @@ public class CatalogedUnit extends BaseEntity {
     @Override
     public String toString() {
         return "se.nrm.dina.collections.data.model.CatalogedUnit[ id=" + id + " ]";
-    }    
+    }     
 }

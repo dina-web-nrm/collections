@@ -21,6 +21,7 @@ import se.nrm.dina.collections.data.model.impl.FeatureObservation;
 import se.nrm.dina.collections.data.model.impl.FeatureObservationType;
 import se.nrm.dina.collections.data.model.impl.Identification;
 import se.nrm.dina.collections.data.model.impl.IndividualGroup;
+import se.nrm.dina.collections.data.model.impl.LocalityInformation;
 import se.nrm.dina.collections.data.model.impl.Occurrence;
 import se.nrm.dina.collections.data.model.impl.PhysicalUnit;
 import se.nrm.dina.collections.exceptions.CollectionsBadRequestException;
@@ -317,19 +318,11 @@ public class CollectionsLogic implements Serializable {
         if (jsonObject.containsKey("identifiedByAgentText")) {
             identification.setIdentifiedByAgentText(jsonObject.getString("identifiedByAgentText"));
         }
-
-        if (jsonObject.containsKey("identifiedDay")) {
-            identification.setIdentifiedDay(jsonObject.getInt("identifiedDay"));
+        
+        if (jsonObject.containsKey("identifiedDateText")) {
+            identification.setIdentifiedDateText(jsonObject.getString("identifiedDateText"));
         }
-
-        if (jsonObject.containsKey("identifiedMonth")) {
-            identification.setIdentifiedMonth(jsonObject.getInt("identifiedMonth"));
-        }
-
-        if (jsonObject.containsKey("identifiedYear")) {
-            identification.setIdentifiedYear(jsonObject.getInt("identifiedYear"));
-        }
-
+ 
         if (jsonObject.containsKey("identifiedTaxonNameStandardized")) {
             identification.setIdentifiedTaxonNameStandardized(jsonObject.getString("identifiedTaxonNameStandardized"));
         }
@@ -359,8 +352,8 @@ public class CollectionsLogic implements Serializable {
 
     }
 
-    private FeatureObservationType getFeatureObservationTypeFromJson(JsonObject featureObservationJson, boolean isEditing) {
-        log.info("getFeatureObservationTypeFromJson : {}", isEditing);
+    private FeatureObservationType getFeatureObservationTypeFromJson(JsonObject featureObservationJson) {
+        log.info("getFeatureObservationTypeFromJson");
 
         FeatureObservationType featureObservationType = new FeatureObservationType();
         if(featureObservationJson.containsKey("featureObservationType")) {
@@ -471,7 +464,7 @@ public class CollectionsLogic implements Serializable {
                 featureObservation.setMethodText(featureObservationJson.getString("methodText"));
             }  
       
-            featureObservation.setIsOfFeatureObservationType(getFeatureObservationTypeFromJson(featureObservationJson, isEditing)); 
+            featureObservation.setIsOfFeatureObservationType(getFeatureObservationTypeFromJson(featureObservationJson)); 
         } catch(CollectionsException e) {
             throw e;
         }
@@ -565,8 +558,99 @@ public class CollectionsLogic implements Serializable {
         if (jsonObject.containsKey("yearEnd")) {
             occurrence.setYearEnd(jsonObject.getInt("yearEnd"));
         }
+        
+        if(jsonObject.containsKey("localityInformation")) {
+            LocalityInformation localityInformation = addLocalityInformation(jsonObject.getJsonObject("localityInformation")); 
+            occurrence.setLocalityInformation(localityInformation);
+        } 
         return occurrence;
     }
+    
+    private LocalityInformation addLocalityInformation(JsonObject jsonObject ) {
+        log.info("addLocalityInformation : {}", jsonObject);
+
+        LocalityInformation locality = new LocalityInformation();
+        if (jsonObject.containsKey(CommonString.getInstance().getId())) {
+            int id = jsonObject.getInt(CommonString.getInstance().getId());
+            locality = (LocalityInformation) dao.findById(id, LocalityInformation.class);
+            if (locality == null) {
+                throw new CollectionsBadRequestException("LocalityInformation [id = " + id + "]",
+                        ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.getDetail("LocalityInformation with id = " + id + " not in database"),
+                        ErrorCode.BAD_REQUEST_ENTITY_NOT_IN_DB.name(),
+                        "Entity not in database");
+            }
+        }
+        
+        if(jsonObject.containsKey("continentStandardized")) {
+            locality.setContinentStandardized(jsonObject.getString("continentStandardized"));
+        }
+        
+        if(jsonObject.containsKey("coordinatesVerbatim")) {
+            locality.setCoordinatesVerbatim(jsonObject.getString("coordinatesVerbatim"));
+        }
+      
+        if(jsonObject.containsKey("coordinateUncertaintyInMeters")) {
+            locality.setCoordinateUncertaintyInMeters(jsonObject.getString("coordinateUncertaintyInMeters"));
+        }
+        
+        if(jsonObject.containsKey("countryStandardized")) {
+            locality.setContinentStandardized(jsonObject.getString("countryStandardized"));
+        }
+        
+        if(jsonObject.containsKey("districtStandardized")) {
+            locality.setDistrictStandardized(jsonObject.getString("districtStandardized"));
+        }
+        
+        if(jsonObject.containsKey("geodeticDatumStandardized")) {
+            locality.setGeodeticDatumStandardized(jsonObject.getString("geodeticDatumStandardized"));
+        }
+        
+        if(jsonObject.containsKey("georeferenceSourcesText")) {
+            locality.setGeoreferenceSourcesText(jsonObject.getString("georeferenceSourcesText"));
+        }
+        
+        if(jsonObject.containsKey("latitudeStandardized")) {
+            locality.setLatitudeStandardized(jsonObject.getString("latitudeStandardized"));
+        }
+        
+        if(jsonObject.containsKey("localityRemarks")) {
+            locality.setLocalityRemarks(jsonObject.getString("localityRemarks"));
+        }
+        
+        if(jsonObject.containsKey("localityStandardized")) {
+            locality.setLocalityStandardized(jsonObject.getString("localityStandardized"));
+        }
+    
+        if(jsonObject.containsKey("localityVerbatim")) {
+            locality.setLocalityVerbatim(jsonObject.getString("localityVerbatim"));
+        }
+        
+        if(jsonObject.containsKey("longitudeStandardized")) {
+            locality.setLongitudeStandardized(jsonObject.getString("longitudeStandardized"));
+        }
+        
+        if(jsonObject.containsKey("maximumDepthInMeters")) {
+            locality.setMaximumDepthInMeters(jsonObject.getString("maximumDepthInMeters"));
+        }
+        
+        if(jsonObject.containsKey("maximumElevationInMeters")) {
+            locality.setMaximumElevationInMeters(jsonObject.getString("maximumElevationInMeters"));
+        }
+        
+        if(jsonObject.containsKey("minimumDepthInMeters")) {
+            locality.setMinimumDepthInMeters(jsonObject.getString("minimumDepthInMeters"));
+        }
+        
+        if(jsonObject.containsKey("minimumElevationInMeters")) {
+            locality.setMinimumElevationInMeters(jsonObject.getString("minimumElevationInMeters"));
+        }
+        
+        if(jsonObject.containsKey("provinceStandardized")) {
+            locality.setProvinceStandardized(jsonObject.getString("provinceStandardized"));
+        }
+        
+        return locality;
+    }   
 
     private void addOccurrences(JsonObject attrJson, IndividualGroup individualGroup, boolean isEditing) {
 

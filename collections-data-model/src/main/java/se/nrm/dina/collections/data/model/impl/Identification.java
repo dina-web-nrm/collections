@@ -4,21 +4,19 @@
  * and open the template in the editor.
  */
 package se.nrm.dina.collections.data.model.impl;
-   
+    
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;    
+import javax.persistence.FetchType;     
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Table;   
+import javax.persistence.Table;    
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement; 
-//import se.nrm.dina.collections.annotation.CollectionsResource; 
-//import se.nrm.dina.collections.annotation.CollectionsManyToOne; 
+import javax.xml.bind.annotation.XmlRootElement;  
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -30,10 +28,9 @@ import se.nrm.dina.collections.data.model.BaseEntity;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Identification.findAll", query = "SELECT i FROM Identification i"), 
-    @NamedQuery(name = "Identification.findById", query = "SELECT i FROM Identification i WHERE i.id = :id")})
-//@CollectionsResource(type = "identification")
+    @NamedQuery(name = "Identification.findById", query = "SELECT i FROM Identification i WHERE i.id = :id")}) 
 public class Identification extends BaseEntity {
- 
+  
     @Column(name = "is_current_identification")
     private Boolean isCurrentIdentification;
  
@@ -49,19 +46,16 @@ public class Identification extends BaseEntity {
     @Size(max = 100)
     @Column(name = "identified_by_agent_text")
     private String identifiedByAgentText;
-    
-    @Column(name = "identified_day")
-    private Integer identifiedDay;
-    
-    @Column(name = "identified_month")
-    private Integer identifiedMonth;
-    
-    @Column(name = "identified_year")
-    private Integer identifiedYear;
+ 
+    @Size(max = 255)
+    @Column(name = "identified_date_text")
+    private String identifiedDateText;
     
     @Size(max = 255)
     @Column(name = "identified_taxon_name_standardized")
     private String identifiedTaxonNameStandardized;
+    
+
  
     @Lob
     @Column(name = "identification_text")
@@ -128,31 +122,7 @@ public class Identification extends BaseEntity {
     public void setIdentifiedByAgentText(String identifiedByAgentText) {
         this.identifiedByAgentText = identifiedByAgentText;
     }
-
-    public Integer getIdentifiedDay() {
-        return identifiedDay;
-    }
-
-    public void setIdentifiedDay(Integer identifiedDay) {
-        this.identifiedDay = identifiedDay;
-    }
-
-    public Integer getIdentifiedMonth() {
-        return identifiedMonth;
-    }
-
-    public void setIdentifiedMonth(Integer identifiedMonth) {
-        this.identifiedMonth = identifiedMonth;
-    }
-
-    public Integer getIdentifiedYear() {
-        return identifiedYear;
-    }
-
-    public void setIdentifiedYear(Integer identifiedYear) {
-        this.identifiedYear = identifiedYear;
-    }
-
+ 
     public String getIdentifiedTaxonNameStandardized() {
         return identifiedTaxonNameStandardized;
     }
@@ -168,7 +138,15 @@ public class Identification extends BaseEntity {
     public void setIsCurrentIdentification(Boolean isCurrentIdentification) {
         this.isCurrentIdentification = isCurrentIdentification;
     }
-  
+
+    public String getIdentifiedDateText() {
+        return identifiedDateText;
+    }
+
+    public void setIdentifiedDateText(String identifiedDateText) {
+        this.identifiedDateText = identifiedDateText;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -189,6 +167,5 @@ public class Identification extends BaseEntity {
     @Override
     public String toString() {
         return "se.nrm.dina.collections.data.model.Identification[ id=" + id + " ]";
-    }    
- 
+    }     
 }

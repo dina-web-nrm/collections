@@ -5,24 +5,21 @@
  */
 package se.nrm.dina.collections.data.model.impl;
   
-import java.util.List;   
+import java.util.List;     
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;   
+import javax.persistence.FetchType;     
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;  
+import javax.persistence.Table;    
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient; 
-//import se.nrm.dina.collections.annotation.CollectionsResource; 
-//import se.nrm.dina.collections.annotation.CollectionsManyToOne;
-//import se.nrm.dina.collections.annotation.CollectionsOneToMany; 
+import javax.xml.bind.annotation.XmlTransient;  
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -34,10 +31,11 @@ import se.nrm.dina.collections.data.model.BaseEntity;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Occurrence.findAll", query = "SELECT o FROM Occurrence o"), 
-    @NamedQuery(name = "Occurrence.findById", query = "SELECT o FROM Occurrence o WHERE o.id = :id")})
-//@CollectionsResource(type = "occurrence")
+    @NamedQuery(name = "Occurrence.findById", query = "SELECT o FROM Occurrence o WHERE o.id = :id")}) 
 public class Occurrence extends BaseEntity {
+
  
+
     @Size(max = 100)
     @Column(name = "establishment_means_standardized")
     private String establishmentMeansStandardized;
@@ -80,13 +78,17 @@ public class Occurrence extends BaseEntity {
     private String occurrenceDateText;
     
     @JoinColumn(name = "involves_individual_group_id", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-//    @CollectionsManyToOne(name = "involvesIndividualGroup", type = "IndividualGroup") 
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}) 
     private IndividualGroup involvesIndividualGroup;
     
-    @OneToMany(mappedBy = "isCollectedAtOccurrence", fetch = FetchType.LAZY)
-//    @CollectionsOneToMany(name = "physicalUnits", type = "PhysicalUnit") 
+    @OneToMany(mappedBy = "isCollectedAtOccurrence", fetch = FetchType.LAZY) 
     private List<PhysicalUnit> physicalUnits;
+ 
+    @JoinColumn(name = "locality_information", referencedColumnName = "id")
+    @ManyToOne
+    private LocalityInformation localityInformation;
+  
+ 
 
     public Occurrence() {
     }
@@ -216,8 +218,18 @@ public class Occurrence extends BaseEntity {
 
     public void setIsDeathEvent(Boolean isDeathEvent) {
         this.isDeathEvent = isDeathEvent;
-    } 
+    }
+
+    public LocalityInformation getLocalityInformation() {
+        return localityInformation;
+    }
+
+    public void setLocalityInformation(LocalityInformation localityInformation) {
+        this.localityInformation = localityInformation;
+    }
+  
     
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -238,5 +250,5 @@ public class Occurrence extends BaseEntity {
     @Override
     public String toString() {
         return "se.nrm.dina.collections.data.model.Occurrence[ id=" + id + " ]";
-    }    
+    }      
 }

@@ -1,27 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="2.1" 
-             xmlns="http://xmlns.jcp.org/xml/ns/persistence" 
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-    
-    
-    <persistence-unit name="jpaPU" transaction-type="JTA">
-        
-        <!--<jta-data-source>java:/jdbc/DinaDS</jta-data-source>-->
-        <jta-data-source>java:jboss/datasources/DinaDS</jta-data-source>
-
-        <exclude-unlisted-classes>false</exclude-unlisted-classes>
-
-        <properties> 
-            <property name="eclipselink.jdbc.batch-writing" value="JDBC"/>
-            <property name="eclipselink.jdbc.batch-writing.size" value="1000"/>
-            <property name="eclipselink.logging.level" value="off"/>
-            <!--<property name="eclipselink.weaving" value="true"/>-->
-        </properties>
-    </persistence-unit> 
-    
-     
-<!--    <persistence-unit name="se.nrm.dina_collections-data-model_jar_0.1-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="jpaPU" transaction-type="JTA">
+    <!--<jta-data-source>java:/jdbc/DinaDS</jta-data-source>-->
+    <jta-data-source>java:jboss/datasources/DinaDS</jta-data-source>
+    <class>se.nrm.dina.collections.data.model.impl.LocalityInformation</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="eclipselink.jdbc.batch-writing" value="JDBC"/>
+      <property name="eclipselink.jdbc.batch-writing.size" value="1000"/>
+      <property name="eclipselink.logging.level" value="off"/>
+      <!--<property name="eclipselink.weaving" value="true"/>-->
+    </properties>
+  </persistence-unit>
+  <!--    <persistence-unit name="se.nrm.dina_collections-data-model_jar_0.1-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         
         <class>se.nrm.dina.collections.data.model.CatalogedUnit</class>

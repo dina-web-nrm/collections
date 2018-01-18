@@ -12,8 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Version; 
-//import se.nrm.dina.collections.annotation.CollectionsId;
+import javax.persistence.Version;  
 
 
 /**
@@ -26,8 +25,7 @@ public abstract class BaseEntity implements Serializable, EntityBean {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
-//    @CollectionsId
+    @Column(name = "id") 
     protected Long id;
       
     @Version

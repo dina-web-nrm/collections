@@ -9,19 +9,13 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;   
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.FetchType;    
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;  
-import javax.validation.constraints.NotNull;
+import javax.persistence.Table;   
 import javax.xml.bind.annotation.XmlRootElement; 
-import javax.xml.bind.annotation.XmlTransient; 
-//import se.nrm.dina.collections.annotation.CollectionsResource; 
-//import se.nrm.dina.collections.annotation.CollectionsOneToMany; 
+import javax.xml.bind.annotation.XmlTransient;  
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -33,19 +27,15 @@ import se.nrm.dina.collections.data.model.BaseEntity;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "FeatureObservationType.findAll", query = "SELECT f FROM FeatureObservationType f"), 
-    @NamedQuery(name = "FeatureObservationType.findById", query = "SELECT f FROM FeatureObservationType f WHERE f.id = :id")
-//    @NamedQuery(name = "FeatureObservationType.findByFeatureObservationTypeName", query = "SELECT f FROM FeatureObservationType f WHERE f.featureObservationTypeName = :featureObservationTypeName")
-})
-//@CollectionsResource(type = "featureObservationType")
+    @NamedQuery(name = "FeatureObservationType.findById", query = "SELECT f FROM FeatureObservationType f WHERE f.id = :id")    
+}) 
 public class FeatureObservationType extends BaseEntity {
- 
   
     @Basic(optional = false)
     @Column(name = "feature_observation_type_name")
     private String featureObservationTypeName;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "isOfFeatureObservationType", fetch = FetchType.LAZY)
-//    @CollectionsOneToMany(name = "featureObservations", type = "FeatureObservation") 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "isOfFeatureObservationType", fetch = FetchType.LAZY) 
     private List<FeatureObservation> featureObservations;
 
     public FeatureObservationType() {
@@ -103,5 +93,5 @@ public class FeatureObservationType extends BaseEntity {
     @Override
     public String toString() {
         return "se.nrm.dina.collections.data.model.FeatureObservationType[ id=" + id + " ]";
-    }   
+    }    
 }

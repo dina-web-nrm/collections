@@ -4,26 +4,19 @@
  * and open the template in the editor.
  */
 package se.nrm.dina.collections.data.model.impl;
-    
-import javax.persistence.Basic;
+     
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;   
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.FetchType;    
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Table;  
-import javax.validation.constraints.NotNull;
+import javax.persistence.Table;   
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement; 
-//import se.nrm.dina.collections.annotation.CollectionsResource; 
-//import se.nrm.dina.collections.annotation.CollectionsManyToOne;  
+import javax.xml.bind.annotation.XmlRootElement;  
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -35,10 +28,9 @@ import se.nrm.dina.collections.data.model.BaseEntity;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "FeatureObservation.findAll", query = "SELECT f FROM FeatureObservation f"), 
-    @NamedQuery(name = "FeatureObservation.findById", query = "SELECT f FROM FeatureObservation f WHERE f.id = :id")})
-//@CollectionsResource(type = "featureObservation")
+    @NamedQuery(name = "FeatureObservation.findById", query = "SELECT f FROM FeatureObservation f WHERE f.id = :id")}) 
 public class FeatureObservation extends BaseEntity {
- 
+  
     @Size(max = 100)
     @Column(name = "feature_observation_agent")
     private String featureObservationAgent;
@@ -151,5 +143,5 @@ public class FeatureObservation extends BaseEntity {
     @Override
     public String toString() {
         return "se.nrm.dina.collections.data.model.FeatureObservation[ id=" + id + " ]";
-    }      
+    }       
 }

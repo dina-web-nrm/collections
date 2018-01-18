@@ -5,20 +5,23 @@
  */
 package se.nrm.dina.collections.data.model.impl;
    
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;   
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;  
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement; 
-//import se.nrm.dina.collections.annotation.CollectionsResource; 
-//import se.nrm.dina.collections.annotation.CollectionsManyToOne; 
+import javax.xml.bind.annotation.XmlRootElement;  
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -30,8 +33,7 @@ import se.nrm.dina.collections.data.model.BaseEntity;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PhysicalUnit.findAll", query = "SELECT p FROM PhysicalUnit p"), 
-    @NamedQuery(name = "PhysicalUnit.findById", query = "SELECT p FROM PhysicalUnit p WHERE p.id = :id")})
-//@CollectionsResource(type = "physicalUnit")
+    @NamedQuery(name = "PhysicalUnit.findById", query = "SELECT p FROM PhysicalUnit p WHERE p.id = :id")}) 
 public class PhysicalUnit extends BaseEntity {
  
     @Lob
@@ -49,18 +51,15 @@ public class PhysicalUnit extends BaseEntity {
     private String physicalUnitText;
   
     @JoinColumn(name = "belongs_to_cataloged_unit_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-//    @CollectionsManyToOne(name = "catalogedUnit", type="CatalogedUnit") 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}) 
     private CatalogedUnit belongsToCatalogedUnit;
     
     @JoinColumn(name = "represents_individual_group_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-//    @CollectionsManyToOne(name = "individualGroup", type="IndividualGroup") 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}) 
     private IndividualGroup representsIndividualGroup;
     
     @JoinColumn(name = "is_collected_at_occurrence_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-//    @CollectionsManyToOne(name = "occurrence", type="Occurrence") 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}) 
     private Occurrence isCollectedAtOccurrence;
 
     public PhysicalUnit() {
@@ -149,5 +148,5 @@ public class PhysicalUnit extends BaseEntity {
     @Override
     public String toString() {
         return "se.nrm.dina.collections.data.model.PhysicalUnit[ id=" + id + " ]";
-    }   
+    }    
 }

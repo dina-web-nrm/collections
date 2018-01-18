@@ -5,26 +5,19 @@
  */
 package se.nrm.dina.collections.data.model.impl;
   
-import java.util.List;   
-import javax.persistence.Basic;
+import java.util.List;     
 import javax.persistence.CascadeType;  
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;   
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.FetchType;     
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;  
-import javax.validation.constraints.NotNull;
+import javax.persistence.Table;    
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement; 
-import javax.xml.bind.annotation.XmlTransient; 
-//import se.nrm.dina.collections.annotation.CollectionsResource; 
-//import se.nrm.dina.collections.annotation.CollectionsOneToMany; 
+import javax.xml.bind.annotation.XmlTransient;  
 import se.nrm.dina.collections.data.model.BaseEntity;
 
 /**
@@ -36,8 +29,7 @@ import se.nrm.dina.collections.data.model.BaseEntity;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "IndividualGroup.findAll", query = "SELECT i FROM IndividualGroup i"), 
-    @NamedQuery(name = "IndividualGroup.findById", query = "SELECT i FROM IndividualGroup i WHERE i.id = :id")})
-//@CollectionsResource(type = "individualGroup")
+    @NamedQuery(name = "IndividualGroup.findById", query = "SELECT i FROM IndividualGroup i WHERE i.id = :id")}) 
 public class IndividualGroup extends BaseEntity {
  
     @Size(max = 255)
@@ -53,22 +45,18 @@ public class IndividualGroup extends BaseEntity {
     @Column(name = "origin_standardized")
     private String originStandardized;
  
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "appliesToIndividualGroup", fetch = FetchType.LAZY)
-//    @CollectionsOneToMany(name = "identifications", type = "Identification") 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "appliesToIndividualGroup", fetch = FetchType.LAZY) 
     private List<Identification> identifications;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "appliesToIndividualGroup", fetch = FetchType.LAZY)
-//    @CollectionsOneToMany(name = "featureObservations", type = "FeatureObservation") 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "appliesToIndividualGroup", fetch = FetchType.LAZY) 
     private List<FeatureObservation> featureObservations;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "involvesIndividualGroup", fetch = FetchType.LAZY) 
-//    @CollectionsOneToMany(name = "occurrences", type = "Occurrence")  
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "involvesIndividualGroup", fetch = FetchType.LAZY)  
     private List<Occurrence> occurrences;
     
     @OneToMany( cascade = CascadeType.ALL, 
                 mappedBy = "representsIndividualGroup",  
-                fetch = FetchType.LAZY) 
-//    @CollectionsOneToMany(name = "physicalUnits", type = "PhysicalUnit")  
+                fetch = FetchType.LAZY)  
     private List<PhysicalUnit> physicalUnits;
 
     public IndividualGroup() {
@@ -168,5 +156,5 @@ public class IndividualGroup extends BaseEntity {
     @Override
     public String toString() {
         return "se.nrm.dina.collections.data.model.IndividualGroup[ id=" + id + " ]";
-    }     
+    }       
 }
