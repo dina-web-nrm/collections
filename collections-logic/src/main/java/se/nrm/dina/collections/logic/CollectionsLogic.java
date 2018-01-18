@@ -318,11 +318,23 @@ public class CollectionsLogic implements Serializable {
         if (jsonObject.containsKey("identifiedByAgentText")) {
             identification.setIdentifiedByAgentText(jsonObject.getString("identifiedByAgentText"));
         }
-        
+
         if (jsonObject.containsKey("identifiedDateText")) {
             identification.setIdentifiedDateText(jsonObject.getString("identifiedDateText"));
         }
- 
+
+        if (jsonObject.containsKey("identifiedDay")) {
+            identification.setIdentifiedDay(jsonObject.getInt("identifiedDay"));
+        }
+
+        if (jsonObject.containsKey("identifiedMonth")) {
+            identification.setIdentifiedMonth(jsonObject.getInt("identifiedMonth"));
+        }
+
+        if (jsonObject.containsKey("identifiedYear")) {
+            identification.setIdentifiedYear(jsonObject.getInt("identifiedYear"));
+        }
+
         if (jsonObject.containsKey("identifiedTaxonNameStandardized")) {
             identification.setIdentifiedTaxonNameStandardized(jsonObject.getString("identifiedTaxonNameStandardized"));
         }
@@ -534,11 +546,7 @@ public class CollectionsLogic implements Serializable {
         if (jsonObject.containsKey("isDeathEvent")) {
             occurrence.setIsDeathEvent(jsonObject.getBoolean("isDeathEvent"));
         }
-
-        if (jsonObject.containsKey("localityText")) {
-            occurrence.setLocalityText(jsonObject.getString("localityText"));
-        }
-
+  
         if (jsonObject.containsKey("monthStart")) {
             occurrence.setMonthStart(jsonObject.getInt("monthStart"));
         }

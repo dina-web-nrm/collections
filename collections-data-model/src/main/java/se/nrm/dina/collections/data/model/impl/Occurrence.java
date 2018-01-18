@@ -68,11 +68,7 @@ public class Occurrence extends BaseEntity {
     @Lob
     @Column(name = "collectors_text")
     private String collectorsText;
-    
-    @Lob
-    @Column(name = "locality_text")
-    private String localityText;
-    
+      
     @Lob
     @Column(name = "occurrence_date_text")
     private String occurrenceDateText;
@@ -85,7 +81,7 @@ public class Occurrence extends BaseEntity {
     private List<PhysicalUnit> physicalUnits;
  
     @JoinColumn(name = "locality_information", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}) 
     private LocalityInformation localityInformation;
   
  
@@ -114,15 +110,7 @@ public class Occurrence extends BaseEntity {
     public void setCollectorsText(String collectorsText) {
         this.collectorsText = collectorsText;
     }
-
-    public String getLocalityText() {
-        return localityText;
-    }
-
-    public void setLocalityText(String localityText) {
-        this.localityText = localityText;
-    }
-
+ 
     public String getOccurrenceDateText() {
         return occurrenceDateText;
     }

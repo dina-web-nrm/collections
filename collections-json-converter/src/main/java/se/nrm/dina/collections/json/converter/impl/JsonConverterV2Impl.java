@@ -6,8 +6,7 @@
 package se.nrm.dina.collections.json.converter.impl;
 
 import java.io.Serializable;  
-import java.io.StringReader; 
-import java.math.BigDecimal;
+import java.io.StringReader;  
 import java.util.ArrayList;
 import java.util.List;
 import javax.json.Json;
@@ -220,6 +219,18 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
                             if(identification.getIdentifiedDateText()!= null) {
                                 subBuilder.add("identifiedDateText", identification.getIdentifiedDateText());
                             }
+                            
+                            if(identification.getIdentifiedDay()!= null) {
+                                subBuilder.add("identifiedDay", identification.getIdentifiedDay());
+                            }
+                            
+                            if(identification.getIdentifiedMonth()!= null) {
+                                subBuilder.add("identifiedMonth", identification.getIdentifiedMonth());
+                            }
+                            
+                            if(identification.getIdentifiedYear()!= null) {
+                                subBuilder.add("identifiedYear", identification.getIdentifiedYear());
+                            }
                              
                             if(identification.getIsCurrentIdentification() != null) {
                                 subBuilder.add("isCurrentIdentification", identification.getIsCurrentIdentification()); 
@@ -258,9 +269,7 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
                             if(occurrence.getIsDeathEvent() != null) {
                                 subBuilder.add("isDeathEvent", occurrence.getIsDeathEvent());
                             } 
-                            if(occurrence.getLocalityText() != null) {
-                                subBuilder.add("localityText", occurrence.getLocalityText());
-                            }
+              
                             if(occurrence.getMonthEnd() != null) {
                                 subBuilder.add("monthEnd", occurrence.getMonthEnd());
                             }

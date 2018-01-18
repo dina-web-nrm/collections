@@ -110,7 +110,7 @@ public class LocalityInformation extends BaseEntity {
     @Column(name = "province_standardized")
     private String provinceStandardized;
     
-    @OneToMany(mappedBy = "localityInformationId")
+    @OneToMany(mappedBy = "localityInformation")
     private List<Occurrence> occurrenceList;
 
     public LocalityInformation() {

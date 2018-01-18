@@ -4,17 +4,17 @@
  * and open the template in the editor.
  */
 package se.nrm.dina.collections.data.model.impl;
-    
+     
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;     
+import javax.persistence.FetchType;      
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Table;    
+import javax.persistence.Table;     
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;  
 import se.nrm.dina.collections.data.model.BaseEntity;
@@ -30,7 +30,7 @@ import se.nrm.dina.collections.data.model.BaseEntity;
     @NamedQuery(name = "Identification.findAll", query = "SELECT i FROM Identification i"), 
     @NamedQuery(name = "Identification.findById", query = "SELECT i FROM Identification i WHERE i.id = :id")}) 
 public class Identification extends BaseEntity {
-  
+ 
     @Column(name = "is_current_identification")
     private Boolean isCurrentIdentification;
  
@@ -50,6 +50,15 @@ public class Identification extends BaseEntity {
     @Size(max = 255)
     @Column(name = "identified_date_text")
     private String identifiedDateText;
+    
+    @Column(name = "identified_day")
+    private Integer identifiedDay;
+    
+    @Column(name = "identified_month")
+    private Integer identifiedMonth;
+    
+    @Column(name = "identified_year")
+    private Integer identifiedYear;
     
     @Size(max = 255)
     @Column(name = "identified_taxon_name_standardized")
@@ -146,6 +155,30 @@ public class Identification extends BaseEntity {
     public void setIdentifiedDateText(String identifiedDateText) {
         this.identifiedDateText = identifiedDateText;
     }
+    
+    public Integer getIdentifiedDay() {
+        return identifiedDay;
+    }
+
+    public void setIdentifiedDay(Integer identifiedDay) {
+        this.identifiedDay = identifiedDay;
+    }
+
+    public Integer getIdentifiedMonth() {
+        return identifiedMonth;
+    }
+
+    public void setIdentifiedMonth(Integer identifiedMonth) {
+        this.identifiedMonth = identifiedMonth;
+    }
+
+    public Integer getIdentifiedYear() {
+        return identifiedYear;
+    }
+
+    public void setIdentifiedYear(Integer identifiedYear) {
+        this.identifiedYear = identifiedYear;
+    }
 
     @Override
     public int hashCode() {
@@ -167,5 +200,5 @@ public class Identification extends BaseEntity {
     @Override
     public String toString() {
         return "se.nrm.dina.collections.data.model.Identification[ id=" + id + " ]";
-    }     
+    }      
 }

@@ -115,11 +115,12 @@ CREATE TABLE `identification` (
   `identification_remarks` text,
   `identified_as_verbatim` varchar(255) DEFAULT NULL,
   `identified_by_agent_text` varchar(100) DEFAULT NULL,
+  `identified_taxon_name_standardized` varchar(255) DEFAULT NULL,
+  `is_current_identification` bit(1) DEFAULT NULL,
+  `identified_date_text` varchar(255) DEFAULT NULL,
   `identified_day` int(11) DEFAULT NULL,
   `identified_month` int(11) DEFAULT NULL,
   `identified_year` int(11) DEFAULT NULL,
-  `identified_taxon_name_standardized` varchar(255) DEFAULT NULL,
-  `is_current_identification` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `identification_individual_group_id_idx` (`applies_to_individual_group_id`),
   CONSTRAINT `identification_individual_group_id` FOREIGN KEY (`applies_to_individual_group_id`) REFERENCES `individual_group` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -162,6 +163,46 @@ LOCK TABLES `individual_group` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `locality_information`
+--
+
+DROP TABLE IF EXISTS `locality_information`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `locality_information` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `version` int(11) NOT NULL DEFAULT '1',
+  `continent_standardized` varchar(255) DEFAULT NULL,
+  `coordinates_verbatim` varchar(100) DEFAULT NULL,
+  `coordinate_uncertainty_in_meters` varchar(45) DEFAULT NULL,
+  `country_standardized` varchar(255) DEFAULT NULL,
+  `district_standardized` varchar(255) DEFAULT NULL,
+  `geodetic_datum_standardized` varchar(100) DEFAULT NULL,
+  `georeference_sources_text` varchar(255) DEFAULT NULL,
+  `latitude_standardized` varchar(45) DEFAULT NULL,
+  `locality_remarks` text,
+  `locality_standardized` varchar(255) DEFAULT NULL,
+  `locality_verbatim` varchar(255) DEFAULT NULL,
+  `longitude_standardized` varchar(45) DEFAULT NULL,
+  `maximum_depth_in_meters` varchar(20) DEFAULT NULL,
+  `maximum_elevation_in_meters` varchar(20) DEFAULT NULL,
+  `minimum_depth_in_meters` varchar(20) DEFAULT NULL,
+  `minimum_elevation_in_meters` varchar(20) DEFAULT NULL,
+  `province_standardized` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `locality_information`
+--
+
+LOCK TABLES `locality_information` WRITE;
+/*!40000 ALTER TABLE `locality_information` DISABLE KEYS */;
+/*!40000 ALTER TABLE `locality_information` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `occurrence`
 --
 
@@ -173,7 +214,7 @@ CREATE TABLE `occurrence` (
   `version` int(11) NOT NULL DEFAULT '1',
   `involves_individual_group_id` bigint(20) NOT NULL COMMENT 'Key to IndividualGroup involved in the occurrence.',
   `collectors_text` text COMMENT 'A text describing the collector(s) in any chosen format.',
-  `locality_text` text COMMENT 'A text describing where the Occurrence took place, in any chosen format.',
+  `locality_information` bigint(20) DEFAULT NULL COMMENT 'A text describing where the Occurrence took place, in any chosen format.',
   `occurrence_date_text` text COMMENT 'A text describing the date of the Occurrence, in any chosen format.',
   `day_start` int(11) DEFAULT NULL,
   `day_end` int(11) DEFAULT NULL,
@@ -186,7 +227,9 @@ CREATE TABLE `occurrence` (
   `is_death_event` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `occurrence_individual_group_id_idx` (`involves_individual_group_id`),
-  CONSTRAINT `occurrence_individual_group_id` FOREIGN KEY (`involves_individual_group_id`) REFERENCES `individual_group` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `occurrence_locality_information_id_idx` (`locality_information`),
+  CONSTRAINT `occurrence_individual_group_id` FOREIGN KEY (`involves_individual_group_id`) REFERENCES `individual_group` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `occurrence_locality_information_id` FOREIGN KEY (`locality_information`) REFERENCES `locality_information` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -243,4 +286,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-12-13 13:05:26
+-- Dump completed on 2018-01-18 14:17:36
