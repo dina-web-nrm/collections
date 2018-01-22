@@ -588,7 +588,7 @@ public class CollectionsLogic implements Serializable {
                         "Entity not in database");
             }
         }
-        
+                                
         if(jsonObject.containsKey("continentStandardized")) {
             locality.setContinentStandardized(jsonObject.getString("continentStandardized"));
         }
@@ -602,7 +602,7 @@ public class CollectionsLogic implements Serializable {
         }
         
         if(jsonObject.containsKey("countryStandardized")) {
-            locality.setContinentStandardized(jsonObject.getString("countryStandardized"));
+            locality.setCountryStandardized(jsonObject.getString("countryStandardized"));
         }
         
         if(jsonObject.containsKey("districtStandardized")) {

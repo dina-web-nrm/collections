@@ -87,7 +87,7 @@ CREATE TABLE `feature_observation_type` (
   `version` int(11) NOT NULL DEFAULT '1',
   `feature_observation_type_name` varchar(255) NOT NULL COMMENT 'The name of a defined FeatureObservationType.',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -96,7 +96,7 @@ CREATE TABLE `feature_observation_type` (
 
 LOCK TABLES `feature_observation_type` WRITE;
 /*!40000 ALTER TABLE `feature_observation_type` DISABLE KEYS */;
-INSERT INTO `feature_observation_type` VALUES (1,1,'sex'),(2,1,'length'),(3,1,'age'),(4,1,'weight'),(5,1,'conditionAtCollecting');
+INSERT INTO `feature_observation_type` VALUES (1,1,'sex'),(2,1,'length'),(3,1,'age'),(4,1,'weight'),(5,1,'conditionAtCollecting'),(6,1,'ageStage');
 /*!40000 ALTER TABLE `feature_observation_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -286,4 +286,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-01-18 14:17:36
+-- Dump completed on 2018-01-22 10:37:25

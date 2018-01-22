@@ -40,6 +40,10 @@ import se.nrm.dina.collections.json.converter.util.Util;
 @Slf4j
 public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>, Serializable {
     
+    public JsonConverterV2Impl() {
+        
+    }
+    
     @Override
     public JsonObject convertIndividualGroup(IndividualGroup individualGroup, String include) {
         log.info("convertIndividualGroup");
@@ -204,12 +208,14 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
                     .forEach(identification -> { 
                         subBuilder.add(CommonString.getInstance().getId(), identification.getId());
                         if(isIdentification) {
-                            if(identification.getIdentificationRemarks() != null) {
-                                subBuilder.add("identificationRemarks", identification.getIdentificationRemarks());
-                            }
                             if(identification.getIdentificationText() != null) {
                                 subBuilder.add("identificationText", identification.getIdentificationText()); 
                             }
+                                                        
+                            if(identification.getIdentificationRemarks() != null) {
+                                subBuilder.add("identificationRemarks", identification.getIdentificationRemarks());
+                            }
+
                             if(identification.getIdentifiedAsVerbatim() != null) {
                                 subBuilder.add("identifiedAsVerbatim", identification.getIdentifiedAsVerbatim());
                             }
@@ -234,6 +240,10 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
                              
                             if(identification.getIsCurrentIdentification() != null) {
                                 subBuilder.add("isCurrentIdentification", identification.getIsCurrentIdentification()); 
+                            } 
+                            
+                            if(identification.getIdentifiedTaxonNameStandardized()!= null) {
+                                subBuilder.add("identifiedTaxonNameStandardized", identification.getIdentifiedTaxonNameStandardized()); 
                             } 
                         }
                         dataArrBuilder.add(subBuilder);
@@ -298,8 +308,13 @@ public class JsonConverterV2Impl<T extends Object> implements JsonConverterV2<T>
         if (localityInformation != null) {
             subBuilder.add(CommonString.getInstance().getId(), localityInformation.getId());
             if (isLocality) {
+                
                 if (localityInformation.getContinentStandardized() != null) {
-                    subBuilder.add("coordinatesVerbatim", localityInformation.getContinentStandardized());
+                    subBuilder.add("continentStandardized", localityInformation.getContinentStandardized());
+                }
+                 
+                if (localityInformation.getCoordinatesVerbatim()!= null) {
+                    subBuilder.add("coordinatesVerbatim", localityInformation.getCoordinatesVerbatim());
                 }
 
                 if (localityInformation.getCoordinateUncertaintyInMeters() != null) {
